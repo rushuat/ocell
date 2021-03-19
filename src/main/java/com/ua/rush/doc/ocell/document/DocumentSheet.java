@@ -1,7 +1,7 @@
 package com.ua.rush.doc.ocell.document;
 
-import com.ua.rush.doc.ocell.reflect.DocumentClass;
-import com.ua.rush.doc.ocell.reflect.DocumentField;
+import com.ua.rush.doc.ocell.reflection.DocumentClass;
+import com.ua.rush.doc.ocell.reflection.DocumentField;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;

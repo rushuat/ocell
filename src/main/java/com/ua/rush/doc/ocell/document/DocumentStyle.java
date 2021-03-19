@@ -1,6 +1,6 @@
 package com.ua.rush.doc.ocell.document;
 
-import com.ua.rush.doc.ocell.reflect.DocumentField;
+import com.ua.rush.doc.ocell.reflection.DocumentField;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;

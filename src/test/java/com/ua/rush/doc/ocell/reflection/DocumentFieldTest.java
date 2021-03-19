@@ -1,4 +1,4 @@
-package com.ua.rush.doc.ocell.reflect;
+package com.ua.rush.doc.ocell.reflection;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
