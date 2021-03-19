@@ -1,7 +1,7 @@
 package com.ua.rush.doc.ocell.document;
 
 import com.ua.rush.doc.ocell.reflection.DocumentClass;
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -26,12 +26,12 @@ public class DocumentHeader<T> {
     }
     this.header = header;
 
-    nameByIndex = getNameByIndexMap();
-    indexByName = getIndexByNameMap();
+    this.nameByIndex = getNameByIndexMap();
+    this.indexByName = getIndexByNameMap();
   }
 
   private Map<Integer, String> getNameByIndexMap() {
-    Map<Integer, String> map = new LinkedHashMap<>();
+    Map<Integer, String> map = new HashMap<>();
     IntStream
         .range(0, header.getLastCellNum())
         .filter(index -> Objects.nonNull(header.getCell(index)))
@@ -40,7 +40,7 @@ public class DocumentHeader<T> {
   }
 
   private Map<String, Integer> getIndexByNameMap() {
-    Map<String, Integer> map = new LinkedHashMap<>();
+    Map<String, Integer> map = new HashMap<>();
     IntStream
         .range(0, header.getLastCellNum())
         .filter(index -> Objects.nonNull(header.getCell(index)))

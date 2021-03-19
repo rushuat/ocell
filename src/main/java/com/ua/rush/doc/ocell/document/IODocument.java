@@ -20,8 +20,8 @@ public abstract class IODocument extends IOStream {
   protected DocumentStyle style;
 
   protected IODocument() {
-    workbook = new XSSFWorkbook();
-    style = new DocumentStyle(workbook);
+    this.workbook = new XSSFWorkbook();
+    this.style = new DocumentStyle(workbook);
   }
 
   protected IODocument(String password) {
