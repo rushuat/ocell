@@ -26,14 +26,14 @@ public abstract class IODocument extends IOStream {
 
   protected IODocument(String password) {
     this();
-    this.password = password == null ? new byte[]{} : password.getBytes();
+    this.password = password == null ? null : password.getBytes();
   }
 
   @Override
   public void fromStream(InputStream stream) throws IOException {
     try (stream) {
       InputStream inputStream = stream;
-      if (password.length > 0) {
+      if (password != null && password.length > 0) {
         POIFSFileSystem fileSystem = new POIFSFileSystem(inputStream);
         EncryptionInfo encryptionInfo = new EncryptionInfo(fileSystem);
         Decryptor decryptor = Decryptor.getInstance(encryptionInfo);
@@ -54,7 +54,7 @@ public abstract class IODocument extends IOStream {
   @Override
   public void toStream(OutputStream stream) throws IOException {
     try (stream) {
-      if (password.length > 0) {
+      if (password != null && password.length > 0) {
         EncryptionInfo encryptionInfo = new EncryptionInfo(EncryptionMode.agile);
         Encryptor encryptor = encryptionInfo.getEncryptor();
         encryptor.confirmPassword(new String(password));
