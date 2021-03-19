@@ -1,6 +1,6 @@
 package com.ua.rush.doc.ocell.document;
 
-import com.ua.rush.doc.ocell.reflect.DocumentClass;
+import com.ua.rush.doc.ocell.reflection.DocumentClass;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;

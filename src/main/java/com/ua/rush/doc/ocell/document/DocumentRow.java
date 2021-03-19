@@ -1,6 +1,6 @@
 package com.ua.rush.doc.ocell.document;
 
-import com.ua.rush.doc.ocell.reflect.DocumentField;
+import com.ua.rush.doc.ocell.reflection.DocumentField;
 import java.util.List;
 import java.util.Objects;
 import org.apache.poi.ss.usermodel.Cell;
