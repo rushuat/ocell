@@ -17,7 +17,7 @@ public class DocumentStyle {
 
   public DocumentStyle(Workbook workbook) {
     this.workbook = workbook;
-    styleCache = new HashMap<>();
+    this.styleCache = new HashMap<>();
   }
 
   public CellStyle getCellStyle(DocumentField documentField) {
