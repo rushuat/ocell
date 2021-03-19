@@ -74,20 +74,20 @@ public class DocumentTest {
   @Test
   public void shouldCreateAndLoadEncryptedDocument() throws IOException {
     //WHEN
-    byte[] excelContent;
+    byte[] documentData;
     String password = "password";
     try (Document document = new Document(password)) {
       document.addSheet(Collections.emptyList());
       document.addSheet(reports);
       document.addSheet("Sheet", reports);
-      excelContent = document.toBytes();
+      documentData = document.toBytes();
     }
 
     List<Object> sheetEmptyDocumentReports;
     List<Report> sheetUnnamedReportDocuments;
     List<Report> sheetNamedReportDocuments;
     try (Document document = new Document(password)) {
-      document.fromBytes(excelContent);
+      document.fromBytes(documentData);
       sheetEmptyDocumentReports = document.getSheet(Object.class);
       sheetUnnamedReportDocuments = document.getSheet(Report.class);
       sheetNamedReportDocuments = document.getSheet("Sheet", Report.class);
