@@ -6,7 +6,7 @@ import com.ua.rush.doc.ocell.annotation.BooleanValue;
 import com.ua.rush.doc.ocell.annotation.DateValue;
 import com.ua.rush.doc.ocell.annotation.FieldFormat;
 import com.ua.rush.doc.ocell.annotation.FieldName;
-import com.ua.rush.doc.ocell.annotation.FiledOrder;
+import com.ua.rush.doc.ocell.annotation.FieldOrder;
 import com.ua.rush.doc.ocell.annotation.NumberValue;
 import com.ua.rush.doc.ocell.annotation.StringValue;
 import java.lang.reflect.Field;
@@ -94,8 +94,8 @@ public class DocumentField {
 
   public Integer getOrder() {
     return
-        field.isAnnotationPresent(FiledOrder.class)
-            ? field.getAnnotation(FiledOrder.class).value()
+        field.isAnnotationPresent(FieldOrder.class)
+            ? field.getAnnotation(FieldOrder.class).value()
             : Integer.MAX_VALUE;
   }
 
