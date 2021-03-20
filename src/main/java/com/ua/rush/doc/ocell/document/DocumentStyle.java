@@ -2,9 +2,9 @@ package com.ua.rush.doc.ocell.document;
 
 import com.ua.rush.doc.ocell.reflection.DocumentField;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.DataFormat;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -17,7 +17,7 @@ public class DocumentStyle {
 
   public DocumentStyle(Workbook workbook) {
     this.workbook = workbook;
-    this.styleCache = new HashMap<>();
+    this.styleCache = new ConcurrentHashMap<>();
   }
 
   public CellStyle getCellStyle(DocumentField documentField) {
