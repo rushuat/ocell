@@ -68,8 +68,20 @@ public class Document extends IODocument {
     return getSheet(null, 0, 1, clazz);
   }
 
+  public <T> List<T> getSheet(int index, Class<T> clazz) {
+    return getSheet(index, 0, 1, clazz);
+  }
+
   public <T> List<T> getSheet(String name, Class<T> clazz) {
     return getSheet(name, 0, 1, clazz);
+  }
+
+  private <T> List<T> getSheet(
+      int index,
+      Integer headerOffset,
+      Integer dataOffset,
+      Class<T> clazz) {
+    return getSheet(workbook.getSheetName(index), headerOffset, dataOffset, clazz);
   }
 
   private <T> List<T> getSheet(
