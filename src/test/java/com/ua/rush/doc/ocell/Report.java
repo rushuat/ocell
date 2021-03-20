@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ua.rush.doc.ocell.annotation.BooleanValue;
 import com.ua.rush.doc.ocell.annotation.DateValue;
+import com.ua.rush.doc.ocell.annotation.FieldExclude;
 import com.ua.rush.doc.ocell.annotation.FieldFormat;
 import com.ua.rush.doc.ocell.annotation.FieldName;
 import com.ua.rush.doc.ocell.annotation.FieldOrder;
@@ -13,10 +14,12 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "OCell")
@@ -43,4 +46,7 @@ public class Report {
 
   @BooleanValue(false)
   private Boolean isNew;
+
+  @FieldExclude
+  private Object object;
 }

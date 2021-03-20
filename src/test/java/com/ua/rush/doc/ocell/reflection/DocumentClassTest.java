@@ -52,7 +52,7 @@ public class DocumentClassTest {
     List<DocumentField> documentFields = documentClass.getFields();
     //THEN
     assertNotNull(documentFields);
-    assertEquals(documentFields.size(), Report.class.getDeclaredFields().length);
+    assertEquals(documentFields.size(), Report.class.getDeclaredFields().length - 1);
   }
 
   @Test
@@ -63,8 +63,8 @@ public class DocumentClassTest {
     //THEN
     assertNotNull(names);
     assertNotNull(indexes);
-    assertEquals(names.keySet().size(), Report.class.getDeclaredFields().length);
-    assertEquals(indexes.keySet().size(), Report.class.getDeclaredFields().length);
+    assertEquals(names.keySet().size(), Report.class.getDeclaredFields().length - 1);
+    assertEquals(indexes.keySet().size(), Report.class.getDeclaredFields().length - 1);
   }
 
   @Test

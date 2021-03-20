@@ -9,7 +9,9 @@ import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import javax.persistence.Entity;
@@ -55,6 +57,7 @@ public class DocumentClass<T> {
         Arrays
             .stream(clazz.getDeclaredFields())
             .map(DocumentField::new)
+            .filter(Predicate.not(DocumentField::isExcluded))
             .sorted(Comparator.comparing(DocumentField::getOrder))
             .collect(Collectors.toList());
     if (clazz.isAnnotationPresent(JsonPropertyOrder.class)) {
@@ -68,6 +71,7 @@ public class DocumentClass<T> {
             Arrays
                 .stream(propertyOrder.value())
                 .map(map::get)
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
       }
       if (propertyOrder.alphabetic()) {
