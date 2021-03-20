@@ -13,10 +13,10 @@
     <java.version>11</java.version>
     <lombok.version>1.18.18</lombok.version>
 
-    <jackson.version>2.12.2</jackson.version>
     <poi.version>5.0.0</poi.version>
+    <jackson.version>2.12.2</jackson.version>
+    <jpa.version>2.2</jpa.version>
 
-    <logback.version>1.2.3</logback.version>
     <testng.version>7.4.0</testng.version>
     <spotbugs.version>4.2.2</spotbugs.version>
 
@@ -44,12 +44,12 @@
       <artifactId>jackson-annotations</artifactId>
       <version>${jackson.version}</version>
     </dependency>
-
     <dependency>
-      <groupId>ch.qos.logback</groupId>
-      <artifactId>logback-classic</artifactId>
-      <version>${logback.version}</version>
+      <groupId>javax.persistence</groupId>
+      <artifactId>javax.persistence-api</artifactId>
+      <version>${jpa.version}</version>
     </dependency>
+
     <dependency>
       <groupId>org.testng</groupId>
       <artifactId>testng</artifactId>

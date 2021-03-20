@@ -105,7 +105,7 @@ public class DocumentFieldTest {
     //THEN
     assertEquals(name0, "ID");
     assertEquals(name1, "USER_NAME");
-    assertEquals(name2, "dateOfBirth");
+    assertEquals(name2, "Date Of Birth");
     assertEquals(name3, "rate");
     assertEquals(name4, "isNew");
   }

@@ -12,6 +12,8 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import lombok.SneakyThrows;
 
 public class DocumentClass<T> {
@@ -77,6 +79,12 @@ public class DocumentClass<T> {
 
   public String getName() {
     String name = null;
+    if (clazz.isAnnotationPresent(Entity.class)) {
+      name = clazz.getAnnotation(Entity.class).name();
+    }
+    if (clazz.isAnnotationPresent(Table.class)) {
+      name = clazz.getAnnotation(Table.class).name();
+    }
     if (clazz.isAnnotationPresent(JsonTypeName.class)) {
       name = clazz.getAnnotation(JsonTypeName.class).value();
     }

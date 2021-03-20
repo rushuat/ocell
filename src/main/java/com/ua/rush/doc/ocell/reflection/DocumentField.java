@@ -15,6 +15,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import javax.persistence.Column;
 import lombok.SneakyThrows;
 
 public class DocumentField {
@@ -101,6 +102,9 @@ public class DocumentField {
 
   public String getName() {
     String name = null;
+    if (field.isAnnotationPresent(Column.class)) {
+      name = field.getAnnotation(Column.class).name();
+    }
     if (field.isAnnotationPresent(JsonProperty.class)) {
       name = field.getAnnotation(JsonProperty.class).value();
     }
