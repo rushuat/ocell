@@ -19,8 +19,16 @@ public class DocumentTest {
   @BeforeTest
   public void before() {
     reports = new Report[]{
-        new Report(0, null, null, null, null),
-        new Report(1, "User", new Date(123456789), 0.2525, true)
+        Report.builder()
+            .id(0)
+            .build(),
+        Report.builder()
+            .id(1)
+            .userName("User")
+            .dateOfBirth(new Date(123456789))
+            .rate(0.2525)
+            .isNew(true)
+            .build()
     };
   }
 
@@ -48,25 +56,25 @@ public class DocumentTest {
 
     assertEquals(
         sheetUnnamedReportDocuments.get(0),
-        new Report(
-            0,
-            "User Name",
-            new GregorianCalendar(1991, Calendar.AUGUST, 24, 1, 2, 3).getTime(),
-            0.1234,
-            false
-        )
+        Report.builder()
+            .id(0)
+            .userName("User Name")
+            .dateOfBirth(new GregorianCalendar(1991, Calendar.AUGUST, 24, 1, 2, 3).getTime())
+            .rate(0.1234)
+            .isNew(false)
+            .build()
     );
     assertEquals(sheetUnnamedReportDocuments.get(1), reports[1]);
 
     assertEquals(
         sheetNamedReportDocuments.get(0),
-        new Report(
-            0,
-            "User Name",
-            new GregorianCalendar(1991, Calendar.AUGUST, 24, 1, 2, 3).getTime(),
-            0.1234,
-            false
-        )
+        Report.builder()
+            .id(0)
+            .userName("User Name")
+            .dateOfBirth(new GregorianCalendar(1991, Calendar.AUGUST, 24, 1, 2, 3).getTime())
+            .rate(0.1234)
+            .isNew(false)
+            .build()
     );
     assertEquals(sheetNamedReportDocuments.get(1), reports[1]);
   }
@@ -101,25 +109,25 @@ public class DocumentTest {
 
     assertEquals(
         sheetUnnamedReportDocuments.get(0),
-        new Report(
-            0,
-            "User Name",
-            new GregorianCalendar(1991, Calendar.AUGUST, 24, 1, 2, 3).getTime(),
-            0.1234,
-            false
-        )
+        Report.builder()
+            .id(0)
+            .userName("User Name")
+            .dateOfBirth(new GregorianCalendar(1991, Calendar.AUGUST, 24, 1, 2, 3).getTime())
+            .rate(0.1234)
+            .isNew(false)
+            .build()
     );
     assertEquals(sheetUnnamedReportDocuments.get(1), reports[1]);
 
     assertEquals(
         sheetNamedReportDocuments.get(0),
-        new Report(
-            0,
-            "User Name",
-            new GregorianCalendar(1991, Calendar.AUGUST, 24, 1, 2, 3).getTime(),
-            0.1234,
-            false
-        )
+        Report.builder()
+            .id(0)
+            .userName("User Name")
+            .dateOfBirth(new GregorianCalendar(1991, Calendar.AUGUST, 24, 1, 2, 3).getTime())
+            .rate(0.1234)
+            .isNew(false)
+            .build()
     );
     assertEquals(sheetNamedReportDocuments.get(1), reports[1]);
   }

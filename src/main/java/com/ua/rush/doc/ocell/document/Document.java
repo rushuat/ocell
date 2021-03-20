@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 import org.apache.poi.ss.usermodel.Sheet;
 
 public class Document extends IODocument {
@@ -30,7 +31,7 @@ public class Document extends IODocument {
     DocumentClass<T> documentClass =
         Optional.ofNullable(items)
             .map(DocumentClass::new)
-            .filter(clazz -> !clazz.getType().equals(Object.class))
+            .filter(Predicate.not(clazz -> clazz.getType().equals(Object.class)))
             .orElse(null);
     List<T> itemList =
         Optional.ofNullable(items)
@@ -42,9 +43,9 @@ public class Document extends IODocument {
   public <T> void addSheet(String name, List<T> items) {
     DocumentClass<T> documentClass =
         Optional.ofNullable(items)
-            .filter(list -> !list.isEmpty())
+            .filter(Predicate.not(List::isEmpty))
             .map(list -> new DocumentClass<>(list.get(0)))
-            .filter(clazz -> !clazz.getType().equals(Object.class))
+            .filter(Predicate.not(clazz -> clazz.getType().equals(Object.class)))
             .orElse(null);
     List<T> itemList =
         Optional.ofNullable(items)
@@ -79,7 +80,7 @@ public class Document extends IODocument {
     return
         Optional.ofNullable(clazz)
             .map(DocumentClass::new)
-            .filter(documentClass -> !documentClass.getType().equals(Object.class))
+            .filter(Predicate.not(documentClass -> documentClass.getType().equals(Object.class)))
             .map(documentClass -> {
               String sheetName = Optional.ofNullable(name).orElse(documentClass.getName());
               Sheet sheet = workbook.getSheet(sheetName);

@@ -1,9 +1,11 @@
 package com.ua.rush.doc.ocell.reflection;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ua.rush.doc.ocell.annotation.BooleanValue;
 import com.ua.rush.doc.ocell.annotation.DateValue;
+import com.ua.rush.doc.ocell.annotation.FieldExclude;
 import com.ua.rush.doc.ocell.annotation.FieldFormat;
 import com.ua.rush.doc.ocell.annotation.FieldName;
 import com.ua.rush.doc.ocell.annotation.FieldOrder;
@@ -15,6 +17,8 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import javax.persistence.Column;
+import javax.persistence.Transient;
 import lombok.SneakyThrows;
 
 public class DocumentField {
@@ -99,8 +103,25 @@ public class DocumentField {
             : Integer.MAX_VALUE;
   }
 
+  public boolean isExcluded() {
+    boolean excluded = false;
+    if (field.isAnnotationPresent(Transient.class)) {
+      excluded = true;
+    }
+    if (field.isAnnotationPresent(JsonIgnore.class)) {
+      excluded = field.getAnnotation(JsonIgnore.class).value();
+    }
+    if (field.isAnnotationPresent(FieldExclude.class)) {
+      excluded = field.getAnnotation(FieldExclude.class).value();
+    }
+    return excluded;
+  }
+
   public String getName() {
     String name = null;
+    if (field.isAnnotationPresent(Column.class)) {
+      name = field.getAnnotation(Column.class).name();
+    }
     if (field.isAnnotationPresent(JsonProperty.class)) {
       name = field.getAnnotation(JsonProperty.class).value();
     }
