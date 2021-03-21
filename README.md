@@ -48,10 +48,13 @@ You are able to apply default values to POJO fields using annotations:
 * *@StringValue*
 * *@NumberValue*
 * *@BooleanValue*
-* *@DateValue* - default format is ISO_ZONED_DATE_TIME but could be overridden by *@FieldFormat* or *@JsonFormat* annotations
+* *@DateValue* - default format is ISO_ZONED_DATE_TIME\
+or could be overridden by *@FieldFormat* or *@JsonFormat* annotations
 
 #### Priority
-You are able to mix all types of annotations with one POJO. The override priory from lower to higher: *JPA* < *Jackson* < *Custom*.
+You are able to mix all types of annotations with one POJO.
+
+The override priory from lower to higher: *JPA* < *Jackson* < *Custom*.
 
 #### Example
 You are able to find POJOs mapping examples [here](https://github.com/rushuat/ocell/tree/main/src/test/java/com/ua/rush/doc/ocell/model)
