@@ -26,7 +26,7 @@ public abstract class IODocument extends IOStream {
 
   protected IODocument(String password) {
     this();
-    this.password = password == null ? null : password.getBytes();
+    this.password = password == null || password.isEmpty() ? null : password.getBytes();
   }
 
   @Override
