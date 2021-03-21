@@ -8,7 +8,7 @@ The library is built for **JDK 11+** version usage.
 
 ### Dependency
 Your project should have a dependency to the library:
-```
+```xml
     <dependency>
       <groupId>com.ua.rush.doc</groupId>
       <artifactId>ocell</artifactId>
