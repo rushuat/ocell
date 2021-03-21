@@ -97,10 +97,14 @@ public class DocumentField {
   }
 
   public Integer getOrder() {
-    return
-        field.isAnnotationPresent(FieldOrder.class)
-            ? field.getAnnotation(FieldOrder.class).value()
-            : Integer.MAX_VALUE;
+    int order = -1;
+    if (field.isAnnotationPresent(JsonProperty.class)) {
+      order = field.getAnnotation(JsonProperty.class).index();
+    }
+    if (field.isAnnotationPresent(FieldOrder.class)) {
+      order = field.getAnnotation(FieldOrder.class).value();
+    }
+    return order < 0 ? Integer.MAX_VALUE : order;
   }
 
   public boolean isExcluded() {

@@ -19,7 +19,7 @@ public class Document extends IODocument {
   }
 
 
-  public <T> void addSheet(T... items) {
+  public <T> void addSheet(T[] items) {
     addSheet(null, items);
   }
 
@@ -27,12 +27,19 @@ public class Document extends IODocument {
     addSheet(null, items);
   }
 
-  public <T> void addSheet(String name, T... items) {
+  public <T> void addSheet(String name, T[] items) {
     DocumentClass<T> documentClass =
         Optional.ofNullable(items)
             .map(DocumentClass::new)
             .filter(Predicate.not(clazz -> clazz.getType().equals(Object.class)))
-            .orElse(null);
+            .orElseGet(() ->
+                Optional.ofNullable(items)
+                    .filter(array -> array.length > 0)
+                    .map(array -> array[0])
+                    .map(DocumentClass::new)
+                    .filter(Predicate.not(clazz -> clazz.getType().equals(Object.class)))
+                    .orElse(null)
+            );
     List<T> itemList =
         Optional.ofNullable(items)
             .map(Arrays::asList)
@@ -44,7 +51,8 @@ public class Document extends IODocument {
     DocumentClass<T> documentClass =
         Optional.ofNullable(items)
             .filter(Predicate.not(List::isEmpty))
-            .map(list -> new DocumentClass<>(list.get(0)))
+            .map(list -> list.get(0))
+            .map(DocumentClass::new)
             .filter(Predicate.not(clazz -> clazz.getType().equals(Object.class)))
             .orElse(null);
     List<T> itemList =
@@ -68,8 +76,23 @@ public class Document extends IODocument {
     return getSheet(null, 0, 1, clazz);
   }
 
+  public <T> List<T> getSheet(int index, Class<T> clazz) {
+    return getSheet(index, 0, 1, clazz);
+  }
+
   public <T> List<T> getSheet(String name, Class<T> clazz) {
     return getSheet(name, 0, 1, clazz);
+  }
+
+  private <T> List<T> getSheet(
+      int index,
+      Integer headerOffset,
+      Integer dataOffset,
+      Class<T> clazz) {
+    return
+        index > 0 && index < workbook.getNumberOfSheets()
+            ? getSheet(workbook.getSheetName(index), headerOffset, dataOffset, clazz)
+            : Collections.emptyList();
   }
 
   private <T> List<T> getSheet(
@@ -84,9 +107,13 @@ public class Document extends IODocument {
             .map(documentClass -> {
               String sheetName = Optional.ofNullable(name).orElse(documentClass.getName());
               Sheet sheet = workbook.getSheet(sheetName);
-              DocumentSheet<T> documentSheet =
-                  new DocumentSheet<>(sheet, headerOffset, dataOffset, style, documentClass);
-              return documentSheet.getRows();
+              return
+                  Optional.ofNullable(sheet)
+                      .map(value ->
+                          new DocumentSheet<>(
+                              sheet, headerOffset, dataOffset, style, documentClass))
+                      .map(DocumentSheet::getRows)
+                      .orElse(Collections.emptyList());
             })
             .orElse(Collections.emptyList());
   }

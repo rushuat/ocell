@@ -4,71 +4,83 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
-import com.ua.rush.doc.ocell.Report;
+import com.ua.rush.doc.ocell.model.Jpa;
+import com.ua.rush.doc.ocell.model.Json;
+import com.ua.rush.doc.ocell.model.Pojo;
 import java.util.List;
 import java.util.Map;
-import org.testng.annotations.BeforeTest;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 public class DocumentClassTest {
 
-  private DocumentClass<Report> documentClass;
-
-  @BeforeTest
-  public void before() {
-    Report[] reports = new Report[]{};
-    documentClass = new DocumentClass<>(reports);
+  private Object[] testCase(Object model) {
+    return
+        new Object[]{
+            model,
+            new DocumentClass<>(model)
+        };
   }
 
-  @Test
-  public void shouldCreateObject() {
+  @DataProvider
+  public Object[][] models() {
+    return
+        new Object[][]{
+            testCase(new Jpa()),
+            testCase(new Json()),
+            testCase(new Pojo())
+        };
+  }
+
+  @Test(dataProvider = "models")
+  public void shouldCreateObject(Object model, DocumentClass<?> documentClass) {
     //WHEN
-    Report report = documentClass.newInstance();
+    Object obj = documentClass.newInstance();
     //THEN
-    assertNotNull(report);
+    assertNotNull(obj);
   }
 
-  @Test
-  public void shouldReturnName() {
+  @Test(dataProvider = "models")
+  public void shouldReturnName(Object model, DocumentClass<?> documentClass) {
     //WHEN
-    String reportName = documentClass.getName();
+    String name = documentClass.getName();
     //THEN
-    assertNotNull(reportName);
-    assertEquals(reportName, "OCell");
+    assertNotNull(name);
+    assertEquals(name, "User");
   }
 
-  @Test
-  public void shouldReturnType() {
+  @Test(dataProvider = "models")
+  public void shouldReturnType(Object model, DocumentClass<?> documentClass) {
     //WHEN
-    Class<Report> reportClass = documentClass.getType();
+    Class<?> clazz = documentClass.getType();
     //THEN
-    assertNotNull(reportClass);
-    assertEquals(reportClass, Report.class);
+    assertNotNull(clazz);
+    assertEquals(clazz, model.getClass());
   }
 
-  @Test
-  public void shouldReturnFields() {
+  @Test(dataProvider = "models")
+  public void shouldReturnFields(Object model, DocumentClass<?> documentClass) {
     //WHEN
     List<DocumentField> documentFields = documentClass.getFields();
     //THEN
     assertNotNull(documentFields);
-    assertEquals(documentFields.size(), Report.class.getDeclaredFields().length - 1);
+    assertEquals(documentFields.size(), model.getClass().getDeclaredFields().length - 1);
   }
 
-  @Test
-  public void shouldReturnMaps() {
+  @Test(dataProvider = "models")
+  public void shouldReturnMaps(Object model, DocumentClass<?> documentClass) {
     //WHEN
     Map<String, Integer> names = documentClass.getIndexByNameMap();
     Map<Integer, String> indexes = documentClass.getNameByIndexMap();
     //THEN
     assertNotNull(names);
     assertNotNull(indexes);
-    assertEquals(names.keySet().size(), Report.class.getDeclaredFields().length - 1);
-    assertEquals(indexes.keySet().size(), Report.class.getDeclaredFields().length - 1);
+    assertEquals(names.keySet().size(), model.getClass().getDeclaredFields().length - 1);
+    assertEquals(indexes.keySet().size(), model.getClass().getDeclaredFields().length - 1);
   }
 
-  @Test
-  public void shouldReturnOrdered() {
+  @Test(dataProvider = "models")
+  public void shouldReturnOrdered(Object model, DocumentClass<?> documentClass) {
     //WHEN
     Integer[] orders =
         documentClass.getFields().stream()
