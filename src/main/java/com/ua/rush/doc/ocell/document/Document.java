@@ -32,7 +32,14 @@ public class Document extends IODocument {
         Optional.ofNullable(items)
             .map(DocumentClass::new)
             .filter(Predicate.not(clazz -> clazz.getType().equals(Object.class)))
-            .orElse(null);
+            .orElseGet(() ->
+                Optional.ofNullable(items)
+                    .filter(array -> array.length > 0)
+                    .map(array -> array[0])
+                    .map(DocumentClass::new)
+                    .filter(Predicate.not(clazz -> clazz.getType().equals(Object.class)))
+                    .orElse(null)
+            );
     List<T> itemList =
         Optional.ofNullable(items)
             .map(Arrays::asList)
@@ -44,7 +51,8 @@ public class Document extends IODocument {
     DocumentClass<T> documentClass =
         Optional.ofNullable(items)
             .filter(Predicate.not(List::isEmpty))
-            .map(list -> new DocumentClass<>(list.get(0)))
+            .map(list -> list.get(0))
+            .map(DocumentClass::new)
             .filter(Predicate.not(clazz -> clazz.getType().equals(Object.class)))
             .orElse(null);
     List<T> itemList =
@@ -81,7 +89,10 @@ public class Document extends IODocument {
       Integer headerOffset,
       Integer dataOffset,
       Class<T> clazz) {
-    return getSheet(workbook.getSheetName(index), headerOffset, dataOffset, clazz);
+    return
+        index > 0 && index < workbook.getNumberOfSheets()
+            ? getSheet(workbook.getSheetName(index), headerOffset, dataOffset, clazz)
+            : Collections.emptyList();
   }
 
   private <T> List<T> getSheet(
@@ -96,9 +107,13 @@ public class Document extends IODocument {
             .map(documentClass -> {
               String sheetName = Optional.ofNullable(name).orElse(documentClass.getName());
               Sheet sheet = workbook.getSheet(sheetName);
-              DocumentSheet<T> documentSheet =
-                  new DocumentSheet<>(sheet, headerOffset, dataOffset, style, documentClass);
-              return documentSheet.getRows();
+              return
+                  Optional.ofNullable(sheet)
+                      .map(value ->
+                          new DocumentSheet<>(
+                              sheet, headerOffset, dataOffset, style, documentClass))
+                      .map(DocumentSheet::getRows)
+                      .orElse(Collections.emptyList());
             })
             .orElse(Collections.emptyList());
   }
