@@ -43,11 +43,11 @@ public class DocumentTest {
     //WHEN
     byte[] documentData;
     try (Document document = new Document()) {
-      document.addSheet(models[0]);
-      document.addSheet(models[1]);
-      document.addSheet("Jpa Sheet", models[2]);
+      document.addSheet(new Object[]{models[0]});
+      document.addSheet(new Object[]{models[1]});
+      document.addSheet("Jpa Sheet", new Jpa[]{(Jpa) models[2]});
       document.addSheet("Json Sheet", Collections.singletonList(models[3]));
-      document.addSheet(models[4], new Pojo(), new Pojo());
+      document.addSheet(new Object[]{models[4], new Pojo(), new Pojo()});
       documentData = document.toBytes();
     }
 
@@ -111,11 +111,11 @@ public class DocumentTest {
     //WHEN
     byte[] documentData;
     try (Document document = new Document(password)) {
-      document.addSheet(models[0]);
-      document.addSheet(models[1]);
-      document.addSheet("Jpa Sheet", models[2]);
+      document.addSheet(new Object[]{models[0]});
+      document.addSheet(new Object[]{models[1]});
+      document.addSheet("Jpa Sheet", new Jpa[]{(Jpa) models[2]});
       document.addSheet("Json Sheet", Collections.singletonList(models[3]));
-      document.addSheet(models[4], new Pojo(), new Pojo());
+      document.addSheet(new Object[]{models[4], new Pojo(), new Pojo()});
       documentData = document.toBytes();
     }
 

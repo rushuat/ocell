@@ -19,7 +19,7 @@ public class Document extends IODocument {
   }
 
 
-  public <T> void addSheet(T... items) {
+  public <T> void addSheet(T[] items) {
     addSheet(null, items);
   }
 
@@ -27,7 +27,7 @@ public class Document extends IODocument {
     addSheet(null, items);
   }
 
-  public <T> void addSheet(String name, T... items) {
+  public <T> void addSheet(String name, T[] items) {
     DocumentClass<T> documentClass =
         Optional.ofNullable(items)
             .map(DocumentClass::new)
