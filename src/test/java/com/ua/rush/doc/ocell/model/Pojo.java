@@ -33,8 +33,8 @@ public class Pojo {
   private String name;
 
   @FieldOrder(2)
-  @FieldFormat("yyyy-MM-dd'T'HH:mm:ss")
   @DateValue("1991-08-24T01:02:03")
+  @FieldFormat("yyyy-MM-dd'T'HH:mm:ss")
   @FieldName("Date Of Birth")
   private Date dateOfBirth;
 
@@ -43,8 +43,8 @@ public class Pojo {
   @FieldName("Age")
   private Integer age;
 
-  @FieldFormat("#.00")
   @NumberValue(0.1234)
+  @FieldFormat("#.00")
   @FieldName("Rating")
   private Double rating;
 

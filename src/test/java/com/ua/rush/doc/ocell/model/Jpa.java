@@ -2,7 +2,6 @@ package com.ua.rush.doc.ocell.model;
 
 import com.ua.rush.doc.ocell.annotation.BooleanValue;
 import com.ua.rush.doc.ocell.annotation.DateValue;
-import com.ua.rush.doc.ocell.annotation.FieldExclude;
 import com.ua.rush.doc.ocell.annotation.FieldFormat;
 import com.ua.rush.doc.ocell.annotation.FieldOrder;
 import com.ua.rush.doc.ocell.annotation.NumberValue;
@@ -11,6 +10,7 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -35,8 +35,8 @@ public class Jpa {
   private String name;
 
   @FieldOrder(2)
-  @FieldFormat("yyyy-MM-dd'T'HH:mm:ss")
   @DateValue("1991-08-24T01:02:03")
+  @FieldFormat("yyyy-MM-dd'T'HH:mm:ss")
   @Column(name = "Date Of Birth")
   private Date dateOfBirth;
 
@@ -45,14 +45,14 @@ public class Jpa {
   @Column(name = "Age")
   private Integer age;
 
-  @FieldFormat("#.00")
   @NumberValue(0.1234)
+  @FieldFormat("#.00")
   @Column(name = "Rating")
   private Double rating;
 
   @BooleanValue(true)
   private Boolean isNew;
 
-  @FieldExclude
+  @Transient
   private Object data;
 }

@@ -1,12 +1,12 @@
 package com.ua.rush.doc.ocell.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.ua.rush.doc.ocell.annotation.BooleanValue;
 import com.ua.rush.doc.ocell.annotation.DateValue;
-import com.ua.rush.doc.ocell.annotation.FieldExclude;
-import com.ua.rush.doc.ocell.annotation.FieldFormat;
 import com.ua.rush.doc.ocell.annotation.NumberValue;
 import com.ua.rush.doc.ocell.annotation.StringValue;
 import java.util.Date;
@@ -31,8 +31,8 @@ public class Json {
   @JsonProperty(value = "User Name", index = 1)
   private String name;
 
-  @FieldFormat("yyyy-MM-dd'T'HH:mm:ss")
   @DateValue("1991-08-24T01:02:03")
+  @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
   @JsonProperty(value = "Date Of Birth", index = 2)
   private Date dateOfBirth;
 
@@ -40,14 +40,14 @@ public class Json {
   @JsonProperty(value = "Age", index = 3)
   private Integer age;
 
-  @FieldFormat("#.00")
   @NumberValue(0.1234)
+  @JsonFormat(pattern = "#.00")
   @JsonProperty("Rating")
   private Double rating;
 
   @BooleanValue(true)
   private Boolean isNew;
 
-  @FieldExclude
+  @JsonIgnore
   private Object data;
 }
