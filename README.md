@@ -1,5 +1,5 @@
 # oCell
-*oCell* is a library for Excel to POJOs and POJOs to Excel mapping based on [Apache POI](https://poi.apache.org/)
+*oCell* is a library for Excel to POJO and POJO to Excel mapping based on [Apache POI](https://poi.apache.org/)
 
 ## Usage
 
@@ -10,15 +10,15 @@ The library is built for **JDK 11+** version usage.
 Your project should have a dependency to the library:
 ```xml
     <dependency>
-      <groupId>com.ua.rush.doc</groupId>
+      <groupId>io.github.rushuat</groupId>
       <artifactId>ocell</artifactId>
       <version>0.1.1</version>
     </dependency>
 ```
 
 ### Code
-The library supports POJOs and a few types of annotations to modify them:
-1. [oCell](https://github.com/rushuat/ocell/tree/main/src/main/java/com/ua/rush/doc/ocell/annotation)
+The library supports POJO and few types of annotations to modify them:
+1. [oCell](https://github.com/rushuat/ocell/tree/main/src/main/java/io/github/rushuat/ocell/annotation)
 2. [Jackson](https://github.com/FasterXML/jackson-annotations)
 3. [JPA](https://javaee.github.io/javaee-spec/javadocs/javax/persistence/package-summary.html)
 
@@ -58,7 +58,7 @@ You are able to mix all types of annotations with one POJO.
 The override priory from lower to higher: *JPA* < *Jackson* < *Custom*.
 
 #### Example
-You are able to find POJOs mapping examples at this [URL](https://github.com/rushuat/ocell/tree/main/src/test/java/com/ua/rush/doc/ocell/model)
+You are able to find POJO mapping examples at this [URL](https://github.com/rushuat/ocell/tree/main/src/test/java/io/github/rushuat/ocell/model)
 
 Documents could be read from different sources:
 ```java
