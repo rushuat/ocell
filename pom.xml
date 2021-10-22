@@ -30,8 +30,8 @@
   </developers>
 
   <scm>
-    <connection>scm:git:git://github.com/rushuat/ocell.git</connection>
-    <developerConnection>scm:git:ssh://github.com:rushuat/ocell.git</developerConnection>
+    <connection>scm:git:https://github.com/rushuat/ocell.git</connection>
+    <developerConnection>scm:git:ssh@github.com:rushuat/ocell.git</developerConnection>
     <url>https://github.com/rushuat/ocell</url>
   </scm>
 
@@ -52,6 +52,7 @@
     <surefire.plugin>2.22.2</surefire.plugin>
     <source-plugin>3.2.1</source-plugin>
     <javadoc-plugin>3.3.1</javadoc-plugin>
+    <gpg-plugin>3.0.1</gpg-plugin>
 
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
@@ -98,6 +99,17 @@
       <scope>provided</scope>
     </dependency>
   </dependencies>
+
+  <distributionManagement>
+    <snapshotRepository>
+      <id>ossrh</id>
+      <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+    </snapshotRepository>
+    <repository>
+      <id>ossrh</id>
+      <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2</url>
+    </repository>
+  </distributionManagement>
 
   <build>
     <plugins>
@@ -156,6 +168,20 @@
             <id>attach-javadocs</id>
             <goals>
               <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-gpg-plugin</artifactId>
+        <version>${gpg-plugin}</version>
+        <executions>
+          <execution>
+            <id>sign-artifacts</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>sign</goal>
             </goals>
           </execution>
         </executions>
