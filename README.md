@@ -12,7 +12,7 @@ Your project should have a dependency to the library:
     <dependency>
       <groupId>com.ua.rush.doc</groupId>
       <artifactId>ocell</artifactId>
-      <version>0.0.1</version>
+      <version>0.1.1</version>
     </dependency>
 ```
 
@@ -28,6 +28,7 @@ The library supports POJOs and a few types of annotations to modify them:
 * *@FieldFormat* - column format
 * *@FieldOrder* - column order
 * *@FieldExclude* - column not used
+* *@FieldConverter* - column converter
 
 #### Jackson
 * *@JsonTypeName* - sheet name
@@ -57,7 +58,7 @@ You are able to mix all types of annotations with one POJO.
 The override priory from lower to higher: *JPA* < *Jackson* < *Custom*.
 
 #### Example
-You are able to find POJOs mapping examples [here](https://github.com/rushuat/ocell/tree/main/src/test/java/com/ua/rush/doc/ocell/model)
+You are able to find POJOs mapping examples at this [URL](https://github.com/rushuat/ocell/tree/main/src/test/java/com/ua/rush/doc/ocell/model)
 
 Documents could be read from different sources:
 ```java
