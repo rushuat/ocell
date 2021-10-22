@@ -9,7 +9,7 @@
   <version>0.1.1</version>
   <packaging>jar</packaging>
 
-  <name>oCell</name>
+  <name>${project.groupId}:${project.artifactId}</name>
   <description>A library for Excel to POJO and POJO to Excel mapping</description>
   <url>https://github.com/rushuat/ocell</url>
 
