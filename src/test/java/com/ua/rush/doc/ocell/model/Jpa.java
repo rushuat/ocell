@@ -2,10 +2,12 @@ package com.ua.rush.doc.ocell.model;
 
 import com.ua.rush.doc.ocell.annotation.BooleanValue;
 import com.ua.rush.doc.ocell.annotation.DateValue;
+import com.ua.rush.doc.ocell.annotation.FieldConverter;
 import com.ua.rush.doc.ocell.annotation.FieldFormat;
 import com.ua.rush.doc.ocell.annotation.FieldOrder;
 import com.ua.rush.doc.ocell.annotation.NumberValue;
 import com.ua.rush.doc.ocell.annotation.StringValue;
+import com.ua.rush.doc.ocell.field.AgeConverter;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -42,6 +44,7 @@ public class Jpa {
 
   @FieldOrder(3)
   @NumberValue(18)
+  @FieldConverter(AgeConverter.class)
   @Column(name = "Age")
   private Integer age;
 
