@@ -3,12 +3,14 @@ package com.ua.rush.doc.ocell.model;
 import com.ua.rush.doc.ocell.annotation.BooleanValue;
 import com.ua.rush.doc.ocell.annotation.ClassName;
 import com.ua.rush.doc.ocell.annotation.DateValue;
+import com.ua.rush.doc.ocell.annotation.FieldConverter;
 import com.ua.rush.doc.ocell.annotation.FieldExclude;
 import com.ua.rush.doc.ocell.annotation.FieldFormat;
 import com.ua.rush.doc.ocell.annotation.FieldName;
 import com.ua.rush.doc.ocell.annotation.FieldOrder;
 import com.ua.rush.doc.ocell.annotation.NumberValue;
 import com.ua.rush.doc.ocell.annotation.StringValue;
+import com.ua.rush.doc.ocell.field.AgeConverter;
 import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -40,6 +42,7 @@ public class Pojo {
 
   @FieldOrder(3)
   @NumberValue(18)
+  @FieldConverter(AgeConverter.class)
   @FieldName("Age")
   private Integer age;
 

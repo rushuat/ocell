@@ -6,6 +6,7 @@ import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertTrue;
 
+import com.ua.rush.doc.ocell.field.AgeConverter;
 import com.ua.rush.doc.ocell.model.Jpa;
 import com.ua.rush.doc.ocell.model.Json;
 import com.ua.rush.doc.ocell.model.Pojo;
@@ -139,6 +140,62 @@ public class DocumentFieldTest {
   }
 
   @Test(dataProvider = "models")
+  public void shouldReturnDefault(Object model, List<DocumentField> documentFields) {
+    //GIVEN
+    DocumentField documentField0 = documentFields.get(0);
+    DocumentField documentField1 = documentFields.get(1);
+    DocumentField documentField2 = documentFields.get(2);
+    DocumentField documentField3 = documentFields.get(3);
+    DocumentField documentField4 = documentFields.get(4);
+    DocumentField documentField5 = documentFields.get(5);
+    DocumentField documentField6 = documentFields.get(6);
+    //WHEN
+    Object default0 = documentField0.getDefault();
+    Object default1 = documentField1.getDefault();
+    Object default2 = documentField2.getDefault();
+    Object default3 = documentField3.getDefault();
+    Object default4 = documentField4.getDefault();
+    Object default5 = documentField5.getDefault();
+    Object default6 = documentField6.getDefault();
+    //THEN
+    assertEquals(default0, 0.0);
+    assertEquals(default1, "New User");
+    assertEquals(default2, new GregorianCalendar(1991, Calendar.AUGUST, 24, 1, 2, 3).getTime());
+    assertEquals(default3, 18.0);
+    assertEquals(default4, 0.1234);
+    assertEquals(default5, true);
+    assertNull(default6);
+  }
+
+  @Test(dataProvider = "models")
+  public void shouldReturnConverter(Object model, List<DocumentField> documentFields) {
+    //GIVEN
+    DocumentField documentField0 = documentFields.get(0);
+    DocumentField documentField1 = documentFields.get(1);
+    DocumentField documentField2 = documentFields.get(2);
+    DocumentField documentField3 = documentFields.get(3);
+    DocumentField documentField4 = documentFields.get(4);
+    DocumentField documentField5 = documentFields.get(5);
+    DocumentField documentField6 = documentFields.get(6);
+    //WHEN
+    Object converter0 = documentField0.getConverter();
+    Object converter1 = documentField1.getConverter();
+    Object converter2 = documentField2.getConverter();
+    Object converter3 = documentField3.getConverter();
+    Object converter4 = documentField4.getConverter();
+    Object converter5 = documentField5.getConverter();
+    Object converter6 = documentField6.getConverter();
+    //THEN
+    assertNull(converter0);
+    assertNull(converter1);
+    assertNull(converter2);
+    assertEquals(converter3.getClass(), AgeConverter.class);
+    assertNull(converter4);
+    assertNull(converter5);
+    assertNull(converter6);
+  }
+
+  @Test(dataProvider = "models")
   public void shouldReturnName(Object model, List<DocumentField> documentFields) {
     //GIVEN
     DocumentField documentField0 = documentFields.get(0);
@@ -167,6 +224,34 @@ public class DocumentFieldTest {
   }
 
   @Test(dataProvider = "models")
+  public void shouldReturnNumber(Object model, List<DocumentField> documentFields) {
+    //GIVEN
+    DocumentField documentField0 = documentFields.get(0);
+    DocumentField documentField1 = documentFields.get(1);
+    DocumentField documentField2 = documentFields.get(2);
+    DocumentField documentField3 = documentFields.get(3);
+    DocumentField documentField4 = documentFields.get(4);
+    DocumentField documentField5 = documentFields.get(5);
+    DocumentField documentField6 = documentFields.get(6);
+    //WHEN
+    Object value0 = documentField0.getNumber((float) 0.0);
+    Object value1 = documentField1.getNumber("New User");
+    Object value2 = documentField2.getNumber(documentField2.getValue(model));
+    Object value3 = documentField3.getNumber((int) 18.0);
+    Object value4 = documentField4.getNumber((double) 1234);
+    Object value5 = documentField5.getNumber(true);
+    Object value6 = documentField6.getNumber(null);
+    //THEN
+    assertEquals(value0, 0L);
+    assertEquals(value1, "New User");
+    assertEquals(value2, new GregorianCalendar(1991, Calendar.AUGUST, 24, 1, 2, 3).getTime());
+    assertEquals(value3, 18);
+    assertEquals(value4, 1234.0);
+    assertEquals(value5, true);
+    assertNull(value6);
+  }
+
+  @Test(dataProvider = "models")
   public void shouldReturnValue(Object model, List<DocumentField> documentFields) {
     //GIVEN
     DocumentField documentField0 = documentFields.get(0);
@@ -185,10 +270,10 @@ public class DocumentFieldTest {
     Object value5 = documentField5.getValue(model);
     Object value6 = documentField6.getValue(model);
     //THEN
-    assertEquals(value0, 0.0);
+    assertEquals(value0, 0L);
     assertEquals(value1, "New User");
     assertEquals(value2, new GregorianCalendar(1991, Calendar.AUGUST, 24, 1, 2, 3).getTime());
-    assertEquals(value3, 18.0);
+    assertEquals(value3, "18 year(s) old");
     assertEquals(value4, 0.1234);
     assertEquals(value5, true);
     assertNull(value6);
@@ -208,7 +293,7 @@ public class DocumentFieldTest {
     documentField0.setValue(model, null);
     documentField1.setValue(model, "Updated User");
     documentField2.setValue(model, new Date(900090009));
-    documentField3.setValue(model, 20);
+    documentField3.setValue(model, "20 year(s) old");
     documentField4.setValue(model, 0.5678);
     documentField5.setValue(model, false);
     documentField6.setValue(model, null);
@@ -221,10 +306,10 @@ public class DocumentFieldTest {
     Object value5 = documentField5.getValue(model);
     Object value6 = documentField6.getValue(model);
     //THEN
-    assertEquals(value0, 0.0);
+    assertEquals(value0, 0L);
     assertEquals(value1, "Updated User");
     assertEquals(value2, new Date(900090009));
-    assertEquals(value3, 20);
+    assertEquals(value3, "20 year(s) old");
     assertEquals(value4, 0.5678);
     assertEquals(value5, false);
     assertNull(value6);

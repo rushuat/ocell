@@ -7,8 +7,10 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.ua.rush.doc.ocell.annotation.BooleanValue;
 import com.ua.rush.doc.ocell.annotation.DateValue;
+import com.ua.rush.doc.ocell.annotation.FieldConverter;
 import com.ua.rush.doc.ocell.annotation.NumberValue;
 import com.ua.rush.doc.ocell.annotation.StringValue;
+import com.ua.rush.doc.ocell.field.AgeConverter;
 import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -37,6 +39,7 @@ public class Json {
   private Date dateOfBirth;
 
   @NumberValue(18)
+  @FieldConverter(AgeConverter.class)
   @JsonProperty(value = "Age", index = 3)
   private Integer age;
 
