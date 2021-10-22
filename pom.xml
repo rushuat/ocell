@@ -4,10 +4,36 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.ua.rush.doc</groupId>
+  <groupId>io.github.rushuat</groupId>
   <artifactId>ocell</artifactId>
   <version>0.1.1</version>
   <packaging>jar</packaging>
+
+  <name>oCell</name>
+  <description>A library for Excel to POJO and POJO to Excel mapping</description>
+  <url>https://github.com/rushuat/ocell</url>
+
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <name>RusH</name>
+      <email>rushuat@users.noreply.github.com</email>
+      <organization>UaT</organization>
+      <organizationUrl>https://github.com/rushuat</organizationUrl>
+    </developer>
+  </developers>
+
+  <scm>
+    <connection>scm:git:git://github.com/rushuat/ocell.git</connection>
+    <developerConnection>scm:git:ssh://github.com:rushuat/ocell.git</developerConnection>
+    <url>https://github.com/rushuat/ocell</url>
+  </scm>
 
   <properties>
     <java.version>11</java.version>
@@ -24,6 +50,8 @@
 
     <compiler.plugin>3.8.1</compiler.plugin>
     <surefire.plugin>2.22.2</surefire.plugin>
+    <source-plugin>3.2.1</source-plugin>
+    <javadoc-plugin>3.3.1</javadoc-plugin>
 
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
@@ -105,6 +133,32 @@
         <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>
         <version>${spotbugs.plugin}</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>${source-plugin}</version>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <goals>
+              <goal>jar-no-fork</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>${javadoc-plugin}</version>
+        <executions>
+          <execution>
+            <id>attach-javadocs</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
