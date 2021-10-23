@@ -15,6 +15,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.testng.annotations.DataProvider;
@@ -28,7 +29,7 @@ public class DocumentFieldTest {
             model,
             Arrays
                 .stream(model.getClass().getDeclaredFields())
-                .map(DocumentField::new)
+                .map(field -> new DocumentField(field, new HashMap<>()))
                 .collect(Collectors.toList())
         };
   }
@@ -47,7 +48,7 @@ public class DocumentFieldTest {
   public void shouldReturnType(Object model, List<DocumentField> documentFields) {
     //GIVEN
     Field field = model.getClass().getDeclaredFields()[0];
-    DocumentField documentField = new DocumentField(field);
+    DocumentField documentField = new DocumentField(field, new HashMap<>());
     //WHEN
     Class<?> clazz = documentField.getType();
     //THEN

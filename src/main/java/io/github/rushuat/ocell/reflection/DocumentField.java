@@ -19,6 +19,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.Map;
 import javax.persistence.Column;
 import javax.persistence.Transient;
 import lombok.SneakyThrows;
@@ -26,10 +27,14 @@ import lombok.SneakyThrows;
 public class DocumentField {
 
   private Field field;
+  private Map<Class<? extends ValueConverter>, ValueConverter> converterCache;
 
-  public DocumentField(Field field) {
+  public DocumentField(
+      Field field,
+      Map<Class<? extends ValueConverter>, ValueConverter> converterCache) {
     this.field = field;
     this.field.setAccessible(true);
+    this.converterCache = converterCache;
   }
 
   @SneakyThrows
@@ -170,13 +175,17 @@ public class DocumentField {
     return field.getType();
   }
 
-  @SneakyThrows
   public ValueConverter getConverter() {
     ValueConverter converter = null;
     if (field.isAnnotationPresent(FieldConverter.class)) {
       Class<? extends ValueConverter> clazz = field.getAnnotation(FieldConverter.class).value();
-      converter = clazz.getDeclaredConstructor().newInstance();
+      converter = converterCache.computeIfAbsent(clazz, this::newConverter);
     }
     return converter;
+  }
+
+  @SneakyThrows
+  private ValueConverter newConverter(Class<? extends ValueConverter> clazz) {
+    return clazz.getDeclaredConstructor().newInstance();
   }
 }
