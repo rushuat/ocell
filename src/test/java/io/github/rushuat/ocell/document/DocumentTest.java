@@ -55,7 +55,9 @@ public class DocumentTest {
     byte[] documentData;
     try (Document document = new Document(password)) {
       document.addSheet(new Object[]{models[0]});
+      document.addSheet(Collections.singletonList(models[0]));
       document.addSheet(new Object[]{models[1]});
+      document.addSheet(Collections.singletonList(models[1]));
       document.addSheet("Jpa Sheet", new Jpa[]{(Jpa) models[2]});
       document.addSheet("Json Sheet", Collections.singletonList(models[3]));
       document.addSheet(new Object[]{models[4], new Pojo(), new Pojo()});

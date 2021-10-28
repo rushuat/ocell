@@ -2,7 +2,9 @@ package io.github.rushuat.ocell.document;
 
 import io.github.rushuat.ocell.reflection.DocumentClass;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -23,7 +25,7 @@ public class Document extends IODocument {
     addSheet(null, items);
   }
 
-  public <T> void addSheet(List<T> items) {
+  public <T> void addSheet(Collection<T> items) {
     addSheet(null, items);
   }
 
@@ -40,28 +42,29 @@ public class Document extends IODocument {
                     .filter(Predicate.not(clazz -> clazz.getType().equals(Object.class)))
                     .orElse(null)
             );
-    List<T> itemList =
+    Collection<T> itemCollection =
         Optional.ofNullable(items)
             .map(Arrays::asList)
             .orElse(Collections.emptyList());
-    addSheet(name, itemList, documentClass);
+    addSheet(name, itemCollection, documentClass);
   }
 
-  public <T> void addSheet(String name, List<T> items) {
+  public <T> void addSheet(String name, Collection<T> items) {
     DocumentClass<T> documentClass =
         Optional.ofNullable(items)
-            .filter(Predicate.not(List::isEmpty))
-            .map(list -> list.get(0))
+            .map(Collection::iterator)
+            .filter(Iterator::hasNext)
+            .map(Iterator::next)
             .map(DocumentClass::new)
             .filter(Predicate.not(clazz -> clazz.getType().equals(Object.class)))
             .orElse(null);
-    List<T> itemList =
+    Collection<T> itemCollection =
         Optional.ofNullable(items)
             .orElse(Collections.emptyList());
-    addSheet(name, itemList, documentClass);
+    addSheet(name, itemCollection, documentClass);
   }
 
-  private <T> void addSheet(String name, List<T> items, DocumentClass<T> clazz) {
+  private <T> void addSheet(String name, Collection<T> items, DocumentClass<T> clazz) {
     if (clazz != null) {
       String sheetName = Optional.ofNullable(name).orElse(clazz.getName());
       Sheet sheet = workbook.createSheet(sheetName);
