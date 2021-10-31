@@ -11,6 +11,7 @@ import io.github.rushuat.ocell.annotation.FieldOrder;
 import io.github.rushuat.ocell.annotation.NumberValue;
 import io.github.rushuat.ocell.annotation.StringValue;
 import io.github.rushuat.ocell.field.AgeConverter;
+import io.github.rushuat.ocell.field.PercentConverter;
 import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -45,6 +46,12 @@ public class Pojo {
   @FieldConverter(AgeConverter.class)
   @FieldName("Age")
   private Integer age;
+
+  @FieldOrder(4)
+  @StringValue("50%")
+  @FieldConverter(PercentConverter.class)
+  @FieldName("%")
+  private String percent;
 
   @NumberValue(0.1234)
   @FieldFormat("#.00")

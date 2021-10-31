@@ -32,6 +32,7 @@ public class DocumentTest {
                 .name("Updated User")
                 .dateOfBirth(new Date(123456789))
                 .age(33)
+                .percent("30%")
                 .rating(0.2525)
                 .isNew(false)
                 .data(null)
@@ -98,17 +99,20 @@ public class DocumentTest {
             .name("New User")
             .dateOfBirth(new GregorianCalendar(1991, Calendar.AUGUST, 24, 1, 2, 3).getTime())
             .age(18)
+            .percent("50%")
             .rating(0.1234)
             .isNew(true)
             .data(null)
             .build()
     );
-    assertEquals(jsonList.get(0),
+    assertEquals(
+        jsonList.get(0),
         Json.builder()
             .id((long) 0)
             .name("New User")
             .dateOfBirth(new GregorianCalendar(1991, Calendar.AUGUST, 24, 1, 2, 3).getTime())
             .age(18)
+            .percent("50%")
             .rating(0.1234)
             .isNew(true)
             .data(null)

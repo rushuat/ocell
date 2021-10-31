@@ -40,17 +40,16 @@ public class DocumentField {
   @SneakyThrows
   public void setValue(Object obj, Object value) {
     Object data = value;
-    if (data != null) {
-      ValueConverter converter = getConverter();
-      if (converter != null) {
-        data = converter.convertInput(data);
+    ValueConverter converter = getConverter();
+    if (converter != null) {
+      data = converter.convertInput(data);
+    } else {
+      if (data instanceof Number) {
+        data = getNumber(data);
       }
     }
     if (data == null) {
       data = getDefault();
-    }
-    if (data != null) {
-      data = getNumber(data);
     }
     field.set(obj, data);
   }
@@ -61,34 +60,27 @@ public class DocumentField {
     if (value == null) {
       value = getDefault();
     }
-    if (value != null) {
-      value = getNumber(value);
-    }
-    if (value != null) {
-      ValueConverter converter = getConverter();
-      if (converter != null) {
-        value = converter.convertOutput(value);
-      }
+    ValueConverter converter = getConverter();
+    if (converter != null) {
+      value = converter.convertOutput(value);
     }
     return value;
   }
 
   public Object getNumber(Object value) {
     Object data = value;
-    if (data instanceof Number) {
-      if (field.getType().equals(Double.class)) {
-        data = ((Number) value).doubleValue();
-      } else if (field.getType().equals(Integer.class)) {
-        data = ((Number) value).intValue();
-      } else if (field.getType().equals(Long.class)) {
-        data = ((Number) value).longValue();
-      } else if (field.getType().equals(Float.class)) {
-        data = ((Number) value).floatValue();
-      } else if (field.getType().equals(Byte.class)) {
-        data = ((Number) value).byteValue();
-      } else if (field.getType().equals(Short.class)) {
-        data = ((Number) value).shortValue();
-      }
+    if (field.getType().equals(Double.class)) {
+      data = ((Number) value).doubleValue();
+    } else if (field.getType().equals(Integer.class)) {
+      data = ((Number) value).intValue();
+    } else if (field.getType().equals(Long.class)) {
+      data = ((Number) value).longValue();
+    } else if (field.getType().equals(Float.class)) {
+      data = ((Number) value).floatValue();
+    } else if (field.getType().equals(Byte.class)) {
+      data = ((Number) value).byteValue();
+    } else if (field.getType().equals(Short.class)) {
+      data = ((Number) value).shortValue();
     }
     return data;
   }
@@ -100,7 +92,8 @@ public class DocumentField {
     } else if (field.isAnnotationPresent(BooleanValue.class)) {
       value = field.getAnnotation(BooleanValue.class).value();
     } else if (field.isAnnotationPresent(NumberValue.class)) {
-      value = field.getAnnotation(NumberValue.class).value();
+      Double number = field.getAnnotation(NumberValue.class).value();
+      value = getNumber(number);
     } else if (field.isAnnotationPresent(DateValue.class)) {
       String date = field.getAnnotation(DateValue.class).value();
       String format = getFormat();

@@ -8,6 +8,7 @@ import io.github.rushuat.ocell.annotation.FieldOrder;
 import io.github.rushuat.ocell.annotation.NumberValue;
 import io.github.rushuat.ocell.annotation.StringValue;
 import io.github.rushuat.ocell.field.AgeConverter;
+import io.github.rushuat.ocell.field.PercentConverter;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -47,6 +48,12 @@ public class Jpa {
   @FieldConverter(AgeConverter.class)
   @Column(name = "Age")
   private Integer age;
+
+  @FieldOrder(4)
+  @StringValue("50%")
+  @FieldConverter(PercentConverter.class)
+  @Column(name = "%")
+  private String percent;
 
   @NumberValue(0.1234)
   @FieldFormat("#.00")
