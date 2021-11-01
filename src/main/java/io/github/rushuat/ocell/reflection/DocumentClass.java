@@ -3,6 +3,7 @@ package io.github.rushuat.ocell.reflection;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import io.github.rushuat.ocell.annotation.ClassName;
+import io.github.rushuat.ocell.field.ValueConverter;
 import java.text.Collator;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -10,6 +11,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -21,9 +23,11 @@ import lombok.SneakyThrows;
 public class DocumentClass<T> {
 
   private Class<T> clazz;
+  private Map<Class<? extends ValueConverter>, ValueConverter> converterCache;
 
   public DocumentClass(Class<T> clazz) {
     this.clazz = clazz;
+    this.converterCache = new ConcurrentHashMap<>();
   }
 
   public DocumentClass(T element) {
@@ -56,7 +60,7 @@ public class DocumentClass<T> {
     List<DocumentField> fields =
         Arrays
             .stream(clazz.getDeclaredFields())
-            .map(DocumentField::new)
+            .map(field -> new DocumentField(field, converterCache))
             .filter(Predicate.not(DocumentField::isExcluded))
             .sorted(Comparator.comparing(DocumentField::getOrder))
             .collect(Collectors.toList());

@@ -11,6 +11,7 @@ import io.github.rushuat.ocell.annotation.FieldConverter;
 import io.github.rushuat.ocell.annotation.NumberValue;
 import io.github.rushuat.ocell.annotation.StringValue;
 import io.github.rushuat.ocell.field.AgeConverter;
+import io.github.rushuat.ocell.field.PercentConverter;
 import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,7 +23,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonTypeName("User")
-@JsonPropertyOrder({"Id", "User Name", "Date Of Birth", "Age", "Rating", "isNew", "data"})
+@JsonPropertyOrder({"Id", "User Name", "Date Of Birth", "Age", "%", "Rating", "isNew", "data"})
 public class Json {
 
   @NumberValue(0)
@@ -42,6 +43,11 @@ public class Json {
   @FieldConverter(AgeConverter.class)
   @JsonProperty(value = "Age", index = 3)
   private Integer age;
+
+  @StringValue("50%")
+  @FieldConverter(PercentConverter.class)
+  @JsonProperty(value = "%", index = 4)
+  private String percent;
 
   @NumberValue(0.1234)
   @JsonFormat(pattern = "#.00")

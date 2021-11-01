@@ -1,3 +1,5 @@
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.rushuat/ocell.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22io.github.rushuat%22%20AND%20a:%22ocell%22)
+
 # oCell
 *oCell* is a library for Excel to POJO and POJO to Excel mapping based on [Apache POI](https://poi.apache.org/)
 
@@ -12,7 +14,7 @@ Your project should have a dependency to the library:
     <dependency>
       <groupId>io.github.rushuat</groupId>
       <artifactId>ocell</artifactId>
-      <version>0.1.1</version>
+      <version>0.1.2</version>
     </dependency>
 ```
 
@@ -22,7 +24,7 @@ The library supports POJO and few types of annotations to modify them:
 2. [Jackson](https://github.com/FasterXML/jackson-annotations)
 3. [JPA](https://javaee.github.io/javaee-spec/javadocs/javax/persistence/package-summary.html)
 
-#### Custom
+#### oCell
 * *@ClassName* - sheet name
 * *@FieldName* - column name
 * *@FieldFormat* - column format
@@ -55,12 +57,14 @@ or could be overridden by *@FieldFormat* or *@JsonFormat* annotations
 #### Priority
 You are able to mix all types of annotations with one POJO.
 
-The override priory from lower to higher: *JPA* < *Jackson* < *Custom*.
+The override priory from lower to higher: *JPA* < *Jackson* < *oCell*.
 
 #### Example
 You are able to find POJO mapping examples at this [URL](https://github.com/rushuat/ocell/tree/main/src/test/java/io/github/rushuat/ocell/model)
 
-Documents could be read from different sources:
+You are able to find *@FieldConverter* examples at this [URL](https://github.com/rushuat/ocell/tree/main/src/test/java/io/github/rushuat/ocell/field)
+
+Documents could be loaded from different sources:
 ```java
     byte[] bytes = ...
     InputStream stream = ...
@@ -81,7 +85,7 @@ Documents could be read from different sources:
     }
 ```
 
-Documents could be written to different sources:
+Documents could be stored to different sources:
 ```java
     byte[] bytes;
     OutputStream stream = ...

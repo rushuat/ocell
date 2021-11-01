@@ -2,6 +2,7 @@ package io.github.rushuat.ocell.document;
 
 import io.github.rushuat.ocell.reflection.DocumentClass;
 import io.github.rushuat.ocell.reflection.DocumentField;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -57,7 +58,7 @@ public class DocumentSheet<T> {
     header = new DocumentHeader<>(row, clazz);
   }
 
-  public void addRows(List<T> items) {
+  public void addRows(Collection<T> items) {
     items.forEach(
         item -> {
           Row row = sheet.createRow(sheet.getLastRowNum() + 1);
