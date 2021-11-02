@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.github.rushuat.ocell.annotation.BooleanValue;
 import io.github.rushuat.ocell.annotation.DateValue;
+import io.github.rushuat.ocell.annotation.FieldAlignment;
 import io.github.rushuat.ocell.annotation.FieldConverter;
 import io.github.rushuat.ocell.annotation.FieldExclude;
 import io.github.rushuat.ocell.annotation.FieldFormat;
@@ -116,10 +117,16 @@ public class DocumentField {
     if (field.isAnnotationPresent(FieldFormat.class)) {
       format = field.getAnnotation(FieldFormat.class).value();
     }
-    if (format == null || format.isBlank()) {
-      format = "";
-    }
     return format;
+  }
+
+  public String getAlignment() {
+    String alignment = null;
+    if (field.isAnnotationPresent(FieldAlignment.class)) {
+      alignment = field.getAnnotation(FieldAlignment.class).value();
+      alignment = alignment.toUpperCase();
+    }
+    return alignment;
   }
 
   public Integer getOrder() {

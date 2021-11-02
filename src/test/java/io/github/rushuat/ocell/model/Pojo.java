@@ -3,6 +3,7 @@ package io.github.rushuat.ocell.model;
 import io.github.rushuat.ocell.annotation.BooleanValue;
 import io.github.rushuat.ocell.annotation.ClassName;
 import io.github.rushuat.ocell.annotation.DateValue;
+import io.github.rushuat.ocell.annotation.FieldAlignment;
 import io.github.rushuat.ocell.annotation.FieldConverter;
 import io.github.rushuat.ocell.annotation.FieldExclude;
 import io.github.rushuat.ocell.annotation.FieldFormat;
@@ -36,28 +37,30 @@ public class Pojo {
   private String name;
 
   @FieldOrder(2)
-  @DateValue("1991-08-24T01:02:03")
+  @FieldAlignment("LEFT")
   @FieldFormat("yyyy-MM-dd'T'HH:mm:ss")
+  @DateValue("1991-08-24T01:02:03")
   @FieldName("Date Of Birth")
   private Date dateOfBirth;
 
   @FieldOrder(3)
-  @NumberValue(18)
   @FieldConverter(AgeConverter.class)
+  @NumberValue(18)
   @FieldName("Age")
   private Integer age;
 
   @FieldOrder(4)
-  @StringValue("50%")
   @FieldConverter(PercentConverter.class)
+  @StringValue("50%")
   @FieldName("%")
   private String percent;
 
+  @FieldFormat("#0.00")
   @NumberValue(0.1234)
-  @FieldFormat("#.00")
   @FieldName("Rating")
   private Double rating;
 
+  @FieldAlignment("CENTER")
   @BooleanValue(true)
   private Boolean isNew;
 

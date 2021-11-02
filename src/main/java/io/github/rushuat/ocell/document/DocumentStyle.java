@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.DataFormat;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.DateFormatConverter;
 
@@ -21,22 +22,30 @@ public class DocumentStyle {
   }
 
   public CellStyle getCellStyle(DocumentField documentField) {
+    String alignment = documentField.getAlignment();
     String format = documentField.getFormat();
-    String style =
-        documentField.getType().equals(Date.class)
-            ? DateFormatConverter.convert(Locale.getDefault(), format)
-            : format;
-    return getCellStyle(style);
+    if (format != null) {
+      if (documentField.getType().equals(Date.class)) {
+        format = DateFormatConverter.convert(Locale.getDefault(), format);
+      }
+    }
+    return getCellStyle(format, alignment);
   }
 
-  public CellStyle getCellStyle(String style) {
-    return styleCache.computeIfAbsent(style, this::toCellStyle);
+  public CellStyle getCellStyle(String format, String alignment) {
+    String styleKey = format + "_" + alignment;
+    return styleCache.computeIfAbsent(styleKey, key -> toCellStyle(format, alignment));
   }
 
-  private CellStyle toCellStyle(String style) {
+  private CellStyle toCellStyle(String format, String alignment) {
     DataFormat dataFormat = workbook.createDataFormat();
     CellStyle cellStyle = workbook.createCellStyle();
-    cellStyle.setDataFormat(dataFormat.getFormat(style));
+    if (format != null) {
+      cellStyle.setDataFormat(dataFormat.getFormat(format));
+    }
+    if (alignment != null) {
+      cellStyle.setAlignment(HorizontalAlignment.valueOf(alignment));
+    }
     return cellStyle;
   }
 }

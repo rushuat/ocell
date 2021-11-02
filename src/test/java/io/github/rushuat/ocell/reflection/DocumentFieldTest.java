@@ -140,14 +140,45 @@ public class DocumentFieldTest {
     String format6 = documentField6.getFormat();
     String format7 = documentField7.getFormat();
     //THEN
-    assertEquals(format0, "");
-    assertEquals(format1, "");
+    assertNull(format0);
+    assertNull(format1);
     assertEquals(format2, "yyyy-MM-dd'T'HH:mm:ss");
-    assertEquals(format3, "");
-    assertEquals(format4, "");
-    assertEquals(format5, "#.00");
-    assertEquals(format6, "");
-    assertEquals(format7, "");
+    assertNull(format3);
+    assertNull(format4);
+    assertEquals(format5, "#0.00");
+    assertNull(format6);
+    assertNull(format7);
+  }
+
+  @Test(dataProvider = "models")
+  public void shouldReturnAlignment(Object model, List<DocumentField> documentFields) {
+    //GIVEN
+    DocumentField documentField0 = documentFields.get(0);
+    DocumentField documentField1 = documentFields.get(1);
+    DocumentField documentField2 = documentFields.get(2);
+    DocumentField documentField3 = documentFields.get(3);
+    DocumentField documentField4 = documentFields.get(4);
+    DocumentField documentField5 = documentFields.get(5);
+    DocumentField documentField6 = documentFields.get(6);
+    DocumentField documentField7 = documentFields.get(7);
+    //WHEN
+    String alignment0 = documentField0.getAlignment();
+    String alignment1 = documentField1.getAlignment();
+    String alignment2 = documentField2.getAlignment();
+    String alignment3 = documentField3.getAlignment();
+    String alignment4 = documentField4.getAlignment();
+    String alignment5 = documentField5.getAlignment();
+    String alignment6 = documentField6.getAlignment();
+    String alignment7 = documentField7.getAlignment();
+    //THEN
+    assertNull(alignment0);
+    assertNull(alignment1);
+    assertEquals(alignment2, "LEFT");
+    assertNull(alignment3);
+    assertNull(alignment4);
+    assertNull(alignment5);
+    assertEquals(alignment6, "CENTER");
+    assertNull(alignment7);
   }
 
   @Test(dataProvider = "models")

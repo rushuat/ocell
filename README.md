@@ -14,7 +14,7 @@ Your project should have a dependency to the library:
     <dependency>
       <groupId>io.github.rushuat</groupId>
       <artifactId>ocell</artifactId>
-      <version>0.1.2</version>
+      <version>0.1.3</version>
     </dependency>
 ```
 
@@ -28,6 +28,7 @@ The library supports POJO and few types of annotations to modify them:
 * *@ClassName* - sheet name
 * *@FieldName* - column name
 * *@FieldFormat* - column format
+* *@FieldAlignment* - column alignment (*HorizontalAlignment* enumeration values)
 * *@FieldOrder* - column order
 * *@FieldExclude* - column not used
 * *@FieldConverter* - column converter
@@ -63,6 +64,8 @@ The override priory from lower to higher: *JPA* < *Jackson* < *oCell*.
 You are able to find POJO mapping examples at this [URL](https://github.com/rushuat/ocell/tree/main/src/test/java/io/github/rushuat/ocell/model)
 
 You are able to find *@FieldConverter* examples at this [URL](https://github.com/rushuat/ocell/tree/main/src/test/java/io/github/rushuat/ocell/field)
+
+You are able to find *@FieldFormat* examples at this [URL](https://stackoverflow.com/questions/319438/basic-excel-currency-format-with-apache-poi)
 
 Documents could be loaded from different sources:
 ```java

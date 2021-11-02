@@ -2,6 +2,7 @@ package io.github.rushuat.ocell.model;
 
 import io.github.rushuat.ocell.annotation.BooleanValue;
 import io.github.rushuat.ocell.annotation.DateValue;
+import io.github.rushuat.ocell.annotation.FieldAlignment;
 import io.github.rushuat.ocell.annotation.FieldConverter;
 import io.github.rushuat.ocell.annotation.FieldFormat;
 import io.github.rushuat.ocell.annotation.FieldOrder;
@@ -38,28 +39,30 @@ public class Jpa {
   private String name;
 
   @FieldOrder(2)
-  @DateValue("1991-08-24T01:02:03")
+  @FieldAlignment("LEFT")
   @FieldFormat("yyyy-MM-dd'T'HH:mm:ss")
+  @DateValue("1991-08-24T01:02:03")
   @Column(name = "Date Of Birth")
   private Date dateOfBirth;
 
   @FieldOrder(3)
-  @NumberValue(18)
   @FieldConverter(AgeConverter.class)
+  @NumberValue(18)
   @Column(name = "Age")
   private Integer age;
 
   @FieldOrder(4)
-  @StringValue("50%")
   @FieldConverter(PercentConverter.class)
+  @StringValue("50%")
   @Column(name = "%")
   private String percent;
 
+  @FieldFormat("#0.00")
   @NumberValue(0.1234)
-  @FieldFormat("#.00")
   @Column(name = "Rating")
   private Double rating;
 
+  @FieldAlignment("CENTER")
   @BooleanValue(true)
   private Boolean isNew;
 
