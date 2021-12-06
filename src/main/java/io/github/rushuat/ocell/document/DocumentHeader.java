@@ -35,7 +35,7 @@ public class DocumentHeader<T> {
     IntStream
         .range(0, header.getLastCellNum())
         .filter(index -> Objects.nonNull(header.getCell(index)))
-        .forEach(index -> map.put(index, header.getCell(index).getStringCellValue()));
+        .forEach(index -> map.put(index, header.getCell(index).getStringCellValue().trim()));
     return map;
   }
 
@@ -44,7 +44,7 @@ public class DocumentHeader<T> {
     IntStream
         .range(0, header.getLastCellNum())
         .filter(index -> Objects.nonNull(header.getCell(index)))
-        .forEach(index -> map.put(header.getCell(index).getStringCellValue(), index));
+        .forEach(index -> map.put(header.getCell(index).getStringCellValue().trim(), index));
     return map;
   }
 
