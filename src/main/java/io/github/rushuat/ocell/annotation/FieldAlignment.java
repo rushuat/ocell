@@ -9,5 +9,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface FieldAlignment {
 
-  String value();
+  String horizontal() default "";
+
+  String vertical() default "";
 }

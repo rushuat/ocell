@@ -1,5 +1,6 @@
 package io.github.rushuat.ocell.document;
 
+import io.github.rushuat.ocell.field.Alignment;
 import io.github.rushuat.ocell.reflection.DocumentField;
 import java.util.Date;
 import java.util.Locale;
@@ -8,6 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.DataFormat;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.DateFormatConverter;
 
@@ -22,7 +24,7 @@ public class DocumentStyle {
   }
 
   public CellStyle getCellStyle(DocumentField documentField) {
-    String alignment = documentField.getAlignment();
+    Alignment alignment = documentField.getAlignment();
     String format = documentField.getFormat();
     if (format != null) {
       if (documentField.getType().equals(Date.class)) {
@@ -32,19 +34,22 @@ public class DocumentStyle {
     return getCellStyle(format, alignment);
   }
 
-  public CellStyle getCellStyle(String format, String alignment) {
-    String styleKey = format + "_" + alignment;
+  public CellStyle getCellStyle(String format, Alignment alignment) {
+    String styleKey = format + "+" + alignment;
     return styleCache.computeIfAbsent(styleKey, key -> toCellStyle(format, alignment));
   }
 
-  private CellStyle toCellStyle(String format, String alignment) {
+  private CellStyle toCellStyle(String format, Alignment alignment) {
     DataFormat dataFormat = workbook.createDataFormat();
     CellStyle cellStyle = workbook.createCellStyle();
     if (format != null) {
       cellStyle.setDataFormat(dataFormat.getFormat(format));
     }
-    if (alignment != null) {
-      cellStyle.setAlignment(HorizontalAlignment.valueOf(alignment));
+    if (alignment.getHorizontal() != null) {
+      cellStyle.setAlignment(HorizontalAlignment.valueOf(alignment.getHorizontal()));
+    }
+    if (alignment.getVertical() != null) {
+      cellStyle.setVerticalAlignment(VerticalAlignment.valueOf(alignment.getVertical()));
     }
     return cellStyle;
   }

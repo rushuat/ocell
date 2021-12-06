@@ -28,7 +28,8 @@ The library supports POJO and few types of annotations to modify them:
 * *@ClassName* - sheet name
 * *@FieldName* - column name
 * *@FieldFormat* - column format
-* *@FieldAlignment* - column alignment (*HorizontalAlignment* enumeration values)
+* *@FieldAlignment* - column alignment by horizontal or vertical properties\
+(*HorizontalAlignment* or *VerticalAlignment* enumeration values)
 * *@FieldOrder* - column order
 * *@FieldExclude* - column not used
 * *@FieldConverter* - column converter

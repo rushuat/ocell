@@ -35,7 +35,7 @@ public class Json {
   @JsonProperty(value = "User Name", index = 1)
   private String name;
 
-  @FieldAlignment("LEFT")
+  @FieldAlignment(horizontal = "left", vertical = "top")
   @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
   @DateValue("1991-08-24T01:02:03")
   @JsonProperty(value = "Date Of Birth", index = 2)
@@ -56,7 +56,7 @@ public class Json {
   @JsonProperty("Rating")
   private Double rating;
 
-  @FieldAlignment("CENTER")
+  @FieldAlignment(horizontal = "center")
   @BooleanValue(true)
   private Boolean isNew;
 

@@ -13,6 +13,7 @@ import io.github.rushuat.ocell.annotation.FieldName;
 import io.github.rushuat.ocell.annotation.FieldOrder;
 import io.github.rushuat.ocell.annotation.NumberValue;
 import io.github.rushuat.ocell.annotation.StringValue;
+import io.github.rushuat.ocell.field.Alignment;
 import io.github.rushuat.ocell.field.ValueConverter;
 import java.lang.reflect.Field;
 import java.time.LocalDateTime;
@@ -120,11 +121,16 @@ public class DocumentField {
     return format;
   }
 
-  public String getAlignment() {
-    String alignment = null;
+  public Alignment getAlignment() {
+    Alignment alignment = new Alignment();
     if (field.isAnnotationPresent(FieldAlignment.class)) {
-      alignment = field.getAnnotation(FieldAlignment.class).value();
-      alignment = alignment.toUpperCase();
+      FieldAlignment fieldAlignment = field.getAnnotation(FieldAlignment.class);
+      if (!fieldAlignment.horizontal().isBlank()) {
+        alignment.setHorizontal(fieldAlignment.horizontal().toUpperCase());
+      }
+      if (!fieldAlignment.vertical().isBlank()) {
+        alignment.setVertical(fieldAlignment.vertical().toUpperCase());
+      }
     }
     return alignment;
   }

@@ -39,7 +39,7 @@ public class Jpa {
   private String name;
 
   @FieldOrder(2)
-  @FieldAlignment("LEFT")
+  @FieldAlignment(horizontal = "left", vertical = "top")
   @FieldFormat("yyyy-MM-dd'T'HH:mm:ss")
   @DateValue("1991-08-24T01:02:03")
   @Column(name = "Date Of Birth")
@@ -62,7 +62,7 @@ public class Jpa {
   @Column(name = "Rating")
   private Double rating;
 
-  @FieldAlignment("CENTER")
+  @FieldAlignment(horizontal = "center")
   @BooleanValue(true)
   private Boolean isNew;
 

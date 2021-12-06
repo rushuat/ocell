@@ -7,6 +7,7 @@ import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertTrue;
 
 import io.github.rushuat.ocell.field.AgeConverter;
+import io.github.rushuat.ocell.field.Alignment;
 import io.github.rushuat.ocell.field.PercentConverter;
 import io.github.rushuat.ocell.model.Jpa;
 import io.github.rushuat.ocell.model.Json;
@@ -161,24 +162,49 @@ public class DocumentFieldTest {
     DocumentField documentField5 = documentFields.get(5);
     DocumentField documentField6 = documentFields.get(6);
     DocumentField documentField7 = documentFields.get(7);
+
     //WHEN
-    String alignment0 = documentField0.getAlignment();
-    String alignment1 = documentField1.getAlignment();
-    String alignment2 = documentField2.getAlignment();
-    String alignment3 = documentField3.getAlignment();
-    String alignment4 = documentField4.getAlignment();
-    String alignment5 = documentField5.getAlignment();
-    String alignment6 = documentField6.getAlignment();
-    String alignment7 = documentField7.getAlignment();
+    Alignment alignment0 = documentField0.getAlignment();
+    Alignment alignment1 = documentField1.getAlignment();
+    Alignment alignment2 = documentField2.getAlignment();
+    Alignment alignment3 = documentField3.getAlignment();
+    Alignment alignment4 = documentField4.getAlignment();
+    Alignment alignment5 = documentField5.getAlignment();
+    Alignment alignment6 = documentField6.getAlignment();
+    Alignment alignment7 = documentField7.getAlignment();
+
     //THEN
-    assertNull(alignment0);
-    assertNull(alignment1);
-    assertEquals(alignment2, "LEFT");
-    assertNull(alignment3);
-    assertNull(alignment4);
-    assertNull(alignment5);
-    assertEquals(alignment6, "CENTER");
-    assertNull(alignment7);
+    assertNotNull(alignment0);
+    assertNull(alignment0.getHorizontal());
+    assertNull(alignment0.getVertical());
+
+    assertNotNull(alignment1);
+    assertNull(alignment1.getHorizontal());
+    assertNull(alignment1.getVertical());
+
+    assertNotNull(alignment2);
+    assertEquals(alignment2.getHorizontal(), "LEFT");
+    assertEquals(alignment2.getVertical(), "TOP");
+
+    assertNotNull(alignment3);
+    assertNull(alignment3.getHorizontal());
+    assertNull(alignment3.getVertical());
+
+    assertNotNull(alignment4);
+    assertNull(alignment4.getHorizontal());
+    assertNull(alignment4.getVertical());
+
+    assertNotNull(alignment5);
+    assertNull(alignment5.getHorizontal());
+    assertNull(alignment5.getVertical());
+
+    assertNotNull(alignment6);
+    assertEquals(alignment6.getHorizontal(), "CENTER");
+    assertNull(alignment6.getVertical());
+
+    assertNotNull(alignment7);
+    assertNull(alignment7.getHorizontal());
+    assertNull(alignment7.getVertical());
   }
 
   @Test(dataProvider = "models")
