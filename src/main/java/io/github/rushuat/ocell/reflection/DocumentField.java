@@ -14,12 +14,11 @@ import io.github.rushuat.ocell.annotation.FieldOrder;
 import io.github.rushuat.ocell.annotation.NumberValue;
 import io.github.rushuat.ocell.annotation.StringValue;
 import io.github.rushuat.ocell.field.Alignment;
+import io.github.rushuat.ocell.field.Format;
 import io.github.rushuat.ocell.field.ValueConverter;
 import java.lang.reflect.Field;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 import javax.persistence.Column;
@@ -87,6 +86,7 @@ public class DocumentField {
     return data;
   }
 
+  @SneakyThrows
   public Object getDefault() {
     Object value = null;
     if (field.isAnnotationPresent(StringValue.class)) {
@@ -98,27 +98,32 @@ public class DocumentField {
       value = getNumber(number);
     } else if (field.isAnnotationPresent(DateValue.class)) {
       String date = field.getAnnotation(DateValue.class).value();
-      String format = getFormat();
-      DateTimeFormatter formatter =
-          format.isEmpty()
-              ? DateTimeFormatter.ISO_ZONED_DATE_TIME
-              : DateTimeFormatter.ofPattern(format);
-      LocalDateTime local = LocalDateTime.from(formatter.parse(date));
-      ZonedDateTime zoned = ZonedDateTime.of(local, ZoneId.systemDefault());
-      value = Date.from(zoned.toInstant());
+      Format format = getFormat();
+      DateFormat formatter =
+          format.getPattern() == null
+              ? new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
+              : new SimpleDateFormat(format.getPattern());
+      value = formatter.parse(date);
     }
     return value;
   }
 
-  public String getFormat() {
-    String format = null;
+  public Format getFormat() {
+    String pattern = null;
     if (field.isAnnotationPresent(JsonFormat.class)) {
-      format = field.getAnnotation(JsonFormat.class).pattern();
+      JsonFormat jsonFormat = field.getAnnotation(JsonFormat.class);
+      if (!jsonFormat.pattern().isBlank()) {
+        pattern = jsonFormat.pattern();
+      }
     }
     if (field.isAnnotationPresent(FieldFormat.class)) {
-      format = field.getAnnotation(FieldFormat.class).value();
+      FieldFormat fieldFormat = field.getAnnotation(FieldFormat.class);
+      if (!fieldFormat.value().isBlank()) {
+        pattern = fieldFormat.value();
+      }
     }
-    return format;
+    boolean isDate = getType().equals(Date.class);
+    return new Format(pattern, isDate);
   }
 
   public Alignment getAlignment() {

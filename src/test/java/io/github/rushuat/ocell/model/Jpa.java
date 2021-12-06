@@ -68,4 +68,8 @@ public class Jpa {
 
   @Transient
   private Object data;
+
+  @FieldAlignment(vertical = "bottom")
+  @DateValue("2020-01-01T11:12:13Z")
+  private Date updated;
 }

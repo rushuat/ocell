@@ -24,7 +24,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonTypeName("User")
-@JsonPropertyOrder({"Id", "User Name", "Date Of Birth", "Age", "%", "Rating", "isNew", "data"})
+@JsonPropertyOrder(
+    {"Id", "User Name", "Date Of Birth", "Age", "%", "Rating", "isNew", "data", "updated"}
+)
 public class Json {
 
   @NumberValue(0)
@@ -62,4 +64,8 @@ public class Json {
 
   @JsonIgnore
   private Object data;
+
+  @FieldAlignment(vertical = "bottom")
+  @DateValue("2020-01-01T11:12:13Z")
+  private Date updated;
 }

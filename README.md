@@ -53,7 +53,7 @@ You are able to apply default values to POJO fields using annotations:
 * *@StringValue*
 * *@NumberValue*
 * *@BooleanValue*
-* *@DateValue* - default format is ISO_ZONED_DATE_TIME\
+* *@DateValue* - default format is *DateTimeFormatter.ISO_INSTANT*\
 or could be overridden by *@FieldFormat* or *@JsonFormat* annotations
 
 #### Priority
