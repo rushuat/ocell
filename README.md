@@ -1,4 +1,6 @@
-[![Maven Central](https://img.shields.io/maven-central/v/io.github.rushuat/ocell.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22io.github.rushuat%22%20AND%20a:%22ocell%22)
+[![maven-central](https://img.shields.io/maven-central/v/io.github.rushuat/ocell.svg?color=blue)](https://search.maven.org/search?q=g:%22io.github.rushuat%22%20AND%20a:%22ocell%22)
+[![javadoc](https://javadoc.io/badge2/io.github.rushuat/ocell/javadoc.svg?color=blue)](https://javadoc.io/doc/io.github.rushuat/ocell)
+[![license](https://img.shields.io/github/license/rushuat/ocell.svg?color=blue)](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
 # oCell
 *oCell* is a library for Excel to POJO and POJO to Excel mapping based on [Apache POI](https://poi.apache.org/)
@@ -14,7 +16,7 @@ Your project should have a dependency to the library:
     <dependency>
       <groupId>io.github.rushuat</groupId>
       <artifactId>ocell</artifactId>
-      <version>0.1.2</version>
+      <version>0.1.3</version>
     </dependency>
 ```
 
@@ -28,6 +30,10 @@ The library supports POJO and few types of annotations to modify them:
 * *@ClassName* - sheet name
 * *@FieldName* - column name
 * *@FieldFormat* - column format
+* *@FieldAlignment* - column alignment by horizontal or vertical properties\
+(*HorizontalAlignment* or *VerticalAlignment* enumeration values)
+* *@HeaderAlignment* - column header alignment by horizontal or vertical properties\
+(*HorizontalAlignment* or *VerticalAlignment* enumeration values)
 * *@FieldOrder* - column order
 * *@FieldExclude* - column not used
 * *@FieldConverter* - column converter
@@ -51,7 +57,7 @@ You are able to apply default values to POJO fields using annotations:
 * *@StringValue*
 * *@NumberValue*
 * *@BooleanValue*
-* *@DateValue* - default format is ISO_ZONED_DATE_TIME\
+* *@DateValue* - default format is *DateTimeFormatter.ISO_INSTANT*\
 or could be overridden by *@FieldFormat* or *@JsonFormat* annotations
 
 #### Priority
@@ -63,6 +69,8 @@ The override priory from lower to higher: *JPA* < *Jackson* < *oCell*.
 You are able to find POJO mapping examples at this [URL](https://github.com/rushuat/ocell/tree/main/src/test/java/io/github/rushuat/ocell/model)
 
 You are able to find *@FieldConverter* examples at this [URL](https://github.com/rushuat/ocell/tree/main/src/test/java/io/github/rushuat/ocell/field)
+
+You are able to find *@FieldFormat* examples at this [URL](https://stackoverflow.com/questions/319438/basic-excel-currency-format-with-apache-poi)
 
 Documents could be loaded from different sources:
 ```java

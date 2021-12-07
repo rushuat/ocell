@@ -36,6 +36,7 @@ public class DocumentTest {
                 .rating(0.2525)
                 .isNew(false)
                 .data(null)
+                .updated(new Date(987654321))
                 .build()
         };
   }
@@ -103,6 +104,7 @@ public class DocumentTest {
             .rating(0.1234)
             .isNew(true)
             .data(null)
+            .updated(new GregorianCalendar(2020, Calendar.JANUARY, 1, 11, 12, 13).getTime())
             .build()
     );
     assertEquals(
@@ -116,6 +118,7 @@ public class DocumentTest {
             .rating(0.1234)
             .isNew(true)
             .data(null)
+            .updated(new GregorianCalendar(2020, Calendar.JANUARY, 1, 11, 12, 13).getTime())
             .build()
     );
     assertEquals(pojoList.get(0), models[4]);

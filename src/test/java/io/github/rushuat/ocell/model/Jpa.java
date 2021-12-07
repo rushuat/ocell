@@ -2,9 +2,11 @@ package io.github.rushuat.ocell.model;
 
 import io.github.rushuat.ocell.annotation.BooleanValue;
 import io.github.rushuat.ocell.annotation.DateValue;
+import io.github.rushuat.ocell.annotation.FieldAlignment;
 import io.github.rushuat.ocell.annotation.FieldConverter;
 import io.github.rushuat.ocell.annotation.FieldFormat;
 import io.github.rushuat.ocell.annotation.FieldOrder;
+import io.github.rushuat.ocell.annotation.HeaderAlignment;
 import io.github.rushuat.ocell.annotation.NumberValue;
 import io.github.rushuat.ocell.annotation.StringValue;
 import io.github.rushuat.ocell.field.AgeConverter;
@@ -38,31 +40,38 @@ public class Jpa {
   private String name;
 
   @FieldOrder(2)
-  @DateValue("1991-08-24T01:02:03")
+  @FieldAlignment(horizontal = "left", vertical = "top")
   @FieldFormat("yyyy-MM-dd'T'HH:mm:ss")
+  @DateValue("1991-08-24T01:02:03")
   @Column(name = "Date Of Birth")
   private Date dateOfBirth;
 
   @FieldOrder(3)
-  @NumberValue(18)
   @FieldConverter(AgeConverter.class)
+  @NumberValue(18)
   @Column(name = "Age")
   private Integer age;
 
   @FieldOrder(4)
-  @StringValue("50%")
   @FieldConverter(PercentConverter.class)
+  @StringValue("50%")
   @Column(name = "%")
   private String percent;
 
+  @FieldFormat("#0.00")
   @NumberValue(0.1234)
-  @FieldFormat("#.00")
   @Column(name = "Rating")
   private Double rating;
 
+  @FieldAlignment(horizontal = "center")
   @BooleanValue(true)
   private Boolean isNew;
 
   @Transient
   private Object data;
+
+  @HeaderAlignment(horizontal = "right")
+  @FieldAlignment(vertical = "bottom")
+  @DateValue("2020-01-01T11:12:13Z")
+  private Date updated;
 }

@@ -14,7 +14,7 @@ public class DocumentSheet<T> {
 
   private Sheet sheet;
   private DocumentStyle style;
-  private DocumentHeader<T> header;
+  private DocumentHeader header;
   private DocumentClass<T> clazz;
   private List<DocumentField> fields;
   private Integer headerOffset;
@@ -55,7 +55,7 @@ public class DocumentSheet<T> {
         sheet.getLastRowNum() > 0
             ? sheet.getRow(headerOffset)
             : Optional.ofNullable(sheet.getRow(0)).orElse(sheet.createRow(0));
-    header = new DocumentHeader<>(row, clazz);
+    header = new DocumentHeader(row, style, fields);
   }
 
   public void addRows(Collection<T> items) {

@@ -32,22 +32,25 @@ public abstract class IODocument extends IOStream {
   @Override
   public void fromStream(InputStream stream) throws IOException {
     try (stream) {
-      InputStream inputStream = stream;
       if (password != null && password.length > 0) {
-        POIFSFileSystem fileSystem = new POIFSFileSystem(inputStream);
-        EncryptionInfo encryptionInfo = new EncryptionInfo(fileSystem);
-        Decryptor decryptor = Decryptor.getInstance(encryptionInfo);
+        try (POIFSFileSystem fileSystem = new POIFSFileSystem(stream)) {
+          EncryptionInfo encryptionInfo = new EncryptionInfo(fileSystem);
+          Decryptor decryptor = Decryptor.getInstance(encryptionInfo);
 
-        if (decryptor.verifyPassword(new String(password))) {
-          inputStream = decryptor.getDataStream(fileSystem);
-        } else {
-          throw new IOException("Invalid document password");
+          if (decryptor.verifyPassword(new String(password))) {
+            try (InputStream inputStream = decryptor.getDataStream(fileSystem)) {
+              workbook = new XSSFWorkbook(inputStream);
+            }
+          } else {
+            throw new IOException("Invalid document password");
+          }
+        } catch (GeneralSecurityException e) {
+          throw new IOException(e);
         }
+      } else {
+        workbook = new XSSFWorkbook(stream);
       }
-      workbook = new XSSFWorkbook(inputStream);
       style = new DocumentStyle(workbook);
-    } catch (GeneralSecurityException e) {
-      throw new IOException(e);
     }
   }
 
@@ -55,17 +58,17 @@ public abstract class IODocument extends IOStream {
   public void toStream(OutputStream stream) throws IOException {
     try (stream) {
       if (password != null && password.length > 0) {
-        EncryptionInfo encryptionInfo = new EncryptionInfo(EncryptionMode.agile);
+        EncryptionInfo encryptionInfo = new EncryptionInfo(EncryptionMode.standard);
         Encryptor encryptor = encryptionInfo.getEncryptor();
         encryptor.confirmPassword(new String(password));
 
         try (POIFSFileSystem fileSystem = new POIFSFileSystem()) {
           try (OutputStream fileStream = encryptor.getDataStream(fileSystem)) {
             workbook.write(fileStream);
-          } catch (GeneralSecurityException e) {
-            throw new IOException(e);
           }
           fileSystem.writeFilesystem(stream);
+        } catch (GeneralSecurityException e) {
+          throw new IOException(e);
         }
       } else {
         workbook.write(stream);
