@@ -39,14 +39,14 @@
     <java.version>11</java.version>
     <lombok.version>1.18.22</lombok.version>
 
-    <poi.version>5.0.0</poi.version>
+    <poi.version>5.1.0</poi.version>
     <jackson.version>2.13.0</jackson.version>
     <jpa.version>2.2</jpa.version>
 
     <testng.version>7.4.0</testng.version>
-    <spotbugs.version>4.4.2</spotbugs.version>
+    <spotbugs.version>4.5.0</spotbugs.version>
 
-    <spotbugs.plugin>4.4.2.2</spotbugs.plugin>
+    <spotbugs.plugin>4.5.0.0</spotbugs.plugin>
 
     <compiler.plugin>3.8.1</compiler.plugin>
     <surefire.plugin>2.22.2</surefire.plugin>
@@ -114,6 +114,11 @@
   <build>
     <plugins>
       <plugin>
+        <groupId>com.github.spotbugs</groupId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
+        <version>${spotbugs.plugin}</version>
+      </plugin>
+      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>${compiler.plugin}</version>
@@ -144,11 +149,6 @@
             --illegal-access=permit
           </argLine>
         </configuration>
-      </plugin>
-      <plugin>
-        <groupId>com.github.spotbugs</groupId>
-        <artifactId>spotbugs-maven-plugin</artifactId>
-        <version>${spotbugs.plugin}</version>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

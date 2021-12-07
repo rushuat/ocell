@@ -1,4 +1,6 @@
-[![Maven Central](https://img.shields.io/maven-central/v/io.github.rushuat/ocell.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22io.github.rushuat%22%20AND%20a:%22ocell%22)
+[![maven-central](https://img.shields.io/maven-central/v/io.github.rushuat/ocell.svg?color=blue)](https://search.maven.org/search?q=g:%22io.github.rushuat%22%20AND%20a:%22ocell%22)
+[![javadoc](https://javadoc.io/badge2/io.github.rushuat/ocell/javadoc.svg?color=blue)](https://javadoc.io/doc/io.github.rushuat/ocell)
+[![license](https://img.shields.io/github/license/rushuat/ocell.svg?color=blue)](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
 # oCell
 *oCell* is a library for Excel to POJO and POJO to Excel mapping based on [Apache POI](https://poi.apache.org/)
@@ -29,6 +31,8 @@ The library supports POJO and few types of annotations to modify them:
 * *@FieldName* - column name
 * *@FieldFormat* - column format
 * *@FieldAlignment* - column alignment by horizontal or vertical properties\
+(*HorizontalAlignment* or *VerticalAlignment* enumeration values)
+* *@HeaderAlignment* - column header alignment by horizontal or vertical properties\
 (*HorizontalAlignment* or *VerticalAlignment* enumeration values)
 * *@FieldOrder* - column order
 * *@FieldExclude* - column not used
