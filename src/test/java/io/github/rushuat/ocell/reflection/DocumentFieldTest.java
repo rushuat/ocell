@@ -252,6 +252,68 @@ public class DocumentFieldTest {
   }
 
   @Test(dataProvider = "models")
+  public void shouldReturnHeader(Object model, List<DocumentField> documentFields) {
+    //GIVEN
+    DocumentField documentField0 = documentFields.get(0);
+    DocumentField documentField1 = documentFields.get(1);
+    DocumentField documentField2 = documentFields.get(2);
+    DocumentField documentField3 = documentFields.get(3);
+    DocumentField documentField4 = documentFields.get(4);
+    DocumentField documentField5 = documentFields.get(5);
+    DocumentField documentField6 = documentFields.get(6);
+    DocumentField documentField7 = documentFields.get(7);
+    DocumentField documentField8 = documentFields.get(8);
+
+    //WHEN
+    Alignment header0 = documentField0.getHeader();
+    Alignment header1 = documentField1.getHeader();
+    Alignment header2 = documentField2.getHeader();
+    Alignment header3 = documentField3.getHeader();
+    Alignment header4 = documentField4.getHeader();
+    Alignment header5 = documentField5.getHeader();
+    Alignment header6 = documentField6.getHeader();
+    Alignment header7 = documentField7.getHeader();
+    Alignment header8 = documentField8.getHeader();
+
+    //THEN
+    assertNotNull(header0);
+    assertNull(header0.getHorizontal());
+    assertNull(header0.getVertical());
+
+    assertNotNull(header1);
+    assertNull(header1.getHorizontal());
+    assertNull(header1.getVertical());
+
+    assertNotNull(header2);
+    assertNull(header2.getHorizontal());
+    assertNull(header2.getVertical());
+
+    assertNotNull(header3);
+    assertNull(header3.getHorizontal());
+    assertNull(header3.getVertical());
+
+    assertNotNull(header4);
+    assertNull(header4.getHorizontal());
+    assertNull(header4.getVertical());
+
+    assertNotNull(header5);
+    assertNull(header5.getHorizontal());
+    assertNull(header5.getVertical());
+
+    assertNotNull(header6);
+    assertNull(header6.getHorizontal());
+    assertNull(header6.getVertical());
+
+    assertNotNull(header7);
+    assertNull(header7.getHorizontal());
+    assertNull(header7.getVertical());
+
+    assertNotNull(header8);
+    assertEquals(header8.getHorizontal(), "RIGHT");
+    assertNull(header8.getVertical());
+  }
+
+  @Test(dataProvider = "models")
   public void shouldReturnDefault(Object model, List<DocumentField> documentFields) {
     //GIVEN
     DocumentField documentField0 = documentFields.get(0);

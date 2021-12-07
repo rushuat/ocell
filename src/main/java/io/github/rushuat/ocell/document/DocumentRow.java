@@ -10,13 +10,13 @@ public class DocumentRow<T> {
 
   private Row row;
   private DocumentStyle style;
-  private DocumentHeader<T> header;
+  private DocumentHeader header;
   private List<DocumentField> fields;
 
   public DocumentRow(
       Row row,
       DocumentStyle style,
-      DocumentHeader<T> header,
+      DocumentHeader header,
       List<DocumentField> fields) {
     this.row = row;
     this.style = style;

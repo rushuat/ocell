@@ -11,6 +11,7 @@ import io.github.rushuat.ocell.annotation.FieldExclude;
 import io.github.rushuat.ocell.annotation.FieldFormat;
 import io.github.rushuat.ocell.annotation.FieldName;
 import io.github.rushuat.ocell.annotation.FieldOrder;
+import io.github.rushuat.ocell.annotation.HeaderAlignment;
 import io.github.rushuat.ocell.annotation.NumberValue;
 import io.github.rushuat.ocell.annotation.StringValue;
 import io.github.rushuat.ocell.field.Alignment;
@@ -135,6 +136,20 @@ public class DocumentField {
       }
       if (!fieldAlignment.vertical().isBlank()) {
         alignment.setVertical(fieldAlignment.vertical().toUpperCase());
+      }
+    }
+    return alignment;
+  }
+
+  public Alignment getHeader() {
+    Alignment alignment = new Alignment();
+    if (field.isAnnotationPresent(HeaderAlignment.class)) {
+      HeaderAlignment headerAlignment = field.getAnnotation(HeaderAlignment.class);
+      if (!headerAlignment.horizontal().isBlank()) {
+        alignment.setHorizontal(headerAlignment.horizontal().toUpperCase());
+      }
+      if (!headerAlignment.vertical().isBlank()) {
+        alignment.setVertical(headerAlignment.vertical().toUpperCase());
       }
     }
     return alignment;

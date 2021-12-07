@@ -9,6 +9,7 @@ import io.github.rushuat.ocell.annotation.FieldExclude;
 import io.github.rushuat.ocell.annotation.FieldFormat;
 import io.github.rushuat.ocell.annotation.FieldName;
 import io.github.rushuat.ocell.annotation.FieldOrder;
+import io.github.rushuat.ocell.annotation.HeaderAlignment;
 import io.github.rushuat.ocell.annotation.NumberValue;
 import io.github.rushuat.ocell.annotation.StringValue;
 import io.github.rushuat.ocell.field.AgeConverter;
@@ -67,6 +68,7 @@ public class Pojo {
   @FieldExclude
   private Object data;
 
+  @HeaderAlignment(horizontal = "right")
   @FieldAlignment(vertical = "bottom")
   @DateValue("2020-01-01T11:12:13Z")
   private Date updated;

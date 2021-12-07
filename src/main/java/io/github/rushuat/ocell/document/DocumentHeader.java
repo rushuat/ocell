@@ -1,7 +1,10 @@
 package io.github.rushuat.ocell.document;
 
-import io.github.rushuat.ocell.reflection.DocumentClass;
+import io.github.rushuat.ocell.field.Alignment;
+import io.github.rushuat.ocell.field.Format;
+import io.github.rushuat.ocell.reflection.DocumentField;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -9,21 +12,28 @@ import java.util.stream.IntStream;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 
-public class DocumentHeader<T> {
+public class DocumentHeader {
 
   private Row header;
   private Map<Integer, String> nameByIndex;
   private Map<String, Integer> indexByName;
 
-  public DocumentHeader(Row header, DocumentClass<T> clazz) {
+  public DocumentHeader(Row header, DocumentStyle style, List<DocumentField> fields) {
     if (header.getLastCellNum() < 0) {
-      Map<Integer, String> headers = clazz.getNameByIndexMap();
-      headers.keySet()
+      IntStream
+          .range(0, fields.size())
           .forEach(index -> {
+            DocumentField documentField = fields.get(index);
+            String name = documentField.getName();
+            Alignment alignment = documentField.getHeader();
+            Format format = new Format(null, false);
+
             Cell cell = header.createCell(index);
-            cell.setCellValue(headers.get(index));
+            cell.setCellStyle(style.getCellStyle(format, alignment));
+            cell.setCellValue(name);
           });
     }
+
     this.header = header;
 
     this.nameByIndex = getNameByIndexMap();
