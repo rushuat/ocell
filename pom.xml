@@ -6,7 +6,7 @@
 
   <groupId>io.github.rushuat</groupId>
   <artifactId>ocell</artifactId>
-  <version>0.1.3</version>
+  <version>0.1.4</version>
   <packaging>jar</packaging>
 
   <name>${project.groupId}:${project.artifactId}</name>
@@ -37,21 +37,21 @@
 
   <properties>
     <java.version>11</java.version>
-    <lombok.version>1.18.22</lombok.version>
+    <lombok.version>1.18.24</lombok.version>
 
-    <poi.version>5.1.0</poi.version>
-    <jackson.version>2.13.0</jackson.version>
+    <poi.version>5.2.2</poi.version>
+    <jackson.version>2.13.2</jackson.version>
     <jpa.version>2.2</jpa.version>
 
-    <testng.version>7.4.0</testng.version>
-    <spotbugs.version>4.5.0</spotbugs.version>
+    <testng.version>7.5</testng.version>
+    <spotbugs.version>4.6.0</spotbugs.version>
 
-    <spotbugs.plugin>4.5.0.0</spotbugs.plugin>
+    <spotbugs.plugin>4.6.0.0</spotbugs.plugin>
 
-    <compiler.plugin>3.8.1</compiler.plugin>
+    <compiler.plugin>3.10.1</compiler.plugin>
     <surefire.plugin>2.22.2</surefire.plugin>
     <source-plugin>3.2.1</source-plugin>
-    <javadoc-plugin>3.3.1</javadoc-plugin>
+    <javadoc-plugin>3.3.2</javadoc-plugin>
     <gpg-plugin>3.0.1</gpg-plugin>
 
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

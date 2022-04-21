@@ -16,7 +16,7 @@ Your project should have a dependency to the library:
     <dependency>
       <groupId>io.github.rushuat</groupId>
       <artifactId>ocell</artifactId>
-      <version>0.1.3</version>
+      <version>0.1.4</version>
     </dependency>
 ```
 
