@@ -76,33 +76,17 @@ public class Document extends IODocument {
 
 
   public <T> List<T> getSheet(Class<T> clazz) {
-    return getSheet(null, 0, 1, clazz);
+    return getSheet(null, clazz);
   }
 
   public <T> List<T> getSheet(int index, Class<T> clazz) {
-    return getSheet(index, 0, 1, clazz);
-  }
-
-  public <T> List<T> getSheet(String name, Class<T> clazz) {
-    return getSheet(name, 0, 1, clazz);
-  }
-
-  private <T> List<T> getSheet(
-      int index,
-      Integer headerOffset,
-      Integer dataOffset,
-      Class<T> clazz) {
     return
         index > 0 && index < workbook.getNumberOfSheets()
-            ? getSheet(workbook.getSheetName(index), headerOffset, dataOffset, clazz)
+            ? getSheet(workbook.getSheetName(index), clazz)
             : Collections.emptyList();
   }
 
-  private <T> List<T> getSheet(
-      String name,
-      Integer headerOffset,
-      Integer dataOffset,
-      Class<T> clazz) {
+  public <T> List<T> getSheet(String name, Class<T> clazz) {
     return
         Optional.ofNullable(clazz)
             .map(DocumentClass::new)
@@ -112,9 +96,7 @@ public class Document extends IODocument {
               Sheet sheet = workbook.getSheet(sheetName);
               return
                   Optional.ofNullable(sheet)
-                      .map(value ->
-                          new DocumentSheet<>(
-                              sheet, headerOffset, dataOffset, style, documentClass))
+                      .map(value -> new DocumentSheet<>(sheet, style, documentClass))
                       .map(DocumentSheet::getRows)
                       .orElse(Collections.emptyList());
             })
