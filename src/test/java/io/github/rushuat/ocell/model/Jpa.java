@@ -2,6 +2,7 @@ package io.github.rushuat.ocell.model;
 
 import io.github.rushuat.ocell.annotation.BooleanValue;
 import io.github.rushuat.ocell.annotation.DateValue;
+import io.github.rushuat.ocell.annotation.EnumValue;
 import io.github.rushuat.ocell.annotation.FieldAlignment;
 import io.github.rushuat.ocell.annotation.FieldConverter;
 import io.github.rushuat.ocell.annotation.FieldFormat;
@@ -74,4 +75,8 @@ public class Jpa {
   @FieldAlignment(vertical = "bottom")
   @DateValue("2020-01-01T11:12:13Z")
   private Date updated;
+
+  @FieldOrder(5)
+  @EnumValue("NEW")
+  private Status status;
 }

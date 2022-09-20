@@ -16,7 +16,7 @@ Your project should have a dependency to the library:
     <dependency>
       <groupId>io.github.rushuat</groupId>
       <artifactId>ocell</artifactId>
-      <version>0.1.4</version>
+      <version>0.1.5</version>
     </dependency>
 ```
 
@@ -57,6 +57,7 @@ You are able to apply default values to POJO fields using annotations:
 * *@StringValue*
 * *@NumberValue*
 * *@BooleanValue*
+* *@EnumValue* - string value of enum constant name
 * *@DateValue* - default format is *DateTimeFormatter.ISO_INSTANT*\
 or could be overridden by *@FieldFormat* or *@JsonFormat* annotations
 

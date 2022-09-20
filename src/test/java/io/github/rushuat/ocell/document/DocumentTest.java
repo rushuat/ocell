@@ -5,6 +5,7 @@ import static org.testng.Assert.assertEquals;
 import io.github.rushuat.ocell.model.Jpa;
 import io.github.rushuat.ocell.model.Json;
 import io.github.rushuat.ocell.model.Pojo;
+import io.github.rushuat.ocell.model.Status;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.Collections;
@@ -37,6 +38,7 @@ public class DocumentTest {
                 .isNew(false)
                 .data(null)
                 .updated(new Date(987654321))
+                .status(Status.OLD)
                 .build()
         };
   }
@@ -105,6 +107,7 @@ public class DocumentTest {
             .isNew(true)
             .data(null)
             .updated(new GregorianCalendar(2020, Calendar.JANUARY, 1, 11, 12, 13).getTime())
+            .status(Status.NEW)
             .build()
     );
     assertEquals(
@@ -119,6 +122,7 @@ public class DocumentTest {
             .isNew(true)
             .data(null)
             .updated(new GregorianCalendar(2020, Calendar.JANUARY, 1, 11, 12, 13).getTime())
+            .status(Status.NEW)
             .build()
     );
     assertEquals(pojoList.get(0), models[4]);

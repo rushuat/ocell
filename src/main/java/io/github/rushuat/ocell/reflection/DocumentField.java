@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.github.rushuat.ocell.annotation.BooleanValue;
 import io.github.rushuat.ocell.annotation.DateValue;
+import io.github.rushuat.ocell.annotation.EnumValue;
 import io.github.rushuat.ocell.annotation.FieldAlignment;
 import io.github.rushuat.ocell.annotation.FieldConverter;
 import io.github.rushuat.ocell.annotation.FieldExclude;
@@ -42,6 +43,12 @@ public class DocumentField {
   @SneakyThrows
   public void setValue(Object obj, Object value) {
     Object data = value;
+    if (data instanceof String) {
+      Object item = getEnum(data);
+      if (item != null) {
+        data = item;
+      }
+    }
     ValueConverter converter = getConverter();
     if (converter != null) {
       data = converter.convertInput(data);
@@ -66,23 +73,44 @@ public class DocumentField {
     if (converter != null) {
       value = converter.convertOutput(value);
     }
+    if (value instanceof Enum) {
+      value = ((Enum<?>) value).name();
+    }
     return value;
   }
 
+  public Object getEnum(Object value) {
+    Object data = null;
+    Class<?> type = getType();
+    if (value != null) {
+      if (type.isEnum()) {
+        for (Object item : type.getEnumConstants()) {
+          if (((Enum<?>) item).name().equals(value.toString())) {
+            data = item;
+          }
+        }
+      }
+    }
+    return data;
+  }
+
   public Object getNumber(Object value) {
-    Object data = value;
-    if (field.getType().equals(Double.class)) {
-      data = ((Number) value).doubleValue();
-    } else if (field.getType().equals(Integer.class)) {
-      data = ((Number) value).intValue();
-    } else if (field.getType().equals(Long.class)) {
-      data = ((Number) value).longValue();
-    } else if (field.getType().equals(Float.class)) {
-      data = ((Number) value).floatValue();
-    } else if (field.getType().equals(Byte.class)) {
-      data = ((Number) value).byteValue();
-    } else if (field.getType().equals(Short.class)) {
-      data = ((Number) value).shortValue();
+    Object data = null;
+    Class<?> type = getType();
+    if (value != null) {
+      if (type.equals(Double.class)) {
+        data = ((Number) value).doubleValue();
+      } else if (type.equals(Integer.class)) {
+        data = ((Number) value).intValue();
+      } else if (type.equals(Long.class)) {
+        data = ((Number) value).longValue();
+      } else if (type.equals(Float.class)) {
+        data = ((Number) value).floatValue();
+      } else if (type.equals(Byte.class)) {
+        data = ((Number) value).byteValue();
+      } else if (type.equals(Short.class)) {
+        data = ((Number) value).shortValue();
+      }
     }
     return data;
   }
@@ -105,6 +133,9 @@ public class DocumentField {
               ? new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
               : new SimpleDateFormat(format.getPattern());
       value = formatter.parse(date);
+    } else if (field.isAnnotationPresent(EnumValue.class)) {
+      String name = field.getAnnotation(EnumValue.class).value();
+      value = getEnum(name);
     }
     return value;
   }
@@ -123,7 +154,8 @@ public class DocumentField {
         pattern = fieldFormat.value();
       }
     }
-    boolean isDate = getType().equals(Date.class);
+    Class<?> type = getType();
+    boolean isDate = type.equals(Date.class);
     return new Format(pattern, isDate);
   }
 

@@ -13,6 +13,7 @@ import io.github.rushuat.ocell.field.PercentConverter;
 import io.github.rushuat.ocell.model.Jpa;
 import io.github.rushuat.ocell.model.Json;
 import io.github.rushuat.ocell.model.Pojo;
+import io.github.rushuat.ocell.model.Status;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -71,6 +72,7 @@ public class DocumentFieldTest {
     DocumentField documentField6 = documentFields.get(6);
     DocumentField documentField7 = documentFields.get(7);
     DocumentField documentField8 = documentFields.get(8);
+    DocumentField documentField9 = documentFields.get(9);
     //WHEN
     int order0 = documentField0.getOrder();
     int order1 = documentField1.getOrder();
@@ -81,6 +83,7 @@ public class DocumentFieldTest {
     int order6 = documentField6.getOrder();
     int order7 = documentField7.getOrder();
     int order8 = documentField8.getOrder();
+    int order9 = documentField9.getOrder();
     //THEN
     assertEquals(order0, 0);
     assertEquals(order1, 1);
@@ -91,6 +94,7 @@ public class DocumentFieldTest {
     assertEquals(order6, Integer.MAX_VALUE);
     assertEquals(order7, Integer.MAX_VALUE);
     assertEquals(order8, Integer.MAX_VALUE);
+    assertEquals(order9, 5);
   }
 
   @Test(dataProvider = "models")
@@ -105,6 +109,7 @@ public class DocumentFieldTest {
     DocumentField documentField6 = documentFields.get(6);
     DocumentField documentField7 = documentFields.get(7);
     DocumentField documentField8 = documentFields.get(8);
+    DocumentField documentField9 = documentFields.get(9);
     //WHEN
     boolean excluded0 = documentField0.isExcluded();
     boolean excluded1 = documentField1.isExcluded();
@@ -115,6 +120,7 @@ public class DocumentFieldTest {
     boolean excluded6 = documentField6.isExcluded();
     boolean excluded7 = documentField7.isExcluded();
     boolean excluded8 = documentField8.isExcluded();
+    boolean excluded9 = documentField9.isExcluded();
     //THEN
     assertFalse(excluded0);
     assertFalse(excluded1);
@@ -125,6 +131,7 @@ public class DocumentFieldTest {
     assertFalse(excluded6);
     assertTrue(excluded7);
     assertFalse(excluded8);
+    assertFalse(excluded9);
   }
 
   @Test(dataProvider = "models")
@@ -139,6 +146,7 @@ public class DocumentFieldTest {
     DocumentField documentField6 = documentFields.get(6);
     DocumentField documentField7 = documentFields.get(7);
     DocumentField documentField8 = documentFields.get(8);
+    DocumentField documentField9 = documentFields.get(9);
 
     //WHEN
     Format format0 = documentField0.getFormat();
@@ -150,6 +158,7 @@ public class DocumentFieldTest {
     Format format6 = documentField6.getFormat();
     Format format7 = documentField7.getFormat();
     Format format8 = documentField8.getFormat();
+    Format format9 = documentField9.getFormat();
 
     //THEN
     assertNotNull(format0);
@@ -187,6 +196,10 @@ public class DocumentFieldTest {
     assertNotNull(format8);
     assertNull(format8.getPattern());
     assertTrue(format8.isDate());
+
+    assertNotNull(format9);
+    assertNull(format9.getPattern());
+    assertFalse(format9.isDate());
   }
 
   @Test(dataProvider = "models")
@@ -201,6 +214,7 @@ public class DocumentFieldTest {
     DocumentField documentField6 = documentFields.get(6);
     DocumentField documentField7 = documentFields.get(7);
     DocumentField documentField8 = documentFields.get(8);
+    DocumentField documentField9 = documentFields.get(9);
 
     //WHEN
     Alignment alignment0 = documentField0.getAlignment();
@@ -212,6 +226,7 @@ public class DocumentFieldTest {
     Alignment alignment6 = documentField6.getAlignment();
     Alignment alignment7 = documentField7.getAlignment();
     Alignment alignment8 = documentField8.getAlignment();
+    Alignment alignment9 = documentField9.getAlignment();
 
     //THEN
     assertNotNull(alignment0);
@@ -249,6 +264,10 @@ public class DocumentFieldTest {
     assertNotNull(alignment8);
     assertNull(alignment8.getHorizontal());
     assertEquals(alignment8.getVertical(), "BOTTOM");
+
+    assertNotNull(alignment9);
+    assertNull(alignment9.getHorizontal());
+    assertNull(alignment9.getVertical());
   }
 
   @Test(dataProvider = "models")
@@ -325,6 +344,7 @@ public class DocumentFieldTest {
     DocumentField documentField6 = documentFields.get(6);
     DocumentField documentField7 = documentFields.get(7);
     DocumentField documentField8 = documentFields.get(8);
+    DocumentField documentField9 = documentFields.get(9);
     //WHEN
     Object default0 = documentField0.getDefault();
     Object default1 = documentField1.getDefault();
@@ -335,6 +355,7 @@ public class DocumentFieldTest {
     Object default6 = documentField6.getDefault();
     Object default7 = documentField7.getDefault();
     Object default8 = documentField8.getDefault();
+    Object default9 = documentField9.getDefault();
     //THEN
     assertEquals(default0, 0L);
     assertEquals(default1, "New User");
@@ -345,6 +366,7 @@ public class DocumentFieldTest {
     assertEquals(default6, true);
     assertNull(default7);
     assertEquals(default8, new GregorianCalendar(2020, Calendar.JANUARY, 1, 11, 12, 13).getTime());
+    assertEquals(default9, Status.NEW);
   }
 
   @Test(dataProvider = "models")
@@ -359,6 +381,7 @@ public class DocumentFieldTest {
     DocumentField documentField6 = documentFields.get(6);
     DocumentField documentField7 = documentFields.get(7);
     DocumentField documentField8 = documentFields.get(8);
+    DocumentField documentField9 = documentFields.get(9);
     //WHEN
     Object converter0 = documentField0.getConverter();
     Object converter1 = documentField1.getConverter();
@@ -369,6 +392,7 @@ public class DocumentFieldTest {
     Object converter6 = documentField6.getConverter();
     Object converter7 = documentField7.getConverter();
     Object converter8 = documentField8.getConverter();
+    Object converter9 = documentField9.getConverter();
     //THEN
     assertNull(converter0);
     assertNull(converter1);
@@ -379,6 +403,7 @@ public class DocumentFieldTest {
     assertNull(converter6);
     assertNull(converter7);
     assertNull(converter8);
+    assertNull(converter9);
   }
 
   @Test(dataProvider = "models")
@@ -393,6 +418,7 @@ public class DocumentFieldTest {
     DocumentField documentField6 = documentFields.get(6);
     DocumentField documentField7 = documentFields.get(7);
     DocumentField documentField8 = documentFields.get(8);
+    DocumentField documentField9 = documentFields.get(9);
     //WHEN
     String name0 = documentField0.getName();
     String name1 = documentField1.getName();
@@ -403,6 +429,7 @@ public class DocumentFieldTest {
     String name6 = documentField6.getName();
     String name7 = documentField7.getName();
     String name8 = documentField8.getName();
+    String name9 = documentField9.getName();
     //THEN
     assertEquals(name0, "Id");
     assertEquals(name1, "User Name");
@@ -413,6 +440,44 @@ public class DocumentFieldTest {
     assertEquals(name6, "isNew");
     assertEquals(name7, "data");
     assertEquals(name8, "updated");
+    assertEquals(name9, "status");
+  }
+
+  @Test(dataProvider = "models")
+  public void shouldReturnEnum(Object model, List<DocumentField> documentFields) {
+    //GIVEN
+    DocumentField documentField0 = documentFields.get(0);
+    DocumentField documentField1 = documentFields.get(1);
+    DocumentField documentField2 = documentFields.get(2);
+    DocumentField documentField3 = documentFields.get(3);
+    DocumentField documentField4 = documentFields.get(4);
+    DocumentField documentField5 = documentFields.get(5);
+    DocumentField documentField6 = documentFields.get(6);
+    DocumentField documentField7 = documentFields.get(7);
+    DocumentField documentField8 = documentFields.get(8);
+    DocumentField documentField9 = documentFields.get(9);
+    //WHEN
+    Object value0 = documentField0.getEnum((float) 0.0);
+    Object value1 = documentField1.getEnum("New User");
+    Object value2 = documentField2.getEnum(documentField2.getValue(model));
+    Object value3 = documentField3.getEnum((int) 18.0);
+    Object value4 = documentField4.getEnum("50%");
+    Object value5 = documentField5.getEnum((double) 1234);
+    Object value6 = documentField6.getEnum(true);
+    Object value7 = documentField7.getEnum(null);
+    Object value8 = documentField8.getEnum(documentField8.getValue(model));
+    Object value9 = documentField9.getEnum("NEW");
+    //THEN
+    assertNull(value0);
+    assertNull(value1);
+    assertNull(value2);
+    assertNull(value3);
+    assertNull(value4);
+    assertNull(value5);
+    assertNull(value6);
+    assertNull(value7);
+    assertNull(value8);
+    assertEquals(value9, Status.NEW);
   }
 
   @Test(dataProvider = "models")
@@ -427,6 +492,7 @@ public class DocumentFieldTest {
     DocumentField documentField6 = documentFields.get(6);
     DocumentField documentField7 = documentFields.get(7);
     DocumentField documentField8 = documentFields.get(8);
+    DocumentField documentField9 = documentFields.get(9);
     //WHEN
     Object value0 = documentField0.getNumber((float) 0.0);
     Object value1 = documentField1.getNumber("New User");
@@ -437,16 +503,18 @@ public class DocumentFieldTest {
     Object value6 = documentField6.getNumber(true);
     Object value7 = documentField7.getNumber(null);
     Object value8 = documentField8.getNumber(documentField8.getValue(model));
+    Object value9 = documentField9.getNumber("NEW");
     //THEN
     assertEquals(value0, 0L);
-    assertEquals(value1, "New User");
-    assertEquals(value2, new GregorianCalendar(1991, Calendar.AUGUST, 24, 1, 2, 3).getTime());
+    assertNull(value1);
+    assertNull(value2);
     assertEquals(value3, 18);
-    assertEquals(value4, "50%");
+    assertNull(value4);
     assertEquals(value5, 1234.0);
-    assertEquals(value6, true);
+    assertNull(value6);
     assertNull(value7);
-    assertEquals(value8, new GregorianCalendar(2020, Calendar.JANUARY, 1, 11, 12, 13).getTime());
+    assertNull(value8);
+    assertNull(value9);
   }
 
   @Test(dataProvider = "models")
@@ -461,6 +529,7 @@ public class DocumentFieldTest {
     DocumentField documentField6 = documentFields.get(6);
     DocumentField documentField7 = documentFields.get(7);
     DocumentField documentField8 = documentFields.get(8);
+    DocumentField documentField9 = documentFields.get(9);
     //WHEN
     Object value0 = documentField0.getValue(model);
     Object value1 = documentField1.getValue(model);
@@ -471,6 +540,7 @@ public class DocumentFieldTest {
     Object value6 = documentField6.getValue(model);
     Object value7 = documentField7.getValue(model);
     Object value8 = documentField8.getValue(model);
+    Object value9 = documentField9.getValue(model);
     //THEN
     assertEquals(value0, 0L);
     assertEquals(value1, "New User");
@@ -481,6 +551,7 @@ public class DocumentFieldTest {
     assertEquals(value6, true);
     assertNull(value7);
     assertEquals(value8, new GregorianCalendar(2020, Calendar.JANUARY, 1, 11, 12, 13).getTime());
+    assertEquals(value9, Status.NEW.name());
   }
 
   @Test(dataProvider = "models")
@@ -495,6 +566,7 @@ public class DocumentFieldTest {
     DocumentField documentField6 = documentFields.get(6);
     DocumentField documentField7 = documentFields.get(7);
     DocumentField documentField8 = documentFields.get(8);
+    DocumentField documentField9 = documentFields.get(9);
     //WHEN
     documentField0.setValue(model, null);
     documentField1.setValue(model, "Updated User");
@@ -505,6 +577,7 @@ public class DocumentFieldTest {
     documentField6.setValue(model, false);
     documentField7.setValue(model, null);
     documentField8.setValue(model, new Date(100010001));
+    documentField9.setValue(model, Status.OLD);
 
     Object value0 = documentField0.getValue(model);
     Object value1 = documentField1.getValue(model);
@@ -515,6 +588,7 @@ public class DocumentFieldTest {
     Object value6 = documentField6.getValue(model);
     Object value7 = documentField7.getValue(model);
     Object value8 = documentField8.getValue(model);
+    Object value9 = documentField9.getValue(model);
     //THEN
     assertEquals(value0, 0L);
     assertEquals(value1, "Updated User");
@@ -525,5 +599,6 @@ public class DocumentFieldTest {
     assertEquals(value6, false);
     assertNull(value7);
     assertEquals(value8, new Date(100010001));
+    assertEquals(value9, Status.OLD.name());
   }
 }
