@@ -19,10 +19,12 @@ import io.github.rushuat.ocell.field.Alignment;
 import io.github.rushuat.ocell.field.Format;
 import io.github.rushuat.ocell.field.ValueConverter;
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
+import java.util.Optional;
 import javax.persistence.Column;
 import javax.persistence.Transient;
 import lombok.SneakyThrows;
@@ -43,19 +45,19 @@ public class DocumentField {
   @SneakyThrows
   public void setValue(Object obj, Object value) {
     Object data = value;
-    if (data instanceof String) {
-      Object item = getEnum(data);
-      if (item != null) {
-        data = item;
-      }
-    }
+    Class<?> type =
+        Optional.ofNullable(getSubtype())
+            .filter(sub -> !sub.equals(getType()))
+            .orElseGet(() -> (Class) getType());
+    data =
+        Optional.ofNullable(getEnum(data, type))
+            .orElse(data);
+    data =
+        Optional.ofNullable(getNumber(data, type))
+            .orElse(data);
     ValueConverter converter = getConverter();
     if (converter != null) {
       data = converter.convertInput(data);
-    } else {
-      if (data instanceof Number) {
-        data = getNumber(data);
-      }
     }
     if (data == null) {
       data = getDefault();
@@ -79,13 +81,12 @@ public class DocumentField {
     return value;
   }
 
-  public Object getEnum(Object value) {
+  public Object getEnum(Object value, Class<?> type) {
     Object data = null;
-    Class<?> type = getType();
-    if (value != null) {
+    if (value instanceof String) {
       if (type.isEnum()) {
         for (Object item : type.getEnumConstants()) {
-          if (((Enum<?>) item).name().equals(value.toString())) {
+          if (((Enum<?>) item).name().equals(value)) {
             data = item;
           }
         }
@@ -94,10 +95,9 @@ public class DocumentField {
     return data;
   }
 
-  public Object getNumber(Object value) {
+  public Object getNumber(Object value, Class<?> type) {
     Object data = null;
-    Class<?> type = getType();
-    if (value != null) {
+    if (value instanceof Number) {
       if (type.equals(Double.class)) {
         data = ((Number) value).doubleValue();
       } else if (type.equals(Integer.class)) {
@@ -124,7 +124,7 @@ public class DocumentField {
       value = field.getAnnotation(BooleanValue.class).value();
     } else if (field.isAnnotationPresent(NumberValue.class)) {
       Double number = field.getAnnotation(NumberValue.class).value();
-      value = getNumber(number);
+      value = getNumber(number, getType());
     } else if (field.isAnnotationPresent(DateValue.class)) {
       String date = field.getAnnotation(DateValue.class).value();
       Format format = getFormat();
@@ -135,7 +135,7 @@ public class DocumentField {
       value = formatter.parse(date);
     } else if (field.isAnnotationPresent(EnumValue.class)) {
       String name = field.getAnnotation(EnumValue.class).value();
-      value = getEnum(name);
+      value = getEnum(name, getType());
     }
     return value;
   }
@@ -231,6 +231,17 @@ public class DocumentField {
 
   public Class<?> getType() {
     return field.getType();
+  }
+
+  public Class<?> getSubtype() {
+    Class<?> type = null;
+    ValueConverter converter = getConverter();
+    if (converter != null) {
+      Class<?> clazz = converter.getClass();
+      ParameterizedType generic = (ParameterizedType) clazz.getGenericInterfaces()[0];
+      type = (Class<?>) generic.getActualTypeArguments()[1];
+    }
+    return type;
   }
 
   public ValueConverter getConverter() {

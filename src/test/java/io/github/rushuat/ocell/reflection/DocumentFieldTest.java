@@ -15,6 +15,7 @@ import io.github.rushuat.ocell.model.Json;
 import io.github.rushuat.ocell.model.Pojo;
 import io.github.rushuat.ocell.model.Status;
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -58,6 +59,18 @@ public class DocumentFieldTest {
     //THEN
     assertNotNull(clazz);
     assertEquals(clazz, field.getType());
+  }
+
+  @Test(dataProvider = "models")
+  public void shouldReturnSubtype(Object model, List<DocumentField> documentFields) {
+    //GIVEN
+    Field field = model.getClass().getDeclaredFields()[3];
+    DocumentField documentField = new DocumentField(field, new HashMap<>());
+    //WHEN
+    Class<?> clazz = documentField.getSubtype();
+    //THEN
+    assertNotNull(clazz);
+    assertEquals(clazz, ((ParameterizedType) documentField.getConverter().getClass().getGenericInterfaces()[0]).getActualTypeArguments()[1]);
   }
 
   @Test(dataProvider = "models")
@@ -457,16 +470,16 @@ public class DocumentFieldTest {
     DocumentField documentField8 = documentFields.get(8);
     DocumentField documentField9 = documentFields.get(9);
     //WHEN
-    Object value0 = documentField0.getEnum((float) 0.0);
-    Object value1 = documentField1.getEnum("New User");
-    Object value2 = documentField2.getEnum(documentField2.getValue(model));
-    Object value3 = documentField3.getEnum((int) 18.0);
-    Object value4 = documentField4.getEnum("50%");
-    Object value5 = documentField5.getEnum((double) 1234);
-    Object value6 = documentField6.getEnum(true);
-    Object value7 = documentField7.getEnum(null);
-    Object value8 = documentField8.getEnum(documentField8.getValue(model));
-    Object value9 = documentField9.getEnum("NEW");
+    Object value0 = documentField0.getEnum((float) 0.0, documentField0.getType());
+    Object value1 = documentField1.getEnum("New User", documentField1.getType());
+    Object value2 = documentField2.getEnum(documentField2.getValue(model), documentField2.getType());
+    Object value3 = documentField3.getEnum((int) 18.0, documentField3.getType());
+    Object value4 = documentField4.getEnum("50%", documentField4.getType());
+    Object value5 = documentField5.getEnum((double) 1234, documentField5.getType());
+    Object value6 = documentField6.getEnum(true, documentField6.getType());
+    Object value7 = documentField7.getEnum(null, documentField7.getType());
+    Object value8 = documentField8.getEnum(documentField8.getValue(model), documentField8.getType());
+    Object value9 = documentField9.getEnum("NEW", documentField9.getType());
     //THEN
     assertNull(value0);
     assertNull(value1);
@@ -494,16 +507,16 @@ public class DocumentFieldTest {
     DocumentField documentField8 = documentFields.get(8);
     DocumentField documentField9 = documentFields.get(9);
     //WHEN
-    Object value0 = documentField0.getNumber((float) 0.0);
-    Object value1 = documentField1.getNumber("New User");
-    Object value2 = documentField2.getNumber(documentField2.getValue(model));
-    Object value3 = documentField3.getNumber((int) 18.0);
-    Object value4 = documentField4.getNumber("50%");
-    Object value5 = documentField5.getNumber((double) 1234);
-    Object value6 = documentField6.getNumber(true);
-    Object value7 = documentField7.getNumber(null);
-    Object value8 = documentField8.getNumber(documentField8.getValue(model));
-    Object value9 = documentField9.getNumber("NEW");
+    Object value0 = documentField0.getNumber((float) 0.0, documentField0.getType());
+    Object value1 = documentField1.getNumber("New User", documentField1.getType());
+    Object value2 = documentField2.getNumber(documentField2.getValue(model), documentField2.getType());
+    Object value3 = documentField3.getNumber((int) 18.0, documentField3.getType());
+    Object value4 = documentField4.getNumber("50%", documentField4.getType());
+    Object value5 = documentField5.getNumber((double) 1234, documentField5.getType());
+    Object value6 = documentField6.getNumber(true, documentField6.getType());
+    Object value7 = documentField7.getNumber(null, documentField7.getType());
+    Object value8 = documentField8.getNumber(documentField8.getValue(model), documentField8.getType());
+    Object value9 = documentField9.getNumber("NEW", documentField9.getType());
     //THEN
     assertEquals(value0, 0L);
     assertNull(value1);

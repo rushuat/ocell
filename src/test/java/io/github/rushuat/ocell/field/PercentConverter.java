@@ -1,21 +1,21 @@
 package io.github.rushuat.ocell.field;
 
-public class PercentConverter implements ValueConverter<String, Number> {
+public class PercentConverter implements ValueConverter<String, Integer> {
 
   private static final String TEXT = "%";
 
   @Override
-  public String convertInput(Number value) {
+  public String convertInput(Integer value) {
     String percent = null;
     if (value != null) {
-      percent = value.intValue() + TEXT;
+      percent = value + TEXT;
     }
     return percent;
   }
 
   @Override
-  public Number convertOutput(String value) {
-    Number percent = null;
+  public Integer convertOutput(String value) {
+    Integer percent = null;
     if (value != null) {
       percent = Integer.valueOf(value.replaceAll(TEXT, ""));
     }
