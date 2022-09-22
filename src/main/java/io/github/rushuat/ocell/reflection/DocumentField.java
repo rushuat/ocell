@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.github.rushuat.ocell.annotation.BooleanValue;
+import io.github.rushuat.ocell.annotation.CharValue;
 import io.github.rushuat.ocell.annotation.DateValue;
 import io.github.rushuat.ocell.annotation.EnumValue;
 import io.github.rushuat.ocell.annotation.FieldAlignment;
@@ -19,6 +20,7 @@ import io.github.rushuat.ocell.field.Alignment;
 import io.github.rushuat.ocell.field.Format;
 import io.github.rushuat.ocell.field.ValueConverter;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -31,8 +33,8 @@ import lombok.SneakyThrows;
 
 public class DocumentField {
 
-  private Field field;
-  private Map<Class<? extends ValueConverter>, ValueConverter> converterCache;
+  private final Field field;
+  private final Map<Class<? extends ValueConverter>, ValueConverter> converterCache;
 
   public DocumentField(
       Field field,
@@ -98,17 +100,17 @@ public class DocumentField {
   public Object getNumber(Object value, Class<?> type) {
     Object data = null;
     if (value instanceof Number) {
-      if (type.equals(Double.class)) {
+      if (type.equals(double.class) || type.equals(Double.class)) {
         data = ((Number) value).doubleValue();
-      } else if (type.equals(Integer.class)) {
+      } else if (type.equals(int.class) || type.equals(Integer.class)) {
         data = ((Number) value).intValue();
-      } else if (type.equals(Long.class)) {
+      } else if (type.equals(long.class) || type.equals(Long.class)) {
         data = ((Number) value).longValue();
-      } else if (type.equals(Float.class)) {
+      } else if (type.equals(float.class) || type.equals(Float.class)) {
         data = ((Number) value).floatValue();
-      } else if (type.equals(Byte.class)) {
+      } else if (type.equals(byte.class) || type.equals(Byte.class)) {
         data = ((Number) value).byteValue();
-      } else if (type.equals(Short.class)) {
+      } else if (type.equals(short.class) || type.equals(Short.class)) {
         data = ((Number) value).shortValue();
       }
     }
@@ -118,13 +120,18 @@ public class DocumentField {
   @SneakyThrows
   public Object getDefault() {
     Object value = null;
-    if (field.isAnnotationPresent(StringValue.class)) {
-      value = field.getAnnotation(StringValue.class).value();
-    } else if (field.isAnnotationPresent(BooleanValue.class)) {
+    if (field.isAnnotationPresent(BooleanValue.class)) {
       value = field.getAnnotation(BooleanValue.class).value();
+    } else if (field.isAnnotationPresent(StringValue.class)) {
+      value = field.getAnnotation(StringValue.class).value();
+    } else if (field.isAnnotationPresent(CharValue.class)) {
+      value = field.getAnnotation(CharValue.class).value();
     } else if (field.isAnnotationPresent(NumberValue.class)) {
       Double number = field.getAnnotation(NumberValue.class).value();
       value = getNumber(number, getType());
+    } else if (field.isAnnotationPresent(EnumValue.class)) {
+      String name = field.getAnnotation(EnumValue.class).value();
+      value = getEnum(name, getType());
     } else if (field.isAnnotationPresent(DateValue.class)) {
       String date = field.getAnnotation(DateValue.class).value();
       Format format = getFormat();
@@ -133,9 +140,6 @@ public class DocumentField {
               ? new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
               : new SimpleDateFormat(format.getPattern());
       value = formatter.parse(date);
-    } else if (field.isAnnotationPresent(EnumValue.class)) {
-      String name = field.getAnnotation(EnumValue.class).value();
-      value = getEnum(name, getType());
     }
     return value;
   }
@@ -200,6 +204,12 @@ public class DocumentField {
 
   public boolean isExcluded() {
     boolean excluded = false;
+    if (Modifier.isStatic(field.getModifiers())) {
+      excluded = true;
+    }
+    if (Modifier.isTransient(field.getModifiers())) {
+      excluded = true;
+    }
     if (field.isAnnotationPresent(Transient.class)) {
       excluded = true;
     }

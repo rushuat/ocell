@@ -19,14 +19,16 @@ import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 @ClassName("User")
-public class Pojo {
+public class Pojo extends Base {
 
   @FieldOrder(0)
   @NumberValue(0)

@@ -8,10 +8,10 @@ import org.apache.poi.ss.usermodel.Row;
 
 public class DocumentRow<T> {
 
-  private Row row;
-  private DocumentStyle style;
-  private DocumentHeader header;
-  private List<DocumentField> fields;
+  private final Row row;
+  private final DocumentStyle style;
+  private final DocumentHeader header;
+  private final List<DocumentField> fields;
 
   public DocumentRow(
       Row row,

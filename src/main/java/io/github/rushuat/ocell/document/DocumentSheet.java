@@ -12,13 +12,14 @@ import org.apache.poi.ss.usermodel.Sheet;
 
 public class DocumentSheet<T> {
 
-  private Sheet sheet;
+  private final Sheet sheet;
   private int headerOffset;
   private int dataOffset;
-  private DocumentStyle style;
   private DocumentHeader header;
-  private DocumentClass<T> clazz;
-  private List<DocumentField> fields;
+
+  private final DocumentStyle style;
+  private final DocumentClass<T> clazz;
+  private final List<DocumentField> fields;
 
   public DocumentSheet(
       Sheet sheet,
@@ -39,15 +40,13 @@ public class DocumentSheet<T> {
 
     this.fields = clazz.getFields();
 
-    this.headerOffset = headerOffset;
-    this.dataOffset = dataOffset;
-
-    initOffset();
+    initOffset(headerOffset, dataOffset);
     initHeader();
   }
 
-  private void initOffset() {
-    dataOffset = dataOffset <= headerOffset ? headerOffset + 1 : dataOffset;
+  private void initOffset(int headerOffset, int dataOffset) {
+    this.headerOffset = headerOffset;
+    this.dataOffset = dataOffset <= headerOffset ? headerOffset + 1 : dataOffset;
   }
 
   private void initHeader() {

@@ -20,17 +20,17 @@ import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 @JsonTypeName("User")
-@JsonPropertyOrder(
-    {"Id", "User Name", "Date Of Birth", "Age", "%", "status", "Rating", "isNew", "data", "updated"}
-)
-public class Json {
+@JsonPropertyOrder(alphabetic = false)
+public class Json extends Base {
 
   @NumberValue(0)
   @JsonProperty(value = "Id", index = 0)
