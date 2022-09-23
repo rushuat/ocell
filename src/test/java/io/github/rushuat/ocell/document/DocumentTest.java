@@ -5,6 +5,7 @@ import static org.testng.Assert.assertEquals;
 import io.github.rushuat.ocell.model.Jpa;
 import io.github.rushuat.ocell.model.Json;
 import io.github.rushuat.ocell.model.Pojo;
+import io.github.rushuat.ocell.model.Status;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.Collections;
@@ -21,23 +22,27 @@ public class DocumentTest {
 
   @BeforeTest
   public void before() {
+    Pojo pojo =
+        Pojo.builder()
+            .id((long) 1)
+            .name("Updated User")
+            .dateOfBirth(new Date(123456789))
+            .age(33)
+            .percent("30%")
+            .rating(0.2525)
+            .isNew(false)
+            .data(null)
+            .updated(new Date(987654321))
+            .status(Status.OLD)
+            .build();
+    pojo.setPassword("******");
     models =
         new Object[]{
             null,
             new Object(),
             new Jpa(),
             new Json(),
-            Pojo.builder()
-                .id((long) 1)
-                .name("Updated User")
-                .dateOfBirth(new Date(123456789))
-                .age(33)
-                .percent("30%")
-                .rating(0.2525)
-                .isNew(false)
-                .data(null)
-                .updated(new Date(987654321))
-                .build()
+            pojo
         };
   }
 
@@ -93,8 +98,7 @@ public class DocumentTest {
     assertEquals(badIndexList.size(), 0);
     assertEquals(badNameList.size(), 0);
 
-    assertEquals(
-        jpaList.get(0),
+    Jpa jpa =
         Jpa.builder()
             .id((long) 0)
             .name("New User")
@@ -105,10 +109,16 @@ public class DocumentTest {
             .isNew(true)
             .data(null)
             .updated(new GregorianCalendar(2020, Calendar.JANUARY, 1, 11, 12, 13).getTime())
-            .build()
-    );
-    assertEquals(
-        jsonList.get(0),
+            .status(Status.NEW)
+            .build();
+    jpa.setGender("MALE");
+    jpa.setCurrency('$');
+    jpa.setSigned('Y');
+    jpa.setCar("Jeep");
+    jpa.setCitizen("USA");
+    assertEquals(jpaList.get(0), jpa);
+
+    Json json =
         Json.builder()
             .id((long) 0)
             .name("New User")
@@ -119,8 +129,22 @@ public class DocumentTest {
             .isNew(true)
             .data(null)
             .updated(new GregorianCalendar(2020, Calendar.JANUARY, 1, 11, 12, 13).getTime())
-            .build()
-    );
-    assertEquals(pojoList.get(0), models[4]);
+            .status(Status.NEW)
+            .build();
+    json.setGender("MALE");
+    json.setCurrency('$');
+    json.setSigned('Y');
+    json.setCar("Jeep");
+    json.setCitizen("USA");
+    assertEquals(jsonList.get(0), json);
+
+    Pojo pojo = (Pojo) models[4];
+    pojo.setGender("MALE");
+    pojo.setCurrency('$');
+    pojo.setSigned('Y');
+    pojo.setCar("Jeep");
+    pojo.setCitizen("USA");
+    pojo.setPassword(null);
+    assertEquals(pojoList.get(0), pojo);
   }
 }

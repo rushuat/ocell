@@ -5,16 +5,14 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import io.github.rushuat.ocell.annotation.ClassName;
 import io.github.rushuat.ocell.field.ValueConverter;
 import java.text.Collator;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -22,8 +20,8 @@ import lombok.SneakyThrows;
 
 public class DocumentClass<T> {
 
-  private Class<T> clazz;
-  private Map<Class<? extends ValueConverter>, ValueConverter> converterCache;
+  private final Class<T> clazz;
+  private final Map<Class<? extends ValueConverter>, ValueConverter> converterCache;
 
   public DocumentClass(Class<T> clazz) {
     this.clazz = clazz;
@@ -57,30 +55,25 @@ public class DocumentClass<T> {
   }
 
   public List<DocumentField> getFields() {
-    List<DocumentField> fields =
-        Arrays
-            .stream(clazz.getDeclaredFields())
-            .map(field -> new DocumentField(field, converterCache))
-            .filter(Predicate.not(DocumentField::isExcluded))
-            .sorted(Comparator.comparing(DocumentField::getOrder))
-            .collect(Collectors.toList());
+    List<DocumentField> fields = new ArrayList<>();
+    Class<?> subclass = clazz;
+    while (subclass != Object.class) {
+      Arrays
+          .stream(subclass.getDeclaredFields())
+          .map(field -> new DocumentField(field, converterCache))
+          .filter(Predicate.not(DocumentField::isExcluded))
+          .forEach(fields::add);
+      subclass = subclass.getSuperclass();
+    }
     if (clazz.isAnnotationPresent(JsonPropertyOrder.class)) {
       JsonPropertyOrder propertyOrder = clazz.getAnnotation(JsonPropertyOrder.class);
-      if (propertyOrder.value().length > 0) {
-        Map<String, DocumentField> map =
-            fields
-                .stream()
-                .collect(Collectors.toMap(DocumentField::getName, Function.identity()));
-        fields =
-            Arrays
-                .stream(propertyOrder.value())
-                .map(map::get)
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList());
-      }
       if (propertyOrder.alphabetic()) {
         fields.sort(Comparator.comparing(DocumentField::getName, Collator.getInstance()));
+      } else {
+        fields.sort(Comparator.comparing(DocumentField::getOrder));
       }
+    } else {
+      fields.sort(Comparator.comparing(DocumentField::getOrder));
     }
     return fields;
   }

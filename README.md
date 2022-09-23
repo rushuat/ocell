@@ -16,7 +16,7 @@ Your project should have a dependency to the library:
     <dependency>
       <groupId>io.github.rushuat</groupId>
       <artifactId>ocell</artifactId>
-      <version>0.1.4</version>
+      <version>0.1.5</version>
     </dependency>
 ```
 
@@ -40,7 +40,7 @@ The library supports POJO and few types of annotations to modify them:
 
 #### Jackson
 * *@JsonTypeName* - sheet name
-* *@JsonPropertyOrder* - columns order or alphabetic order
+* *@JsonPropertyOrder* - only alphabetic order
 * *@JsonProperty* - column name
 * *@JsonFormat* - column format by *pattern* property
 * *@JsonProperty* - column order by *index* property
@@ -55,8 +55,10 @@ The library supports POJO and few types of annotations to modify them:
 #### Default
 You are able to apply default values to POJO fields using annotations:
 * *@StringValue*
-* *@NumberValue*
-* *@BooleanValue*
+* *@CharValue* - not applicable to primitive *char*
+* *@BooleanValue* - not applicable to primitive *boolean*
+* *@NumberValue* - not applicable to primitive types
+* *@EnumValue* - string value of enum constant name
 * *@DateValue* - default format is *DateTimeFormatter.ISO_INSTANT*\
 or could be overridden by *@FieldFormat* or *@JsonFormat* annotations
 

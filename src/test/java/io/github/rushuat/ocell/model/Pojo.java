@@ -3,6 +3,7 @@ package io.github.rushuat.ocell.model;
 import io.github.rushuat.ocell.annotation.BooleanValue;
 import io.github.rushuat.ocell.annotation.ClassName;
 import io.github.rushuat.ocell.annotation.DateValue;
+import io.github.rushuat.ocell.annotation.EnumValue;
 import io.github.rushuat.ocell.annotation.FieldAlignment;
 import io.github.rushuat.ocell.annotation.FieldConverter;
 import io.github.rushuat.ocell.annotation.FieldExclude;
@@ -18,14 +19,16 @@ import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 @ClassName("User")
-public class Pojo {
+public class Pojo extends Base {
 
   @FieldOrder(0)
   @NumberValue(0)
@@ -72,4 +75,8 @@ public class Pojo {
   @FieldAlignment(vertical = "bottom")
   @DateValue("2020-01-01T11:12:13Z")
   private Date updated;
+
+  @FieldOrder(5)
+  @EnumValue("NEW")
+  private Status status;
 }

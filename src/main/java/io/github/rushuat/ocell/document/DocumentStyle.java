@@ -16,8 +16,8 @@ import org.apache.poi.ss.util.DateFormatConverter;
 
 public class DocumentStyle {
 
-  private Workbook workbook;
-  private Map<String, CellStyle> styleCache;
+  private final Workbook workbook;
+  private final Map<String, CellStyle> styleCache;
 
   public DocumentStyle(Workbook workbook) {
     this.workbook = workbook;

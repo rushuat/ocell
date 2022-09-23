@@ -7,7 +7,7 @@ import org.apache.poi.ss.usermodel.DateUtil;
 
 public class DocumentCell {
 
-  private Cell cell;
+  private final Cell cell;
 
   public DocumentCell(Cell cell) {
     this.cell = cell;

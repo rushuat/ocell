@@ -4,35 +4,45 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.GeneralSecurityException;
+import java.util.Optional;
+import java.util.function.Predicate;
 import org.apache.poi.poifs.crypt.Decryptor;
 import org.apache.poi.poifs.crypt.EncryptionInfo;
 import org.apache.poi.poifs.crypt.EncryptionMode;
 import org.apache.poi.poifs.crypt.Encryptor;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.util.IOUtils;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public abstract class IODocument extends IOStream {
 
-  private byte[] password;
+  private final byte[] password;
 
   protected Workbook workbook;
   protected DocumentStyle style;
 
   protected IODocument() {
-    this.workbook = new XSSFWorkbook();
-    this.style = new DocumentStyle(workbook);
+    this(null);
   }
 
   protected IODocument(String password) {
-    this();
-    this.password = password == null || password.isEmpty() ? null : password.getBytes();
+    IOUtils.setByteArrayMaxOverride(Integer.MAX_VALUE);
+    this.workbook = new XSSFWorkbook();
+    this.style = new DocumentStyle(workbook);
+    this.password =
+        Optional.ofNullable(password)
+            .filter(Predicate.not(String::isEmpty))
+            .map(String::getBytes)
+            .orElse(null);
   }
 
   @Override
   public void fromStream(InputStream stream) throws IOException {
     try (stream) {
-      if (password != null && password.length > 0) {
+      if (password == null) {
+        workbook = new XSSFWorkbook(stream);
+      } else {
         try (POIFSFileSystem fileSystem = new POIFSFileSystem(stream)) {
           EncryptionInfo encryptionInfo = new EncryptionInfo(fileSystem);
           Decryptor decryptor = Decryptor.getInstance(encryptionInfo);
@@ -47,8 +57,6 @@ public abstract class IODocument extends IOStream {
         } catch (GeneralSecurityException e) {
           throw new IOException(e);
         }
-      } else {
-        workbook = new XSSFWorkbook(stream);
       }
       style = new DocumentStyle(workbook);
     }
@@ -57,7 +65,9 @@ public abstract class IODocument extends IOStream {
   @Override
   public void toStream(OutputStream stream) throws IOException {
     try (stream) {
-      if (password != null && password.length > 0) {
+      if (password == null) {
+        workbook.write(stream);
+      } else {
         EncryptionInfo encryptionInfo = new EncryptionInfo(EncryptionMode.standard);
         Encryptor encryptor = encryptionInfo.getEncryptor();
         encryptor.confirmPassword(new String(password));
@@ -70,8 +80,6 @@ public abstract class IODocument extends IOStream {
         } catch (GeneralSecurityException e) {
           throw new IOException(e);
         }
-      } else {
-        workbook.write(stream);
       }
     }
   }

@@ -14,9 +14,9 @@ import org.apache.poi.ss.usermodel.Row;
 
 public class DocumentHeader {
 
-  private Row header;
-  private Map<Integer, String> nameByIndex;
-  private Map<String, Integer> indexByName;
+  private final Row header;
+  private final Map<Integer, String> nameByIndex;
+  private final Map<String, Integer> indexByName;
 
   public DocumentHeader(Row header, DocumentStyle style, List<DocumentField> fields) {
     if (header.getLastCellNum() < 0) {

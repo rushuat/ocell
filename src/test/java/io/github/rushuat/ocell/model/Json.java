@@ -7,8 +7,10 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import io.github.rushuat.ocell.annotation.BooleanValue;
 import io.github.rushuat.ocell.annotation.DateValue;
+import io.github.rushuat.ocell.annotation.EnumValue;
 import io.github.rushuat.ocell.annotation.FieldAlignment;
 import io.github.rushuat.ocell.annotation.FieldConverter;
+import io.github.rushuat.ocell.annotation.FieldOrder;
 import io.github.rushuat.ocell.annotation.HeaderAlignment;
 import io.github.rushuat.ocell.annotation.NumberValue;
 import io.github.rushuat.ocell.annotation.StringValue;
@@ -18,17 +20,17 @@ import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 @JsonTypeName("User")
-@JsonPropertyOrder(
-    {"Id", "User Name", "Date Of Birth", "Age", "%", "Rating", "isNew", "data", "updated"}
-)
-public class Json {
+@JsonPropertyOrder(alphabetic = false)
+public class Json extends Base {
 
   @NumberValue(0)
   @JsonProperty(value = "Id", index = 0)
@@ -70,4 +72,8 @@ public class Json {
   @FieldAlignment(vertical = "bottom")
   @DateValue("2020-01-01T11:12:13Z")
   private Date updated;
+
+  @FieldOrder(5)
+  @EnumValue("NEW")
+  private Status status;
 }

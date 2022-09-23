@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.github.rushuat.ocell.annotation.BooleanValue;
+import io.github.rushuat.ocell.annotation.CharValue;
 import io.github.rushuat.ocell.annotation.DateValue;
+import io.github.rushuat.ocell.annotation.EnumValue;
 import io.github.rushuat.ocell.annotation.FieldAlignment;
 import io.github.rushuat.ocell.annotation.FieldConverter;
 import io.github.rushuat.ocell.annotation.FieldExclude;
@@ -18,18 +20,21 @@ import io.github.rushuat.ocell.field.Alignment;
 import io.github.rushuat.ocell.field.Format;
 import io.github.rushuat.ocell.field.ValueConverter;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.lang.reflect.ParameterizedType;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
+import java.util.Optional;
 import javax.persistence.Column;
 import javax.persistence.Transient;
 import lombok.SneakyThrows;
 
 public class DocumentField {
 
-  private Field field;
-  private Map<Class<? extends ValueConverter>, ValueConverter> converterCache;
+  private final Field field;
+  private final Map<Class<? extends ValueConverter>, ValueConverter> converterCache;
 
   public DocumentField(
       Field field,
@@ -42,13 +47,19 @@ public class DocumentField {
   @SneakyThrows
   public void setValue(Object obj, Object value) {
     Object data = value;
+    Class<?> type =
+        Optional.ofNullable(getSubtype())
+            .filter(sub -> !sub.equals(getType()))
+            .orElseGet(() -> (Class) getType());
+    data =
+        Optional.ofNullable(getEnum(data, type))
+            .orElse(data);
+    data =
+        Optional.ofNullable(getNumber(data, type))
+            .orElse(data);
     ValueConverter converter = getConverter();
     if (converter != null) {
       data = converter.convertInput(data);
-    } else {
-      if (data instanceof Number) {
-        data = getNumber(data);
-      }
     }
     if (data == null) {
       data = getDefault();
@@ -66,23 +77,42 @@ public class DocumentField {
     if (converter != null) {
       value = converter.convertOutput(value);
     }
+    if (value instanceof Enum) {
+      value = ((Enum<?>) value).name();
+    }
     return value;
   }
 
-  public Object getNumber(Object value) {
-    Object data = value;
-    if (field.getType().equals(Double.class)) {
-      data = ((Number) value).doubleValue();
-    } else if (field.getType().equals(Integer.class)) {
-      data = ((Number) value).intValue();
-    } else if (field.getType().equals(Long.class)) {
-      data = ((Number) value).longValue();
-    } else if (field.getType().equals(Float.class)) {
-      data = ((Number) value).floatValue();
-    } else if (field.getType().equals(Byte.class)) {
-      data = ((Number) value).byteValue();
-    } else if (field.getType().equals(Short.class)) {
-      data = ((Number) value).shortValue();
+  public Object getEnum(Object value, Class<?> type) {
+    Object data = null;
+    if (value instanceof String) {
+      if (type.isEnum()) {
+        for (Object item : type.getEnumConstants()) {
+          if (((Enum<?>) item).name().equals(value)) {
+            data = item;
+          }
+        }
+      }
+    }
+    return data;
+  }
+
+  public Object getNumber(Object value, Class<?> type) {
+    Object data = null;
+    if (value instanceof Number) {
+      if (type.equals(double.class) || type.equals(Double.class)) {
+        data = ((Number) value).doubleValue();
+      } else if (type.equals(int.class) || type.equals(Integer.class)) {
+        data = ((Number) value).intValue();
+      } else if (type.equals(long.class) || type.equals(Long.class)) {
+        data = ((Number) value).longValue();
+      } else if (type.equals(float.class) || type.equals(Float.class)) {
+        data = ((Number) value).floatValue();
+      } else if (type.equals(byte.class) || type.equals(Byte.class)) {
+        data = ((Number) value).byteValue();
+      } else if (type.equals(short.class) || type.equals(Short.class)) {
+        data = ((Number) value).shortValue();
+      }
     }
     return data;
   }
@@ -90,13 +120,18 @@ public class DocumentField {
   @SneakyThrows
   public Object getDefault() {
     Object value = null;
-    if (field.isAnnotationPresent(StringValue.class)) {
-      value = field.getAnnotation(StringValue.class).value();
-    } else if (field.isAnnotationPresent(BooleanValue.class)) {
+    if (field.isAnnotationPresent(BooleanValue.class)) {
       value = field.getAnnotation(BooleanValue.class).value();
+    } else if (field.isAnnotationPresent(StringValue.class)) {
+      value = field.getAnnotation(StringValue.class).value();
+    } else if (field.isAnnotationPresent(CharValue.class)) {
+      value = field.getAnnotation(CharValue.class).value();
     } else if (field.isAnnotationPresent(NumberValue.class)) {
       Double number = field.getAnnotation(NumberValue.class).value();
-      value = getNumber(number);
+      value = getNumber(number, getType());
+    } else if (field.isAnnotationPresent(EnumValue.class)) {
+      String name = field.getAnnotation(EnumValue.class).value();
+      value = getEnum(name, getType());
     } else if (field.isAnnotationPresent(DateValue.class)) {
       String date = field.getAnnotation(DateValue.class).value();
       Format format = getFormat();
@@ -123,7 +158,8 @@ public class DocumentField {
         pattern = fieldFormat.value();
       }
     }
-    boolean isDate = getType().equals(Date.class);
+    Class<?> type = getType();
+    boolean isDate = type.equals(Date.class);
     return new Format(pattern, isDate);
   }
 
@@ -168,6 +204,12 @@ public class DocumentField {
 
   public boolean isExcluded() {
     boolean excluded = false;
+    if (Modifier.isStatic(field.getModifiers())) {
+      excluded = true;
+    }
+    if (Modifier.isTransient(field.getModifiers())) {
+      excluded = true;
+    }
     if (field.isAnnotationPresent(Transient.class)) {
       excluded = true;
     }
@@ -199,6 +241,17 @@ public class DocumentField {
 
   public Class<?> getType() {
     return field.getType();
+  }
+
+  public Class<?> getSubtype() {
+    Class<?> type = null;
+    ValueConverter converter = getConverter();
+    if (converter != null) {
+      Class<?> clazz = converter.getClass();
+      ParameterizedType generic = (ParameterizedType) clazz.getGenericInterfaces()[0];
+      type = (Class<?>) generic.getActualTypeArguments()[1];
+    }
+    return type;
   }
 
   public ValueConverter getConverter() {
