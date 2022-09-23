@@ -101,6 +101,7 @@ public class DocumentFieldTest {
     DocumentField documentField16 = documentFields.get(16);
     DocumentField documentField17 = documentFields.get(17);
     DocumentField documentField18 = documentFields.get(18);
+    DocumentField documentField19 = documentFields.get(19);
     //WHEN
     int order0 = documentField0.getOrder();
     int order1 = documentField1.getOrder();
@@ -121,6 +122,7 @@ public class DocumentFieldTest {
     int order16 = documentField16.getOrder();
     int order17 = documentField17.getOrder();
     int order18 = documentField18.getOrder();
+    int order19 = documentField19.getOrder();
     //THEN
     assertEquals(order0, 0);
     assertEquals(order1, 1);
@@ -141,6 +143,7 @@ public class DocumentFieldTest {
     assertEquals(order16, Integer.MAX_VALUE);
     assertEquals(order17, 6);
     assertEquals(order18, 7);
+    assertEquals(order19, Integer.MAX_VALUE);
   }
 
   @Test(dataProvider = "models")
@@ -165,6 +168,7 @@ public class DocumentFieldTest {
     DocumentField documentField16 = documentFields.get(16);
     DocumentField documentField17 = documentFields.get(17);
     DocumentField documentField18 = documentFields.get(18);
+    DocumentField documentField19 = documentFields.get(19);
     //WHEN
     boolean excluded0 = documentField0.isExcluded();
     boolean excluded1 = documentField1.isExcluded();
@@ -185,6 +189,7 @@ public class DocumentFieldTest {
     boolean excluded16 = documentField16.isExcluded();
     boolean excluded17 = documentField17.isExcluded();
     boolean excluded18 = documentField18.isExcluded();
+    boolean excluded19 = documentField19.isExcluded();
     //THEN
     assertFalse(excluded0);
     assertFalse(excluded1);
@@ -205,6 +210,7 @@ public class DocumentFieldTest {
     assertFalse(excluded16);
     assertFalse(excluded17);
     assertFalse(excluded18);
+    assertFalse(excluded19);
   }
 
   @Test(dataProvider = "models")
@@ -229,6 +235,7 @@ public class DocumentFieldTest {
     DocumentField documentField16 = documentFields.get(16);
     DocumentField documentField17 = documentFields.get(17);
     DocumentField documentField18 = documentFields.get(18);
+    DocumentField documentField19 = documentFields.get(19);
 
     //WHEN
     Format format0 = documentField0.getFormat();
@@ -250,6 +257,7 @@ public class DocumentFieldTest {
     Format format16 = documentField16.getFormat();
     Format format17 = documentField17.getFormat();
     Format format18 = documentField18.getFormat();
+    Format format19 = documentField19.getFormat();
 
     //THEN
     assertNotNull(format0);
@@ -327,6 +335,10 @@ public class DocumentFieldTest {
     assertNotNull(format18);
     assertNull(format18.getPattern());
     assertFalse(format18.isDate());
+
+    assertNotNull(format19);
+    assertNull(format19.getPattern());
+    assertFalse(format19.isDate());
   }
 
   @Test(dataProvider = "models")
@@ -351,6 +363,7 @@ public class DocumentFieldTest {
     DocumentField documentField16 = documentFields.get(16);
     DocumentField documentField17 = documentFields.get(17);
     DocumentField documentField18 = documentFields.get(18);
+    DocumentField documentField19 = documentFields.get(19);
 
     //WHEN
     Alignment alignment0 = documentField0.getAlignment();
@@ -372,6 +385,7 @@ public class DocumentFieldTest {
     Alignment alignment16 = documentField16.getAlignment();
     Alignment alignment17 = documentField17.getAlignment();
     Alignment alignment18 = documentField18.getAlignment();
+    Alignment alignment19 = documentField19.getAlignment();
 
     //THEN
     assertNotNull(alignment0);
@@ -449,6 +463,10 @@ public class DocumentFieldTest {
     assertNotNull(alignment18);
     assertNull(alignment18.getHorizontal());
     assertNull(alignment18.getVertical());
+
+    assertNotNull(alignment19);
+    assertNull(alignment19.getHorizontal());
+    assertNull(alignment19.getVertical());
   }
 
   @Test(dataProvider = "models")
@@ -473,6 +491,7 @@ public class DocumentFieldTest {
     DocumentField documentField16 = documentFields.get(16);
     DocumentField documentField17 = documentFields.get(17);
     DocumentField documentField18 = documentFields.get(18);
+    DocumentField documentField19 = documentFields.get(19);
 
     //WHEN
     Alignment header0 = documentField0.getHeader();
@@ -494,6 +513,7 @@ public class DocumentFieldTest {
     Alignment header16 = documentField16.getHeader();
     Alignment header17 = documentField17.getHeader();
     Alignment header18 = documentField18.getHeader();
+    Alignment header19 = documentField19.getHeader();
 
     //THEN
     assertNotNull(header0);
@@ -571,6 +591,10 @@ public class DocumentFieldTest {
     assertNotNull(header18);
     assertNull(header18.getHorizontal());
     assertNull(header18.getVertical());
+
+    assertNotNull(header19);
+    assertNull(header19.getHorizontal());
+    assertNull(header19.getVertical());
   }
 
   @Test(dataProvider = "models")
@@ -595,6 +619,7 @@ public class DocumentFieldTest {
     DocumentField documentField16 = documentFields.get(16);
     DocumentField documentField17 = documentFields.get(17);
     DocumentField documentField18 = documentFields.get(18);
+    DocumentField documentField19 = documentFields.get(19);
     //WHEN
     Object default0 = documentField0.getDefault();
     Object default1 = documentField1.getDefault();
@@ -615,6 +640,7 @@ public class DocumentFieldTest {
     Object default16 = documentField16.getDefault();
     Object default17 = documentField17.getDefault();
     Object default18 = documentField18.getDefault();
+    Object default19 = documentField19.getDefault();
     //THEN
     assertEquals(default0, 0L);
     assertEquals(default1, "New User");
@@ -635,6 +661,7 @@ public class DocumentFieldTest {
     assertEquals(default16, 'Y');
     assertEquals(default17, "Jeep");
     assertEquals(default18, "USA");
+    assertEquals(default19, true);
   }
 
   @Test(dataProvider = "models")
@@ -659,6 +686,7 @@ public class DocumentFieldTest {
     DocumentField documentField16 = documentFields.get(16);
     DocumentField documentField17 = documentFields.get(17);
     DocumentField documentField18 = documentFields.get(18);
+    DocumentField documentField19 = documentFields.get(19);
     //WHEN
     Object converter0 = documentField0.getConverter();
     Object converter1 = documentField1.getConverter();
@@ -679,6 +707,7 @@ public class DocumentFieldTest {
     Object converter16 = documentField16.getConverter();
     Object converter17 = documentField17.getConverter();
     Object converter18 = documentField18.getConverter();
+    Object converter19 = documentField19.getConverter();
     //THEN
     assertNull(converter0);
     assertNull(converter1);
@@ -699,6 +728,7 @@ public class DocumentFieldTest {
     assertNull(converter16);
     assertNull(converter17);
     assertNull(converter18);
+    assertNull(converter19);
   }
 
   @Test(dataProvider = "models")
@@ -723,6 +753,7 @@ public class DocumentFieldTest {
     DocumentField documentField16 = documentFields.get(16);
     DocumentField documentField17 = documentFields.get(17);
     DocumentField documentField18 = documentFields.get(18);
+    DocumentField documentField19 = documentFields.get(19);
     //WHEN
     String name0 = documentField0.getName();
     String name1 = documentField1.getName();
@@ -743,6 +774,7 @@ public class DocumentFieldTest {
     String name16 = documentField16.getName();
     String name17 = documentField17.getName();
     String name18 = documentField18.getName();
+    String name19 = documentField19.getName();
     //THEN
     assertEquals(name0, "Id");
     assertEquals(name1, "User Name");
@@ -763,6 +795,7 @@ public class DocumentFieldTest {
     assertEquals(name16, "signed");
     assertEquals(name17, "car");
     assertEquals(name18, "citizen");
+    assertEquals(name19, "isOwner");
   }
 
   @Test(dataProvider = "models")
@@ -787,6 +820,7 @@ public class DocumentFieldTest {
     DocumentField documentField16 = documentFields.get(16);
     DocumentField documentField17 = documentFields.get(17);
     DocumentField documentField18 = documentFields.get(18);
+    DocumentField documentField19 = documentFields.get(19);
     //WHEN
     Object value0 = documentField0.getEnum((float) 0.0, documentField0.getType());
     Object value1 = documentField1.getEnum("New User", documentField1.getType());
@@ -807,6 +841,7 @@ public class DocumentFieldTest {
     Object value16 = documentField16.getEnum('Y', documentField16.getType());
     Object value17 = documentField17.getEnum("Jeep", documentField17.getType());
     Object value18 = documentField18.getEnum("USA", documentField18.getType());
+    Object value19 = documentField19.getEnum(false, documentField19.getType());
     //THEN
     assertNull(value0);
     assertNull(value1);
@@ -827,6 +862,7 @@ public class DocumentFieldTest {
     assertNull(value16);
     assertNull(value17);
     assertNull(value18);
+    assertNull(value19);
   }
 
   @Test(dataProvider = "models")
@@ -851,6 +887,7 @@ public class DocumentFieldTest {
     DocumentField documentField16 = documentFields.get(16);
     DocumentField documentField17 = documentFields.get(17);
     DocumentField documentField18 = documentFields.get(18);
+    DocumentField documentField19 = documentFields.get(19);
     //WHEN
     Object value0 = documentField0.getNumber((float) 0.0, documentField0.getType());
     Object value1 = documentField1.getNumber("New User", documentField1.getType());
@@ -871,6 +908,7 @@ public class DocumentFieldTest {
     Object value16 = documentField16.getNumber('Y', documentField16.getType());
     Object value17 = documentField17.getNumber("Jeep", documentField17.getType());
     Object value18 = documentField18.getNumber("USA", documentField18.getType());
+    Object value19 = documentField19.getNumber(false, documentField19.getType());
     //THEN
     assertEquals(value0, 0L);
     assertNull(value1);
@@ -891,6 +929,7 @@ public class DocumentFieldTest {
     assertNull(value16);
     assertNull(value17);
     assertNull(value18);
+    assertNull(value19);
   }
 
   @Test(dataProvider = "models")
@@ -915,6 +954,7 @@ public class DocumentFieldTest {
     DocumentField documentField16 = documentFields.get(16);
     DocumentField documentField17 = documentFields.get(17);
     DocumentField documentField18 = documentFields.get(18);
+    DocumentField documentField19 = documentFields.get(19);
     //WHEN
     Object value0 = documentField0.getValue(model);
     Object value1 = documentField1.getValue(model);
@@ -935,6 +975,7 @@ public class DocumentFieldTest {
     Object value16 = documentField16.getValue(model);
     Object value17 = documentField17.getValue(model);
     Object value18 = documentField18.getValue(model);
+    Object value19 = documentField19.getValue(model);
     //THEN
     assertEquals(value0, 0L);
     assertEquals(value1, "New User");
@@ -955,6 +996,7 @@ public class DocumentFieldTest {
     assertEquals(value16, 'Y');
     assertEquals(value17, "Jeep");
     assertEquals(value18, "USA");
+    assertEquals(value19, false);
   }
 
   @Test(dataProvider = "models")
@@ -979,6 +1021,7 @@ public class DocumentFieldTest {
     DocumentField documentField16 = documentFields.get(16);
     DocumentField documentField17 = documentFields.get(17);
     DocumentField documentField18 = documentFields.get(18);
+    DocumentField documentField19 = documentFields.get(19);
     //WHEN
     documentField0.setValue(model, null);
     documentField1.setValue(model, "Updated User");
@@ -999,6 +1042,7 @@ public class DocumentFieldTest {
     documentField16.setValue(model, 'N');
     documentField17.setValue(model, "Honda");
     documentField18.setValue(model, "JPN");
+    documentField19.setValue(model, true);
 
     Object value0 = documentField0.getValue(model);
     Object value1 = documentField1.getValue(model);
@@ -1019,6 +1063,7 @@ public class DocumentFieldTest {
     Object value16 = documentField16.getValue(model);
     Object value17 = documentField17.getValue(model);
     Object value18 = documentField18.getValue(model);
+    Object value19 = documentField19.getValue(model);
     //THEN
     assertEquals(value0, 0L);
     assertEquals(value1, "Updated User");
@@ -1039,5 +1084,6 @@ public class DocumentFieldTest {
     assertEquals(value16, 'N');
     assertEquals(value17, "Honda");
     assertEquals(value18, "JPN");
+    assertEquals(value19, true);
   }
 }

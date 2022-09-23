@@ -54,9 +54,9 @@ The library supports POJO and few types of annotations to modify them:
 
 #### Default
 You are able to apply default values to POJO fields using annotations:
-* *@BooleanValue*
 * *@StringValue*
 * *@CharValue* - not applicable to primitive *char*
+* *@BooleanValue* - not applicable to primitive *boolean*
 * *@NumberValue* - not applicable to primitive types
 * *@EnumValue* - string value of enum constant name
 * *@DateValue* - default format is *DateTimeFormatter.ISO_INSTANT*\

@@ -1,5 +1,6 @@
 package io.github.rushuat.ocell.model;
 
+import io.github.rushuat.ocell.annotation.BooleanValue;
 import io.github.rushuat.ocell.annotation.CharValue;
 import io.github.rushuat.ocell.annotation.FieldName;
 import io.github.rushuat.ocell.annotation.FieldOrder;
@@ -40,4 +41,7 @@ public class Base {
   @FieldOrder(7)
   @StringValue("USA")
   private String citizen;
+
+  @BooleanValue(true)
+  private boolean isOwner;
 }
