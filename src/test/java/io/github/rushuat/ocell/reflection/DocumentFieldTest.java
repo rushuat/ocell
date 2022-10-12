@@ -14,6 +14,7 @@ import io.github.rushuat.ocell.model.Jpa;
 import io.github.rushuat.ocell.model.Json;
 import io.github.rushuat.ocell.model.Pojo;
 import io.github.rushuat.ocell.model.Status;
+import io.github.rushuat.ocell.model.Xml;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
@@ -42,6 +43,7 @@ public class DocumentFieldTest {
     return
         new Object[][]{
             testCase(new Jpa()),
+            testCase(new Xml()),
             testCase(new Json()),
             testCase(new Pojo())
         };

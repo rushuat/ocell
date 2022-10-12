@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import io.github.rushuat.ocell.annotation.ClassName;
 import io.github.rushuat.ocell.field.ValueConverter;
+import jakarta.xml.bind.annotation.XmlAccessOrder;
+import jakarta.xml.bind.annotation.XmlAccessorOrder;
+import jakarta.xml.bind.annotation.XmlRootElement;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -65,15 +68,18 @@ public class DocumentClass<T> {
           .forEach(fields::add);
       subclass = subclass.getSuperclass();
     }
+    fields.sort(Comparator.comparing(DocumentField::getOrder));
+    if (clazz.isAnnotationPresent(XmlAccessorOrder.class)) {
+      XmlAccessorOrder accessorOrder = clazz.getAnnotation(XmlAccessorOrder.class);
+      if (accessorOrder.value() == XmlAccessOrder.ALPHABETICAL) {
+        fields.sort(Comparator.comparing(DocumentField::getName, Collator.getInstance()));
+      }
+    }
     if (clazz.isAnnotationPresent(JsonPropertyOrder.class)) {
       JsonPropertyOrder propertyOrder = clazz.getAnnotation(JsonPropertyOrder.class);
       if (propertyOrder.alphabetic()) {
         fields.sort(Comparator.comparing(DocumentField::getName, Collator.getInstance()));
-      } else {
-        fields.sort(Comparator.comparing(DocumentField::getOrder));
       }
-    } else {
-      fields.sort(Comparator.comparing(DocumentField::getOrder));
     }
     return fields;
   }
@@ -85,6 +91,9 @@ public class DocumentClass<T> {
     }
     if (clazz.isAnnotationPresent(Table.class)) {
       name = clazz.getAnnotation(Table.class).name();
+    }
+    if (clazz.isAnnotationPresent(XmlRootElement.class)) {
+      name = clazz.getAnnotation(XmlRootElement.class).name();
     }
     if (clazz.isAnnotationPresent(JsonTypeName.class)) {
       name = clazz.getAnnotation(JsonTypeName.class).value();
