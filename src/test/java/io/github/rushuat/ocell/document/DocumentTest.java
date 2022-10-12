@@ -6,6 +6,7 @@ import io.github.rushuat.ocell.model.Jpa;
 import io.github.rushuat.ocell.model.Json;
 import io.github.rushuat.ocell.model.Pojo;
 import io.github.rushuat.ocell.model.Status;
+import io.github.rushuat.ocell.model.Xml;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.Collections;
@@ -41,6 +42,7 @@ public class DocumentTest {
             null,
             new Object(),
             new Jpa(),
+            new Xml(),
             new Json(),
             pojo
         };
@@ -66,14 +68,16 @@ public class DocumentTest {
       document.addSheet(new Object[]{models[1]});
       document.addSheet(Collections.singletonList(models[1]));
       document.addSheet("Jpa Sheet", new Jpa[]{(Jpa) models[2]});
-      document.addSheet("Json Sheet", Collections.singletonList(models[3]));
-      document.addSheet(new Object[]{models[4], new Pojo(), new Pojo()});
+      document.addSheet("Xml Sheet", Collections.singleton(models[3]));
+      document.addSheet("Json Sheet", Collections.singletonList(models[4]));
+      document.addSheet(new Object[]{models[5], new Pojo(), new Pojo()});
       documentData = document.toBytes();
     }
 
     List<?> nullList;
     List<Object> objList;
     List<Jpa> jpaList;
+    List<Xml> xmlList;
     List<Json> jsonList;
     List<Pojo> pojoList;
     List<Pojo> badIndexList;
@@ -83,8 +87,9 @@ public class DocumentTest {
       nullList = document.getSheet(null);
       objList = document.getSheet(Object.class);
       jpaList = document.getSheet("Jpa Sheet", Jpa.class);
+      xmlList = document.getSheet("Xml Sheet", Xml.class);
       jsonList = document.getSheet("Json Sheet", Json.class);
-      pojoList = document.getSheet(2, Pojo.class);
+      pojoList = document.getSheet(3, Pojo.class);
       badIndexList = document.getSheet(100, Pojo.class);
       badNameList = document.getSheet("Pojo Sheet", Pojo.class);
     }
@@ -93,6 +98,7 @@ public class DocumentTest {
     assertEquals(nullList.size(), 0);
     assertEquals(objList.size(), 0);
     assertEquals(jpaList.size(), 1);
+    assertEquals(xmlList.size(), 1);
     assertEquals(jsonList.size(), 1);
     assertEquals(pojoList.size(), 3);
     assertEquals(badIndexList.size(), 0);
@@ -118,6 +124,26 @@ public class DocumentTest {
     jpa.setCitizen("USA");
     assertEquals(jpaList.get(0), jpa);
 
+    Xml xml =
+        Xml.builder()
+            .id((long) 0)
+            .name("New User")
+            .dateOfBirth(new GregorianCalendar(1991, Calendar.AUGUST, 24, 1, 2, 3).getTime())
+            .age(18)
+            .percent("50%")
+            .rating(0.1234)
+            .isNew(true)
+            .data(null)
+            .updated(new GregorianCalendar(2020, Calendar.JANUARY, 1, 11, 12, 13).getTime())
+            .status(Status.NEW)
+            .build();
+    xml.setGender("MALE");
+    xml.setCurrency('$');
+    xml.setSigned('Y');
+    xml.setCar("Jeep");
+    xml.setCitizen("USA");
+    assertEquals(xmlList.get(0), xml);
+
     Json json =
         Json.builder()
             .id((long) 0)
@@ -138,7 +164,7 @@ public class DocumentTest {
     json.setCitizen("USA");
     assertEquals(jsonList.get(0), json);
 
-    Pojo pojo = (Pojo) models[4];
+    Pojo pojo = (Pojo) models[5];
     pojo.setGender("MALE");
     pojo.setCurrency('$');
     pojo.setSigned('Y');

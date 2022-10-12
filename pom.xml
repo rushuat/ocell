@@ -6,7 +6,7 @@
 
   <groupId>io.github.rushuat</groupId>
   <artifactId>ocell</artifactId>
-  <version>0.1.5</version>
+  <version>0.1.6</version>
   <packaging>jar</packaging>
 
   <name>${project.groupId}:${project.artifactId}</name>
@@ -41,6 +41,7 @@
 
     <poi.version>5.2.3</poi.version>
     <jackson.version>2.13.4</jackson.version>
+    <jaxb.version>4.0.0</jaxb.version>
     <jpa.version>2.2</jpa.version>
 
     <testng.version>7.6.1</testng.version>
@@ -68,10 +69,16 @@
       <artifactId>poi-ooxml</artifactId>
       <version>${poi.version}</version>
     </dependency>
+
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-annotations</artifactId>
       <version>${jackson.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>jakarta.xml.bind</groupId>
+      <artifactId>jakarta.xml.bind-api</artifactId>
+      <version>${jaxb.version}</version>
     </dependency>
     <dependency>
       <groupId>javax.persistence</groupId>

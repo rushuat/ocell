@@ -19,6 +19,9 @@ import io.github.rushuat.ocell.annotation.StringValue;
 import io.github.rushuat.ocell.field.Alignment;
 import io.github.rushuat.ocell.field.Format;
 import io.github.rushuat.ocell.field.ValueConverter;
+import jakarta.xml.bind.annotation.XmlAttribute;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlTransient;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
@@ -213,6 +216,9 @@ public class DocumentField {
     if (field.isAnnotationPresent(Transient.class)) {
       excluded = true;
     }
+    if (field.isAnnotationPresent(XmlTransient.class)) {
+      excluded = true;
+    }
     if (field.isAnnotationPresent(JsonIgnore.class)) {
       excluded = field.getAnnotation(JsonIgnore.class).value();
     }
@@ -226,6 +232,12 @@ public class DocumentField {
     String name = null;
     if (field.isAnnotationPresent(Column.class)) {
       name = field.getAnnotation(Column.class).name();
+    }
+    if (field.isAnnotationPresent(XmlAttribute.class)) {
+      name = field.getAnnotation(XmlAttribute.class).name();
+    }
+    if (field.isAnnotationPresent(XmlElement.class)) {
+      name = field.getAnnotation(XmlElement.class).name();
     }
     if (field.isAnnotationPresent(JsonProperty.class)) {
       name = field.getAnnotation(JsonProperty.class).value();

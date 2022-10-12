@@ -7,6 +7,7 @@ import static org.testng.Assert.assertTrue;
 import io.github.rushuat.ocell.model.Jpa;
 import io.github.rushuat.ocell.model.Json;
 import io.github.rushuat.ocell.model.Pojo;
+import io.github.rushuat.ocell.model.Xml;
 import java.util.List;
 import java.util.Map;
 import org.testng.annotations.DataProvider;
@@ -27,6 +28,7 @@ public class DocumentClassTest {
     return
         new Object[][]{
             testCase(new Jpa()),
+            testCase(new Xml()),
             testCase(new Json()),
             testCase(new Pojo())
         };

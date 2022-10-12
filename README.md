@@ -16,15 +16,16 @@ Your project should have a dependency to the library:
     <dependency>
       <groupId>io.github.rushuat</groupId>
       <artifactId>ocell</artifactId>
-      <version>0.1.5</version>
+      <version>0.1.6</version>
     </dependency>
 ```
 
 ### Code
 The library supports POJO and few types of annotations to modify them:
 1. [oCell](https://github.com/rushuat/ocell/tree/main/src/main/java/io/github/rushuat/ocell/annotation)
-2. [Jackson](https://github.com/FasterXML/jackson-annotations)
-3. [JPA](https://javaee.github.io/javaee-spec/javadocs/javax/persistence/package-summary.html)
+2. [Jackson](https://github.com/FasterXML/jackson-annotations/wiki/Jackson-Annotations)
+3. [JAXB](https://jakarta.ee/specifications/xml-binding/4.0/apidocs/jakarta.xml.bind/jakarta/xml/bind/annotation/package-summary.html)
+4. [JPA](https://javaee.github.io/javaee-spec/javadocs/javax/persistence/package-summary.html)
 
 #### oCell
 * *@ClassName* - sheet name
@@ -46,6 +47,13 @@ The library supports POJO and few types of annotations to modify them:
 * *@JsonProperty* - column order by *index* property
 * *@JsonIgnore* - column not used
 
+#### JAXB
+* *@XmlRootElement* - sheet name by *name* property
+* *@XmlAccessorOrder* - alphabetic order
+* *@XmlElement* - column name by *name* property
+* *@XmlAttribute* - column name by *name* property
+* *@XmlTransient* - column not used
+
 #### JPA
 * *@Entity* - sheet name
 * *@Table* - sheet name
@@ -65,7 +73,7 @@ or could be overridden by *@FieldFormat* or *@JsonFormat* annotations
 #### Priority
 You are able to mix all types of annotations with one POJO.
 
-The override priory from lower to higher: *JPA* < *Jackson* < *oCell*.
+The override priory from lower to higher: *JPA* < *JAXB* < *Jackson* < *oCell*.
 
 #### Example
 You are able to find POJO mapping examples at this [URL](https://github.com/rushuat/ocell/tree/main/src/test/java/io/github/rushuat/ocell/model)
