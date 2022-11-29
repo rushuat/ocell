@@ -9,7 +9,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 
-public abstract class IOStream implements Closeable {
+public abstract class DocumentIO implements Closeable {
 
   public abstract void fromStream(InputStream stream) throws IOException;
 

@@ -1,4 +1,4 @@
-package io.github.rushuat.ocell.document;
+package io.github.rushuat.ocell.model;
 
 import io.github.rushuat.ocell.reflection.DocumentClass;
 import io.github.rushuat.ocell.reflection.DocumentField;
@@ -12,32 +12,33 @@ import org.apache.poi.ss.usermodel.Sheet;
 
 public class DocumentSheet<T> {
 
+  private final DocumentWorkbook workbook;
+
   private final Sheet sheet;
   private int headerOffset;
   private int dataOffset;
   private DocumentHeader header;
 
-  private final DocumentStyle style;
   private final DocumentClass<T> clazz;
   private final List<DocumentField> fields;
 
   public DocumentSheet(
+      DocumentWorkbook workbook,
       Sheet sheet,
-      DocumentStyle style,
       DocumentClass<T> clazz) {
-    this(sheet, 0, 1, style, clazz);
+    this(workbook, sheet, 0, 1, clazz);
   }
 
   public DocumentSheet(
+      DocumentWorkbook workbook,
       Sheet sheet,
       int headerOffset,
       int dataOffset,
-      DocumentStyle style,
       DocumentClass<T> clazz) {
-    this.sheet = sheet;
-    this.style = style;
-    this.clazz = clazz;
+    this.workbook = workbook;
 
+    this.sheet = sheet;
+    this.clazz = clazz;
     this.fields = clazz.getFields();
 
     initOffset(headerOffset, dataOffset);
@@ -54,14 +55,14 @@ public class DocumentSheet<T> {
         sheet.getLastRowNum() > 0
             ? sheet.getRow(headerOffset)
             : Optional.ofNullable(sheet.getRow(0)).orElse(sheet.createRow(0));
-    header = new DocumentHeader(row, style, fields);
+    header = new DocumentHeader(workbook, row, fields);
   }
 
   public void addRows(Collection<T> items) {
     items.forEach(
         item -> {
           Row row = sheet.createRow(sheet.getLastRowNum() + 1);
-          DocumentRow<T> documentRow = new DocumentRow<>(row, style, header, fields);
+          DocumentRow<T> documentRow = new DocumentRow<>(workbook, row, header, fields);
           documentRow.setCells(item);
         });
   }
@@ -74,7 +75,7 @@ public class DocumentSheet<T> {
                 index -> {
                   T item = clazz.newInstance();
                   Row row = sheet.getRow(index);
-                  DocumentRow<T> documentRow = new DocumentRow<>(row, style, header, fields);
+                  DocumentRow<T> documentRow = new DocumentRow<>(workbook, row, header, fields);
                   return documentRow.getCells(item);
                 })
             .collect(Collectors.toList());

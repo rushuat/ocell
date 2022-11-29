@@ -1,4 +1,4 @@
-package io.github.rushuat.ocell.document;
+package io.github.rushuat.ocell.model;
 
 import io.github.rushuat.ocell.reflection.DocumentField;
 import java.util.List;
@@ -8,18 +8,20 @@ import org.apache.poi.ss.usermodel.Row;
 
 public class DocumentRow<T> {
 
+  private final DocumentWorkbook workbook;
+
   private final Row row;
-  private final DocumentStyle style;
   private final DocumentHeader header;
+
   private final List<DocumentField> fields;
 
   public DocumentRow(
+      DocumentWorkbook workbook,
       Row row,
-      DocumentStyle style,
       DocumentHeader header,
       List<DocumentField> fields) {
+    this.workbook = workbook;
     this.row = row;
-    this.style = style;
     this.header = header;
     this.fields = fields;
   }
@@ -32,7 +34,7 @@ public class DocumentRow<T> {
           Integer index = header.getIndex(field.getName());
           Cell cell = row.createCell(index);
           DocumentCell documentCell = new DocumentCell(cell);
-          documentCell.setStyle(style.getCellStyle(field));
+          documentCell.setStyle(workbook.getCellStyle(field));
           documentCell.setValue(field.getValue(item));
         });
   }

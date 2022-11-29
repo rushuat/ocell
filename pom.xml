@@ -6,7 +6,7 @@
 
   <groupId>io.github.rushuat</groupId>
   <artifactId>ocell</artifactId>
-  <version>0.1.6</version>
+  <version>0.1.7</version>
   <packaging>jar</packaging>
 
   <name>${project.groupId}:${project.artifactId}</name>
@@ -40,20 +40,20 @@
     <lombok.version>1.18.24</lombok.version>
 
     <poi.version>5.2.3</poi.version>
-    <jackson.version>2.13.4</jackson.version>
-    <jaxb.version>4.0.0</jaxb.version>
+    <jackson.version>2.14.1</jackson.version>
+    <jaxb.version>2.3.1</jaxb.version>
     <jpa.version>2.2</jpa.version>
 
     <testng.version>7.6.1</testng.version>
-    <spotbugs.version>4.7.2</spotbugs.version>
+    <spotbugs.version>4.7.3</spotbugs.version>
 
-    <spotbugs.plugin>4.7.2.0</spotbugs.plugin>
+    <spotbugs.plugin>4.7.3.0</spotbugs.plugin>
 
     <compiler.plugin>3.10.1</compiler.plugin>
     <surefire.plugin>2.22.2</surefire.plugin>
-    <source-plugin>3.2.1</source-plugin>
-    <javadoc-plugin>3.4.1</javadoc-plugin>
-    <gpg-plugin>3.0.1</gpg-plugin>
+    <source.plugin>3.2.1</source.plugin>
+    <javadoc.plugin>3.4.1</javadoc.plugin>
+    <gpg.plugin>3.0.1</gpg.plugin>
 
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
@@ -76,8 +76,8 @@
       <version>${jackson.version}</version>
     </dependency>
     <dependency>
-      <groupId>jakarta.xml.bind</groupId>
-      <artifactId>jakarta.xml.bind-api</artifactId>
+      <groupId>javax.xml.bind</groupId>
+      <artifactId>jaxb-api</artifactId>
       <version>${jaxb.version}</version>
     </dependency>
     <dependency>
@@ -160,7 +160,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-source-plugin</artifactId>
-        <version>${source-plugin}</version>
+        <version>${source.plugin}</version>
         <executions>
           <execution>
             <id>attach-sources</id>
@@ -173,7 +173,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <version>${javadoc-plugin}</version>
+        <version>${javadoc.plugin}</version>
         <executions>
           <execution>
             <id>attach-javadocs</id>
@@ -186,7 +186,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-gpg-plugin</artifactId>
-        <version>${gpg-plugin}</version>
+        <version>${gpg.plugin}</version>
         <executions>
           <execution>
             <id>sign-artifacts</id>

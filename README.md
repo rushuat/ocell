@@ -16,16 +16,16 @@ Your project should have a dependency to the library:
     <dependency>
       <groupId>io.github.rushuat</groupId>
       <artifactId>ocell</artifactId>
-      <version>0.1.6</version>
+      <version>0.1.7</version>
     </dependency>
 ```
 
 ### Code
-The library supports POJO and few types of annotations to modify them:
+The library supports POJOs and few types of annotations to customize them:
 1. [oCell](https://github.com/rushuat/ocell/tree/main/src/main/java/io/github/rushuat/ocell/annotation)
 2. [Jackson](https://github.com/FasterXML/jackson-annotations/wiki/Jackson-Annotations)
-3. [JAXB](https://jakarta.ee/specifications/xml-binding/4.0/apidocs/jakarta.xml.bind/jakarta/xml/bind/annotation/package-summary.html)
-4. [JPA](https://javaee.github.io/javaee-spec/javadocs/javax/persistence/package-summary.html)
+3. [JAXB](https://javadoc.io/doc/javax.xml.bind/jaxb-api/2.3.1/javax/xml/bind/annotation/package-summary.html)
+4. [JPA](https://javadoc.io/static/javax.persistence/javax.persistence-api/2.2/javax/persistence/package-summary.html)
 
 #### oCell
 * *@ClassName* - sheet name
@@ -61,7 +61,7 @@ The library supports POJO and few types of annotations to modify them:
 * *@Transient* - column not used
 
 #### Default
-You are able to apply default values to POJO fields using annotations:
+Default values could be applied to POJO fields using annotations:
 * *@StringValue*
 * *@CharValue* - not applicable to primitive *char*
 * *@BooleanValue* - not applicable to primitive *boolean*
@@ -71,16 +71,21 @@ You are able to apply default values to POJO fields using annotations:
 or could be overridden by *@FieldFormat* or *@JsonFormat* annotations
 
 #### Priority
-You are able to mix all types of annotations with one POJO.
+All types of annotations could be mixed with one POJO.
 
-The override priory from lower to higher: *JPA* < *JAXB* < *Jackson* < *oCell*.
+Priority order of annotations from lower to higher: *JPA* < *JAXB* < *Jackson* < *oCell*.
+
+#### Document
+The library supports two types of spreadsheet documents:
+* *DocumentBIFF* - Microsoft Office Binary File Format (.xls)
+* *DocumentOOXML* - Office Open XML File Format (.xlsx)
 
 #### Example
-You are able to find POJO mapping examples at this [URL](https://github.com/rushuat/ocell/tree/main/src/test/java/io/github/rushuat/ocell/model)
+POJO mapping examples at this [URL](https://github.com/rushuat/ocell/tree/main/src/test/java/io/github/rushuat/ocell/model)
 
-You are able to find *@FieldConverter* examples at this [URL](https://github.com/rushuat/ocell/tree/main/src/test/java/io/github/rushuat/ocell/field)
+*@FieldConverter* examples at this [URL](https://github.com/rushuat/ocell/tree/main/src/test/java/io/github/rushuat/ocell/field)
 
-You are able to find *@FieldFormat* examples at this [URL](https://stackoverflow.com/questions/319438/basic-excel-currency-format-with-apache-poi)
+*@FieldFormat* examples at this [URL](https://stackoverflow.com/questions/319438/basic-excel-currency-format-with-apache-poi)
 
 Documents could be loaded from different sources:
 ```java
@@ -91,7 +96,7 @@ Documents could be loaded from different sources:
 
     List<Pojo> pojos;
 
-    try (Document document = new Document()) {
+    try (Document document = new DocumentOOXML()) {
       document.fromBytes(bytes);
       document.fromStream(stream);
       document.fromFile(path);
@@ -112,7 +117,7 @@ Documents could be stored to different sources:
 
     List<Pojo> pojos = ...
 
-    try (Document document = new Document()) {
+    try (Document document = new DocumentOOXML()) {
       document.addSheet(pojos);
       document.addSheet("Sheet1", pojos);
 
@@ -127,7 +132,7 @@ Documents could be protected by a password:
 ```java
     String password = ...
     
-    try (Document document = new Document(password)) { ... }
+    try (Document document = new DocumentOOXML(password)) { ... }
 ```
 ## Future 
 1. Fork version based on [FastExcel](https://github.com/dhatim/fastexcel)
