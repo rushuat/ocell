@@ -1,4 +1,4 @@
-package io.github.rushuat.ocell.document;
+package io.github.rushuat.ocell.model;
 
 import java.util.Date;
 import org.apache.poi.ss.usermodel.Cell;

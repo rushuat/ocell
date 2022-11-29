@@ -52,17 +52,22 @@ public class DocumentTest {
   public Object[][] passwords() {
     return
         new Object[][]{
-            {null},
-            {""},
-            {"******"}
+            {new DocumentBIFF()},
+            {new DocumentBIFF(null)},
+            {new DocumentBIFF("")},
+            {new DocumentBIFF("******")},
+            {new DocumentOOXML()},
+            {new DocumentOOXML(null)},
+            {new DocumentOOXML("")},
+            {new DocumentOOXML("******")},
         };
   }
 
   @Test(dataProvider = "passwords")
-  public void shouldCreateAndLoadDocument(String password) throws IOException {
+  public void shouldCreateAndLoadDocument(Document document) throws IOException {
     //WHEN
     byte[] documentData;
-    try (Document document = new Document(password)) {
+    try (document) {
       document.addSheet(new Object[]{models[0]});
       document.addSheet(Collections.singletonList(models[0]));
       document.addSheet(new Object[]{models[1]});
@@ -82,7 +87,7 @@ public class DocumentTest {
     List<Pojo> pojoList;
     List<Pojo> badIndexList;
     List<Pojo> badNameList;
-    try (Document document = new Document(password)) {
+    try (document) {
       document.fromBytes(documentData);
       nullList = document.getSheet(null);
       objList = document.getSheet(Object.class);

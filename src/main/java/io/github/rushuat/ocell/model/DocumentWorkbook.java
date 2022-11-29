@@ -1,8 +1,10 @@
-package io.github.rushuat.ocell.document;
+package io.github.rushuat.ocell.model;
 
 import io.github.rushuat.ocell.field.Alignment;
 import io.github.rushuat.ocell.field.Format;
 import io.github.rushuat.ocell.reflection.DocumentField;
+import java.io.Closeable;
+import java.io.IOException;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -14,14 +16,23 @@ import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.DateFormatConverter;
 
-public class DocumentStyle {
+public class DocumentWorkbook implements Closeable {
 
-  private final Workbook workbook;
-  private final Map<String, CellStyle> styleCache;
+  private Workbook workbook;
+  private Map<String, CellStyle> styleCache;
 
-  public DocumentStyle(Workbook workbook) {
-    this.workbook = workbook;
+  public DocumentWorkbook(Workbook workbook) {
     this.styleCache = new ConcurrentHashMap<>();
+    this.workbook = workbook;
+  }
+
+  public Workbook getWorkbook() {
+    return workbook;
+  }
+
+  public void setWorkbook(Workbook workbook) {
+    this.styleCache = new ConcurrentHashMap<>();
+    this.workbook = workbook;
   }
 
   public CellStyle getCellStyle(DocumentField documentField) {
@@ -61,5 +72,11 @@ public class DocumentStyle {
     }
 
     return cellStyle;
+  }
+
+  @Override
+  public void close() throws IOException {
+    styleCache = null;
+    workbook.close();
   }
 }

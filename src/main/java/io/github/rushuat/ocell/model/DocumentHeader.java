@@ -1,4 +1,4 @@
-package io.github.rushuat.ocell.document;
+package io.github.rushuat.ocell.model;
 
 import io.github.rushuat.ocell.field.Alignment;
 import io.github.rushuat.ocell.field.Format;
@@ -15,10 +15,11 @@ import org.apache.poi.ss.usermodel.Row;
 public class DocumentHeader {
 
   private final Row header;
+
   private final Map<Integer, String> nameByIndex;
   private final Map<String, Integer> indexByName;
 
-  public DocumentHeader(Row header, DocumentStyle style, List<DocumentField> fields) {
+  public DocumentHeader(DocumentWorkbook workbook, Row header, List<DocumentField> fields) {
     if (header.getLastCellNum() < 0) {
       IntStream
           .range(0, fields.size())
@@ -29,7 +30,7 @@ public class DocumentHeader {
             Format format = new Format(null, false);
 
             Cell cell = header.createCell(index);
-            cell.setCellStyle(style.getCellStyle(format, alignment));
+            cell.setCellStyle(workbook.getCellStyle(format, alignment));
             cell.setCellValue(name);
           });
     }
