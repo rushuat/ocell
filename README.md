@@ -1,4 +1,4 @@
-[![maven-central](https://img.shields.io/maven-central/v/io.github.rushuat/ocell.svg?color=blue)](https://search.maven.org/search?q=g:%22io.github.rushuat%22%20AND%20a:%22ocell%22)
+[![maven-central](https://img.shields.io/maven-central/v/io.github.rushuat/ocell.svg?color=blue)](https://central.sonatype.com/artifact/io.github.rushuat/ocell)
 [![javadoc](https://javadoc.io/badge2/io.github.rushuat/ocell/javadoc.svg?color=blue)](https://javadoc.io/doc/io.github.rushuat/ocell)
 [![license](https://img.shields.io/github/license/rushuat/ocell.svg?color=blue)](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
@@ -16,7 +16,7 @@ Your project should have a dependency to the library:
     <dependency>
       <groupId>io.github.rushuat</groupId>
       <artifactId>ocell</artifactId>
-      <version>0.1.7</version>
+      <version>0.1.8</version>
     </dependency>
 ```
 
