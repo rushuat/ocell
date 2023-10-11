@@ -89,7 +89,7 @@ public abstract class Document extends DocumentIO {
   }
 
   public <T> List<T> getSheet(int index, Class<T> clazz) {
-    if (index > 0) {
+    if (index >= 0) {
       Workbook book = workbook.getWorkbook();
       if (index < book.getNumberOfSheets()) {
         return getSheet(book.getSheetName(index), clazz);

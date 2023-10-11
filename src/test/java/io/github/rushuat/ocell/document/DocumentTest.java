@@ -41,10 +41,10 @@ public class DocumentTest {
         new Object[]{
             null,
             new Object(),
+            pojo,
             new Jpa(),
             new Xml(),
-            new Json(),
-            pojo
+            new Json()
         };
   }
 
@@ -72,10 +72,10 @@ public class DocumentTest {
       document.addSheet(Collections.singletonList(models[0]));
       document.addSheet(new Object[]{models[1]});
       document.addSheet(Collections.singletonList(models[1]));
-      document.addSheet("Jpa Sheet", new Jpa[]{(Jpa) models[2]});
-      document.addSheet("Xml Sheet", Collections.singleton(models[3]));
-      document.addSheet("Json Sheet", Collections.singletonList(models[4]));
-      document.addSheet(new Object[]{models[5], new Pojo(), new Pojo()});
+      document.addSheet(new Object[]{models[2], new Pojo(), new Pojo()});
+      document.addSheet("Jpa Sheet", new Jpa[]{(Jpa) models[3]});
+      document.addSheet("Xml Sheet", Collections.singleton(models[4]));
+      document.addSheet("Json Sheet", Collections.singletonList(models[5]));
       documentData = document.toBytes();
     }
 
@@ -91,10 +91,10 @@ public class DocumentTest {
       document.fromBytes(documentData);
       nullList = document.getSheet(null);
       objList = document.getSheet(Object.class);
+      pojoList = document.getSheet(0, Pojo.class);
       jpaList = document.getSheet("Jpa Sheet", Jpa.class);
       xmlList = document.getSheet("Xml Sheet", Xml.class);
       jsonList = document.getSheet("Json Sheet", Json.class);
-      pojoList = document.getSheet(3, Pojo.class);
       badIndexList = document.getSheet(100, Pojo.class);
       badNameList = document.getSheet("Pojo Sheet", Pojo.class);
     }
@@ -102,12 +102,21 @@ public class DocumentTest {
     //THEN
     assertEquals(nullList.size(), 0);
     assertEquals(objList.size(), 0);
+    assertEquals(pojoList.size(), 3);
     assertEquals(jpaList.size(), 1);
     assertEquals(xmlList.size(), 1);
     assertEquals(jsonList.size(), 1);
-    assertEquals(pojoList.size(), 3);
     assertEquals(badIndexList.size(), 0);
     assertEquals(badNameList.size(), 0);
+
+    Pojo pojo = (Pojo) models[2];
+    pojo.setGender("MALE");
+    pojo.setCurrency('$');
+    pojo.setSigned('Y');
+    pojo.setCar("Jeep");
+    pojo.setCitizen("USA");
+    pojo.setPassword(null);
+    assertEquals(pojoList.get(0), pojo);
 
     Jpa jpa =
         Jpa.builder()
@@ -168,14 +177,5 @@ public class DocumentTest {
     json.setCar("Jeep");
     json.setCitizen("USA");
     assertEquals(jsonList.get(0), json);
-
-    Pojo pojo = (Pojo) models[5];
-    pojo.setGender("MALE");
-    pojo.setCurrency('$');
-    pojo.setSigned('Y');
-    pojo.setCar("Jeep");
-    pojo.setCitizen("USA");
-    pojo.setPassword(null);
-    assertEquals(pojoList.get(0), pojo);
   }
 }
