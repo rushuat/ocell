@@ -2,6 +2,7 @@ package io.github.rushuat.ocell.model;
 
 import io.github.rushuat.ocell.annotation.BooleanValue;
 import io.github.rushuat.ocell.annotation.CharValue;
+import io.github.rushuat.ocell.annotation.FieldFormula;
 import io.github.rushuat.ocell.annotation.FieldName;
 import io.github.rushuat.ocell.annotation.FieldOrder;
 import io.github.rushuat.ocell.annotation.NumberValue;
@@ -44,4 +45,8 @@ public class Base {
 
   @BooleanValue(true)
   private boolean isOwner;
+
+  @FieldFormula
+  @StringValue("CONCATENATE(2+5,\"!\")")
+  private String formula;
 }

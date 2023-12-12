@@ -11,6 +11,7 @@ import io.github.rushuat.ocell.annotation.FieldAlignment;
 import io.github.rushuat.ocell.annotation.FieldConverter;
 import io.github.rushuat.ocell.annotation.FieldExclude;
 import io.github.rushuat.ocell.annotation.FieldFormat;
+import io.github.rushuat.ocell.annotation.FieldFormula;
 import io.github.rushuat.ocell.annotation.FieldName;
 import io.github.rushuat.ocell.annotation.FieldOrder;
 import io.github.rushuat.ocell.annotation.HeaderAlignment;
@@ -203,6 +204,14 @@ public class DocumentField {
       order = field.getAnnotation(FieldOrder.class).value();
     }
     return order < 0 ? Integer.MAX_VALUE : order;
+  }
+
+  public boolean isFormula() {
+    boolean formula = false;
+    if (field.isAnnotationPresent(FieldFormula.class)) {
+      formula = field.getAnnotation(FieldFormula.class).value();
+    }
+    return formula;
   }
 
   public boolean isExcluded() {

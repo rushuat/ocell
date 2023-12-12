@@ -17,8 +17,8 @@ import org.apache.poi.util.IOUtils;
 
 public abstract class Document extends DocumentIO {
 
-  protected final byte[] password;
   protected final DocumentWorkbook workbook;
+  protected final byte[] password;
 
   protected Document(Workbook workbook, String password) {
     IOUtils.setByteArrayMaxOverride(Integer.MAX_VALUE);

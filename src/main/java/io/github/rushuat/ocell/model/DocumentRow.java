@@ -35,7 +35,7 @@ public class DocumentRow<T> {
           Cell cell = row.createCell(index);
           DocumentCell documentCell = new DocumentCell(cell);
           documentCell.setStyle(workbook.getCellStyle(field));
-          documentCell.setValue(field.getValue(item));
+          documentCell.setValue(field.getValue(item), field.isFormula());
         });
   }
 

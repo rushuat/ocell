@@ -55,7 +55,7 @@ public class DocumentSheet<T> {
         sheet.getLastRowNum() > 0
             ? sheet.getRow(headerOffset)
             : Optional.ofNullable(sheet.getRow(0)).orElse(sheet.createRow(0));
-    header = new DocumentHeader(workbook, row, fields);
+    this.header = new DocumentHeader(workbook, row, fields);
   }
 
   public void addRows(Collection<T> items) {

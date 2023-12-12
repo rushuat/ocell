@@ -115,7 +115,7 @@ public class DocumentTest {
     pojo.setSigned('Y');
     pojo.setCar("Jeep");
     pojo.setCitizen("USA");
-    pojo.setPassword(null);
+    pojo.setFormula("CONCATENATE(2+5,\"!\")");
     assertEquals(pojoList.get(0), pojo);
 
     Jpa jpa =
@@ -136,6 +136,7 @@ public class DocumentTest {
     jpa.setSigned('Y');
     jpa.setCar("Jeep");
     jpa.setCitizen("USA");
+    jpa.setFormula("CONCATENATE(2+5,\"!\")");
     assertEquals(jpaList.get(0), jpa);
 
     Xml xml =
@@ -156,6 +157,7 @@ public class DocumentTest {
     xml.setSigned('Y');
     xml.setCar("Jeep");
     xml.setCitizen("USA");
+    xml.setFormula("CONCATENATE(2+5,\"!\")");
     assertEquals(xmlList.get(0), xml);
 
     Json json =
@@ -176,6 +178,7 @@ public class DocumentTest {
     json.setSigned('Y');
     json.setCar("Jeep");
     json.setCitizen("USA");
+    json.setFormula("CONCATENATE(2+5,\"!\")");
     assertEquals(jsonList.get(0), json);
   }
 }

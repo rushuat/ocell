@@ -17,10 +17,14 @@ public class DocumentCell {
     cell.setCellStyle(style);
   }
 
-  public <E> void setValue(E obj) {
+  public <V> void setValue(V obj, boolean formula) {
     if (obj != null) {
       if (obj instanceof String) {
-        cell.setCellValue((String) obj);
+        if (formula) {
+          cell.setCellFormula((String) obj);
+        } else {
+          cell.setCellValue((String) obj);
+        }
       } else if (obj instanceof Boolean) {
         cell.setCellValue((Boolean) obj);
       } else if (obj instanceof Number) {
@@ -46,6 +50,9 @@ public class DocumentCell {
               DateUtil.isCellDateFormatted(cell)
                   ? cell.getDateCellValue()
                   : cell.getNumericCellValue();
+          break;
+        case FORMULA:
+          value = cell.getCellFormula();
           break;
         default:
           value = null;
