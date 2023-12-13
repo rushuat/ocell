@@ -1,5 +1,6 @@
 package io.github.rushuat.ocell.document;
 
+import io.github.rushuat.ocell.field.MappingMode;
 import io.github.rushuat.ocell.field.ValueConverter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,8 +12,11 @@ import org.apache.poi.ss.usermodel.Workbook;
 
 public class DocumentBIFF extends Document {
 
-  public DocumentBIFF(String password, Map<Class<?>, ValueConverter> converters) {
-    super(new HSSFWorkbook(), password, converters);
+  public DocumentBIFF(
+      String password,
+      MappingMode mode,
+      Map<Class<?>, ValueConverter> converters) {
+    super(new HSSFWorkbook(), password, mode, converters);
   }
 
   @Override

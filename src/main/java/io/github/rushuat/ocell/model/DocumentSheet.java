@@ -1,10 +1,13 @@
 package io.github.rushuat.ocell.model;
 
+import io.github.rushuat.ocell.field.MappingMode;
 import io.github.rushuat.ocell.reflection.DocumentClass;
 import io.github.rushuat.ocell.reflection.DocumentField;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import org.apache.poi.ss.usermodel.Row;
@@ -43,6 +46,7 @@ public class DocumentSheet<T> {
 
     initOffset(headerOffset, dataOffset);
     initHeader();
+    validateHeader();
   }
 
   private void initOffset(int headerOffset, int dataOffset) {
@@ -56,6 +60,32 @@ public class DocumentSheet<T> {
             ? sheet.getRow(headerOffset)
             : Optional.ofNullable(sheet.getRow(0)).orElseGet(() -> sheet.createRow(0));
     this.header = new DocumentHeader(workbook, row, fields);
+  }
+
+  private void validateHeader() {
+    if (workbook.getMode() == MappingMode.STRICT) {
+      Set<String> requiredColumns =
+          fields
+              .stream()
+              .map(DocumentField::getName)
+              .collect(Collectors.toSet());
+      List<String> missingColumns =
+          header.getNames()
+              .stream()
+              .filter(name -> !requiredColumns.contains(name))
+              .collect(Collectors.toList());
+      List<String> extraColumns =
+          requiredColumns
+              .stream()
+              .filter(name -> Objects.isNull(header.getIndex(name)))
+              .collect(Collectors.toList());
+      if (!missingColumns.isEmpty() || !extraColumns.isEmpty()) {
+        throw
+            new IllegalArgumentException(
+                clazz.getType().getName() + ": missing " + missingColumns + " extra " + extraColumns
+            );
+      }
+    }
   }
 
   public void addRows(Collection<T> items) {

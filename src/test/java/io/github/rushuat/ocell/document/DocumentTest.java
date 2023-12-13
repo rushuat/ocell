@@ -72,11 +72,11 @@ public class DocumentTest {
       document.addSheet(new Object[]{models[0]});
       document.addSheet(Collections.singletonList(models[0]));
       document.addSheet(new Object[]{models[1]});
-      document.addSheet(Collections.singletonList(models[1]));
+      document.addSheet(List.of(models[1]));
       document.addSheet(new Object[]{models[2], new Pojo(), new Pojo()});
       document.addSheet("Jpa Sheet", new Jpa[]{(Jpa) models[3]});
-      document.addSheet("Xml Sheet", Collections.singleton(models[4]));
-      document.addSheet("Json Sheet", Collections.singletonList(models[5]));
+      document.addSheet("Xml Sheet", List.of(models[4]));
+      document.addSheet("Json Sheet", List.of(models[5]));
       documentData = document.toBytes();
     }
 

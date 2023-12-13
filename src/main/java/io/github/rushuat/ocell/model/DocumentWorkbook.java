@@ -2,6 +2,7 @@ package io.github.rushuat.ocell.model;
 
 import io.github.rushuat.ocell.field.Alignment;
 import io.github.rushuat.ocell.field.Format;
+import io.github.rushuat.ocell.field.MappingMode;
 import io.github.rushuat.ocell.field.ValueConverter;
 import io.github.rushuat.ocell.reflection.DocumentField;
 import java.io.Closeable;
@@ -25,11 +26,13 @@ public class DocumentWorkbook implements Closeable {
   private Map<String, CellStyle> styles;
 
   private final byte[] password;
+  private final MappingMode mode;
   private final Map<Class<?>, ValueConverter> converters;
 
   public DocumentWorkbook(
       Workbook workbook,
       String password,
+      MappingMode mode,
       Map<Class<?>, ValueConverter> converters) {
     this.workbook = workbook;
     this.styles = new ConcurrentHashMap<>();
@@ -39,6 +42,9 @@ public class DocumentWorkbook implements Closeable {
             .filter(Predicate.not(String::isEmpty))
             .map(String::getBytes)
             .orElse(null);
+    this.mode =
+        Optional.ofNullable(mode)
+            .orElse(MappingMode.FLEXIBLE);
     this.converters =
         Optional.ofNullable(converters)
             .map(ConcurrentHashMap::new)
@@ -56,6 +62,10 @@ public class DocumentWorkbook implements Closeable {
 
   public byte[] getPassword() {
     return password;
+  }
+
+  public MappingMode getMode() {
+    return mode;
   }
 
   public Map<Class<?>, ValueConverter> getConverters() {

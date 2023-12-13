@@ -1,8 +1,10 @@
 package io.github.rushuat.ocell.document;
 
+import io.github.rushuat.ocell.field.MappingMode;
 import io.github.rushuat.ocell.field.ValueConverter;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicReference;
 
 public final class Documents {
 
@@ -10,19 +12,29 @@ public final class Documents {
   }
 
   private enum DocumentType {
-    BIFF, OOXML
+    BIFF,
+    OOXML
   }
 
   public static class DocumentBuilder {
 
     private final DocumentType type;
     private final String password;
+    private final AtomicReference<MappingMode> mode;
     private final Map<Class<?>, ValueConverter> converters;
 
     private DocumentBuilder(DocumentType type, String password) {
       this.type = type;
       this.password = password;
+      this.mode = new AtomicReference<>(MappingMode.FLEXIBLE);
       this.converters = new ConcurrentHashMap<>();
+    }
+
+    public DocumentBuilder mode(MappingMode mode) {
+      if (mode != null) {
+        this.mode.set(mode);
+      }
+      return this;
     }
 
     public DocumentBuilder converter(Class<?> clazz, ValueConverter converter) {
@@ -42,9 +54,9 @@ public final class Documents {
     public Document create() {
       switch (type) {
         case BIFF:
-          return new DocumentBIFF(password, converters);
+          return new DocumentBIFF(password, mode.get(), converters);
         case OOXML:
-          return new DocumentOOXML(password, converters);
+          return new DocumentOOXML(password, mode.get(), converters);
         default:
           throw new IllegalArgumentException(type.name());
       }
