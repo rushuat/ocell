@@ -2,12 +2,15 @@ package io.github.rushuat.ocell.model;
 
 import io.github.rushuat.ocell.field.Alignment;
 import io.github.rushuat.ocell.field.Format;
+import io.github.rushuat.ocell.field.ValueConverter;
 import io.github.rushuat.ocell.reflection.DocumentField;
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Predicate;
 import org.apache.poi.ss.usermodel.BuiltinFormats;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.DataFormat;
@@ -19,10 +22,31 @@ import org.apache.poi.ss.util.DateFormatConverter;
 public class DocumentWorkbook implements Closeable {
 
   private Workbook workbook;
-  private Map<String, CellStyle> styleCache;
+  private Map<String, CellStyle> styles;
 
-  public DocumentWorkbook(Workbook workbook) {
-    this.styleCache = new ConcurrentHashMap<>();
+  private final byte[] password;
+  private final Map<Class<?>, ValueConverter> converters;
+
+  public DocumentWorkbook(
+      Workbook workbook,
+      String password,
+      Map<Class<?>, ValueConverter> converters) {
+    this.workbook = workbook;
+    this.styles = new ConcurrentHashMap<>();
+
+    this.password =
+        Optional.ofNullable(password)
+            .filter(Predicate.not(String::isEmpty))
+            .map(String::getBytes)
+            .orElse(null);
+    this.converters =
+        Optional.ofNullable(converters)
+            .map(ConcurrentHashMap::new)
+            .orElseGet(ConcurrentHashMap::new);
+  }
+
+  public void setWorkbook(Workbook workbook) {
+    this.styles = new ConcurrentHashMap<>();
     this.workbook = workbook;
   }
 
@@ -30,9 +54,12 @@ public class DocumentWorkbook implements Closeable {
     return workbook;
   }
 
-  public void setWorkbook(Workbook workbook) {
-    this.styleCache = new ConcurrentHashMap<>();
-    this.workbook = workbook;
+  public byte[] getPassword() {
+    return password;
+  }
+
+  public Map<Class<?>, ValueConverter> getConverters() {
+    return converters;
   }
 
   public CellStyle getCellStyle(DocumentField documentField) {
@@ -43,7 +70,7 @@ public class DocumentWorkbook implements Closeable {
 
   public CellStyle getCellStyle(Format format, Alignment alignment) {
     String styleKey = format + "+" + alignment;
-    return styleCache.computeIfAbsent(styleKey, key -> toCellStyle(format, alignment));
+    return styles.computeIfAbsent(styleKey, key -> toCellStyle(format, alignment));
   }
 
   private CellStyle toCellStyle(Format format, Alignment alignment) {
@@ -76,7 +103,7 @@ public class DocumentWorkbook implements Closeable {
 
   @Override
   public void close() throws IOException {
-    styleCache = null;
+    styles = null;
     workbook.close();
   }
 }

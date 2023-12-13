@@ -1,9 +1,11 @@
 package io.github.rushuat.ocell.document;
 
+import io.github.rushuat.ocell.field.ValueConverter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.GeneralSecurityException;
+import java.util.Map;
 import org.apache.poi.poifs.crypt.Decryptor;
 import org.apache.poi.poifs.crypt.EncryptionInfo;
 import org.apache.poi.poifs.crypt.EncryptionMode;
@@ -14,26 +16,22 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class DocumentOOXML extends Document {
 
-  public DocumentOOXML() {
-    this(null);
-  }
-
-  public DocumentOOXML(String password) {
-    super(new XSSFWorkbook(), password);
+  public DocumentOOXML(String password, Map<Class<?>, ValueConverter> converters) {
+    super(new XSSFWorkbook(), password, converters);
   }
 
   @Override
   public void fromStream(InputStream stream) throws IOException {
     try (stream) {
       try (Workbook book = workbook.getWorkbook()) {
-        if (password == null) {
+        if (workbook.getPassword() == null) {
           workbook.setWorkbook(new XSSFWorkbook(stream));
         } else {
           try (POIFSFileSystem fileSystem = new POIFSFileSystem(stream)) {
             EncryptionInfo encryptionInfo = new EncryptionInfo(fileSystem);
             Decryptor decryptor = Decryptor.getInstance(encryptionInfo);
 
-            if (decryptor.verifyPassword(new String(password))) {
+            if (decryptor.verifyPassword(new String(workbook.getPassword()))) {
               try (InputStream inputStream = decryptor.getDataStream(fileSystem)) {
                 workbook.setWorkbook(new XSSFWorkbook(inputStream));
               }
@@ -52,12 +50,12 @@ public class DocumentOOXML extends Document {
   public void toStream(OutputStream stream) throws IOException {
     try (stream) {
       Workbook book = workbook.getWorkbook();
-      if (password == null) {
+      if (workbook.getPassword() == null) {
         book.write(stream);
       } else {
         EncryptionInfo encryptionInfo = new EncryptionInfo(EncryptionMode.standard);
         Encryptor encryptor = encryptionInfo.getEncryptor();
-        encryptor.confirmPassword(new String(password));
+        encryptor.confirmPassword(new String(workbook.getPassword()));
 
         try (POIFSFileSystem fileSystem = new POIFSFileSystem()) {
           try (OutputStream fileStream = encryptor.getDataStream(fileSystem)) {

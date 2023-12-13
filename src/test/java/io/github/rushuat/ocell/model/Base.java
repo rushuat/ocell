@@ -49,4 +49,6 @@ public class Base {
   @FieldFormula
   @StringValue("CONCATENATE(2+5,\"!\")")
   private String formula;
+
+  private String empty = "";
 }
