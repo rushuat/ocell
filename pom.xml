@@ -6,7 +6,7 @@
 
   <groupId>io.github.rushuat</groupId>
   <artifactId>ocell</artifactId>
-  <version>0.1.8</version>
+  <version>0.1.9</version>
   <packaging>jar</packaging>
 
   <name>${project.groupId}:${project.artifactId}</name>
@@ -39,20 +39,20 @@
     <java.version>11</java.version>
     <lombok.version>1.18.30</lombok.version>
 
-    <poi.version>5.2.4</poi.version>
-    <jackson.version>2.15.2</jackson.version>
+    <poi.version>5.2.5</poi.version>
+    <jackson.version>2.16.0</jackson.version>
     <jaxb.version>2.3.1</jaxb.version>
     <jpa.version>2.2</jpa.version>
 
     <testng.version>7.8.0</testng.version>
-    <spotbugs.version>4.7.3</spotbugs.version>
+    <spotbugs.version>4.8.1</spotbugs.version>
 
-    <spotbugs.plugin>4.7.3.6</spotbugs.plugin>
+    <spotbugs.plugin>4.8.2.0</spotbugs.plugin>
 
     <compiler.plugin>3.11.0</compiler.plugin>
-    <surefire.plugin>3.1.2</surefire.plugin>
+    <surefire.plugin>3.2.3</surefire.plugin>
     <source.plugin>3.3.0</source.plugin>
-    <javadoc.plugin>3.6.0</javadoc.plugin>
+    <javadoc.plugin>3.6.3</javadoc.plugin>
     <gpg.plugin>3.1.0</gpg.plugin>
 
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -96,7 +96,7 @@
       <groupId>com.github.spotbugs</groupId>
       <artifactId>spotbugs</artifactId>
       <version>${spotbugs.version}</version>
-      <scope>provided</scope>
+      <scope>test</scope>
     </dependency>
 
     <dependency>

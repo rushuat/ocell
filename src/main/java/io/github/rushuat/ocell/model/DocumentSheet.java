@@ -64,25 +64,25 @@ public class DocumentSheet<T> {
 
   private void validateHeader() {
     if (workbook.getMode() == MappingMode.STRICT) {
-      Set<String> requiredColumns =
+      Set<String> requiredFields =
           fields
               .stream()
               .map(DocumentField::getName)
               .collect(Collectors.toSet());
-      List<String> missingColumns =
+      List<String> missingFields =
           header.getNames()
               .stream()
-              .filter(name -> !requiredColumns.contains(name))
+              .filter(name -> !requiredFields.contains(name))
               .collect(Collectors.toList());
-      List<String> extraColumns =
-          requiredColumns
+      List<String> extraFields =
+          requiredFields
               .stream()
               .filter(name -> Objects.isNull(header.getIndex(name)))
               .collect(Collectors.toList());
-      if (!missingColumns.isEmpty() || !extraColumns.isEmpty()) {
+      if (!missingFields.isEmpty() || !extraFields.isEmpty()) {
         throw
             new IllegalArgumentException(
-                clazz.getType().getName() + ": missing " + missingColumns + " extra " + extraColumns
+                clazz.getType().getName() + ": missing " + missingFields + " extra " + extraFields
             );
       }
     }

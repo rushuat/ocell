@@ -33,9 +33,9 @@ public class DocumentRow<T> {
         .forEach(field -> {
           Integer index = header.getIndex(field.getName());
           Cell cell = row.createCell(index);
-          DocumentCell documentCell = new DocumentCell(cell);
+          DocumentCell documentCell = new DocumentCell(cell, field.isFormula());
           documentCell.setStyle(workbook.getCellStyle(field));
-          documentCell.setValue(field.getValue(item), field.isFormula());
+          documentCell.setValue(field.getValue(item));
         });
   }
 
@@ -46,7 +46,7 @@ public class DocumentRow<T> {
         .forEach(field -> {
           Integer index = header.getIndex(field.getName());
           Cell cell = row.getCell(index);
-          DocumentCell documentCell = new DocumentCell(cell);
+          DocumentCell documentCell = new DocumentCell(cell, field.isFormula());
           field.setValue(item, documentCell.getValue());
         });
     return item;
