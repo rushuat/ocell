@@ -2,23 +2,15 @@ package io.github.rushuat.ocell.field;
 
 public class AgeConverter implements ValueConverter<Integer, String> {
 
-  private static final String TEXT = " year(s) old";
+  private static final String SUFFIX = " year(s) old";
 
   @Override
   public Integer convertInput(String value) {
-    Integer age = null;
-    if (value != null) {
-      age = Integer.valueOf(value.split(" ")[0]);
-    }
-    return age;
+    return value == null || value.isEmpty() ? null : Integer.valueOf(value.split(" ")[0]);
   }
 
   @Override
   public String convertOutput(Integer value) {
-    String age = null;
-    if (value != null) {
-      age = value + TEXT;
-    }
-    return age;
+    return value == null ? "" : value + SUFFIX;
   }
 }

@@ -2,6 +2,7 @@ package io.github.rushuat.ocell.document;
 
 import static org.testng.Assert.assertEquals;
 
+import io.github.rushuat.ocell.field.EmptyConverter;
 import io.github.rushuat.ocell.model.Jpa;
 import io.github.rushuat.ocell.model.Json;
 import io.github.rushuat.ocell.model.Pojo;
@@ -52,14 +53,14 @@ public class DocumentTest {
   public Object[][] passwords() {
     return
         new Object[][]{
-            {new DocumentBIFF()},
-            {new DocumentBIFF(null)},
-            {new DocumentBIFF("")},
-            {new DocumentBIFF("******")},
-            {new DocumentOOXML()},
-            {new DocumentOOXML(null)},
-            {new DocumentOOXML("")},
-            {new DocumentOOXML("******")},
+            {Documents.BIFF().converter(String.class, new EmptyConverter()).create()},
+            {Documents.BIFF(null).converter(String.class, new EmptyConverter()).create()},
+            {Documents.BIFF("").converter(String.class, new EmptyConverter()).create()},
+            {Documents.BIFF("******").converter(String.class, new EmptyConverter()).create()},
+            {Documents.OOXML().converter(String.class, new EmptyConverter()).create()},
+            {Documents.OOXML(null).converter(String.class, new EmptyConverter()).create()},
+            {Documents.OOXML("").converter(String.class, new EmptyConverter()).create()},
+            {Documents.OOXML("******").converter(String.class, new EmptyConverter()).create()},
         };
   }
 
@@ -71,11 +72,11 @@ public class DocumentTest {
       document.addSheet(new Object[]{models[0]});
       document.addSheet(Collections.singletonList(models[0]));
       document.addSheet(new Object[]{models[1]});
-      document.addSheet(Collections.singletonList(models[1]));
+      document.addSheet(List.of(models[1]));
       document.addSheet(new Object[]{models[2], new Pojo(), new Pojo()});
       document.addSheet("Jpa Sheet", new Jpa[]{(Jpa) models[3]});
-      document.addSheet("Xml Sheet", Collections.singleton(models[4]));
-      document.addSheet("Json Sheet", Collections.singletonList(models[5]));
+      document.addSheet("Xml Sheet", List.of(models[4]));
+      document.addSheet("Json Sheet", List.of(models[5]));
       documentData = document.toBytes();
     }
 
@@ -115,7 +116,8 @@ public class DocumentTest {
     pojo.setSigned('Y');
     pojo.setCar("Jeep");
     pojo.setCitizen("USA");
-    pojo.setPassword(null);
+    pojo.setFormula("CONCATENATE(2+5,\"!\")");
+    pojo.setEmpty(null);
     assertEquals(pojoList.get(0), pojo);
 
     Jpa jpa =
@@ -136,6 +138,8 @@ public class DocumentTest {
     jpa.setSigned('Y');
     jpa.setCar("Jeep");
     jpa.setCitizen("USA");
+    jpa.setFormula("CONCATENATE(2+5,\"!\")");
+    jpa.setEmpty(null);
     assertEquals(jpaList.get(0), jpa);
 
     Xml xml =
@@ -156,6 +160,8 @@ public class DocumentTest {
     xml.setSigned('Y');
     xml.setCar("Jeep");
     xml.setCitizen("USA");
+    xml.setFormula("CONCATENATE(2+5,\"!\")");
+    xml.setEmpty(null);
     assertEquals(xmlList.get(0), xml);
 
     Json json =
@@ -176,6 +182,8 @@ public class DocumentTest {
     json.setSigned('Y');
     json.setCar("Jeep");
     json.setCitizen("USA");
+    json.setFormula("CONCATENATE(2+5,\"!\")");
+    json.setEmpty(null);
     assertEquals(jsonList.get(0), json);
   }
 }

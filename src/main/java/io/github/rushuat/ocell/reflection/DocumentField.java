@@ -11,6 +11,7 @@ import io.github.rushuat.ocell.annotation.FieldAlignment;
 import io.github.rushuat.ocell.annotation.FieldConverter;
 import io.github.rushuat.ocell.annotation.FieldExclude;
 import io.github.rushuat.ocell.annotation.FieldFormat;
+import io.github.rushuat.ocell.annotation.FieldFormula;
 import io.github.rushuat.ocell.annotation.FieldName;
 import io.github.rushuat.ocell.annotation.FieldOrder;
 import io.github.rushuat.ocell.annotation.HeaderAlignment;
@@ -37,14 +38,17 @@ import lombok.SneakyThrows;
 public class DocumentField {
 
   private final Field field;
-  private final Map<Class<? extends ValueConverter>, ValueConverter> converterCache;
+  private final Map<Class<?>, ValueConverter> typeConverters;
+  private final Map<Class<? extends ValueConverter>, ValueConverter> fieldConverters;
 
   public DocumentField(
       Field field,
-      Map<Class<? extends ValueConverter>, ValueConverter> converterCache) {
+      Map<Class<?>, ValueConverter> typeConverters,
+      Map<Class<? extends ValueConverter>, ValueConverter> fieldConverters) {
     this.field = field;
     this.field.setAccessible(true);
-    this.converterCache = converterCache;
+    this.typeConverters = typeConverters;
+    this.fieldConverters = fieldConverters;
   }
 
   @SneakyThrows
@@ -60,7 +64,9 @@ public class DocumentField {
     data =
         Optional.ofNullable(getNumber(data, type))
             .orElse(data);
-    ValueConverter converter = getConverter();
+    ValueConverter converter =
+        Optional.ofNullable(getConverter())
+            .orElseGet(() -> typeConverters.get(type));
     if (converter != null) {
       data = converter.convertInput(data);
     }
@@ -76,7 +82,9 @@ public class DocumentField {
     if (value == null) {
       value = getDefault();
     }
-    ValueConverter converter = getConverter();
+    ValueConverter converter =
+        Optional.ofNullable(getConverter())
+            .orElseGet(() -> typeConverters.get(getType()));
     if (converter != null) {
       value = converter.convertOutput(value);
     }
@@ -205,6 +213,14 @@ public class DocumentField {
     return order < 0 ? Integer.MAX_VALUE : order;
   }
 
+  public boolean isFormula() {
+    boolean formula = false;
+    if (field.isAnnotationPresent(FieldFormula.class)) {
+      formula = field.getAnnotation(FieldFormula.class).value();
+    }
+    return formula;
+  }
+
   public boolean isExcluded() {
     boolean excluded = false;
     if (Modifier.isStatic(field.getModifiers())) {
@@ -269,8 +285,9 @@ public class DocumentField {
   public ValueConverter getConverter() {
     ValueConverter converter = null;
     if (field.isAnnotationPresent(FieldConverter.class)) {
-      Class<? extends ValueConverter> clazz = field.getAnnotation(FieldConverter.class).value();
-      converter = converterCache.computeIfAbsent(clazz, this::newConverter);
+      Class<? extends ValueConverter> clazz =
+          field.getAnnotation(FieldConverter.class).value();
+      converter = fieldConverters.computeIfAbsent(clazz, this::newConverter);
     }
     return converter;
   }

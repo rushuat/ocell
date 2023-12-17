@@ -1,14 +1,16 @@
 package io.github.rushuat.ocell.document;
 
+import io.github.rushuat.ocell.field.MappingMode;
+import io.github.rushuat.ocell.field.ValueConverter;
 import io.github.rushuat.ocell.model.DocumentSheet;
 import io.github.rushuat.ocell.model.DocumentWorkbook;
 import io.github.rushuat.ocell.reflection.DocumentClass;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Predicate;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -17,17 +19,15 @@ import org.apache.poi.util.IOUtils;
 
 public abstract class Document extends DocumentIO {
 
-  protected final byte[] password;
   protected final DocumentWorkbook workbook;
 
-  protected Document(Workbook workbook, String password) {
+  protected Document(
+      Workbook workbook,
+      String password,
+      MappingMode mode,
+      Map<Class<?>, ValueConverter> converters) {
     IOUtils.setByteArrayMaxOverride(Integer.MAX_VALUE);
-    this.workbook = new DocumentWorkbook(workbook);
-    this.password =
-        Optional.ofNullable(password)
-            .filter(Predicate.not(String::isEmpty))
-            .map(String::getBytes)
-            .orElse(null);
+    this.workbook = new DocumentWorkbook(workbook, password, mode, converters);
   }
 
   public <T> void addSheet(T[] items) {
@@ -41,20 +41,20 @@ public abstract class Document extends DocumentIO {
   public <T> void addSheet(String name, T[] items) {
     DocumentClass<T> documentClass =
         Optional.ofNullable(items)
-            .map(DocumentClass::new)
+            .map(array -> new DocumentClass<>(array, workbook.getConverters()))
             .filter(Predicate.not(clazz -> clazz.getType().equals(Object.class)))
             .orElseGet(() ->
                 Optional.ofNullable(items)
                     .filter(array -> array.length > 0)
                     .map(array -> array[0])
-                    .map(DocumentClass::new)
+                    .map(element -> new DocumentClass<>(element, workbook.getConverters()))
                     .filter(Predicate.not(clazz -> clazz.getType().equals(Object.class)))
                     .orElse(null)
             );
     Collection<T> itemCollection =
         Optional.ofNullable(items)
             .map(Arrays::asList)
-            .orElse(Collections.emptyList());
+            .orElse(List.of());
     addSheet(name, itemCollection, documentClass);
   }
 
@@ -64,19 +64,19 @@ public abstract class Document extends DocumentIO {
             .map(Collection::iterator)
             .filter(Iterator::hasNext)
             .map(Iterator::next)
-            .map(DocumentClass::new)
+            .map(item -> new DocumentClass<>(item, workbook.getConverters()))
             .filter(Predicate.not(clazz -> clazz.getType().equals(Object.class)))
             .orElse(null);
     Collection<T> itemCollection =
         Optional.ofNullable(items)
-            .orElse(Collections.emptyList());
+            .orElse(List.of());
     addSheet(name, itemCollection, documentClass);
   }
 
   private <T> void addSheet(String name, Collection<T> items, DocumentClass<T> clazz) {
     if (clazz != null) {
       Workbook book = workbook.getWorkbook();
-      String sheetName = Optional.ofNullable(name).orElse(clazz.getName());
+      String sheetName = Optional.ofNullable(name).orElseGet(clazz::getName);
       Sheet sheet = book.createSheet(sheetName);
       DocumentSheet<T> documentSheet = new DocumentSheet<>(workbook, sheet, clazz);
       documentSheet.addRows(items);
@@ -95,25 +95,25 @@ public abstract class Document extends DocumentIO {
         return getSheet(book.getSheetName(index), clazz);
       }
     }
-    return Collections.emptyList();
+    return List.of();
   }
 
   public <T> List<T> getSheet(String name, Class<T> clazz) {
     return
         Optional.ofNullable(clazz)
-            .map(DocumentClass::new)
+            .map(cls -> new DocumentClass<>(cls, workbook.getConverters()))
             .filter(Predicate.not(documentClass -> documentClass.getType().equals(Object.class)))
             .map(documentClass -> {
               Workbook book = workbook.getWorkbook();
-              String sheetName = Optional.ofNullable(name).orElse(documentClass.getName());
+              String sheetName = Optional.ofNullable(name).orElseGet(documentClass::getName);
               Sheet sheet = book.getSheet(sheetName);
               return
                   Optional.ofNullable(sheet)
                       .map(value -> new DocumentSheet<>(workbook, sheet, documentClass))
                       .map(DocumentSheet::getRows)
-                      .orElse(Collections.emptyList());
+                      .orElse(List.of());
             })
-            .orElse(Collections.emptyList());
+            .orElse(List.of());
   }
 
   @Override

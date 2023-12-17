@@ -1,10 +1,13 @@
 package io.github.rushuat.ocell.model;
 
+import io.github.rushuat.ocell.field.MappingMode;
 import io.github.rushuat.ocell.reflection.DocumentClass;
 import io.github.rushuat.ocell.reflection.DocumentField;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import org.apache.poi.ss.usermodel.Row;
@@ -43,6 +46,7 @@ public class DocumentSheet<T> {
 
     initOffset(headerOffset, dataOffset);
     initHeader();
+    validateHeader();
   }
 
   private void initOffset(int headerOffset, int dataOffset) {
@@ -54,8 +58,34 @@ public class DocumentSheet<T> {
     Row row =
         sheet.getLastRowNum() > 0
             ? sheet.getRow(headerOffset)
-            : Optional.ofNullable(sheet.getRow(0)).orElse(sheet.createRow(0));
-    header = new DocumentHeader(workbook, row, fields);
+            : Optional.ofNullable(sheet.getRow(0)).orElseGet(() -> sheet.createRow(0));
+    this.header = new DocumentHeader(workbook, row, fields);
+  }
+
+  private void validateHeader() {
+    if (workbook.getMode() == MappingMode.STRICT) {
+      Set<String> requiredFields =
+          fields
+              .stream()
+              .map(DocumentField::getName)
+              .collect(Collectors.toSet());
+      List<String> missingFields =
+          header.getNames()
+              .stream()
+              .filter(name -> !requiredFields.contains(name))
+              .collect(Collectors.toList());
+      List<String> extraFields =
+          requiredFields
+              .stream()
+              .filter(name -> Objects.isNull(header.getIndex(name)))
+              .collect(Collectors.toList());
+      if (!missingFields.isEmpty() || !extraFields.isEmpty()) {
+        throw
+            new IllegalArgumentException(
+                clazz.getType().getName() + ": missing " + missingFields + " extra " + extraFields
+            );
+      }
+    }
   }
 
   public void addRows(Collection<T> items) {

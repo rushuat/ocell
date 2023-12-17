@@ -4,6 +4,7 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
+import io.github.rushuat.ocell.field.EmptyConverter;
 import io.github.rushuat.ocell.model.Jpa;
 import io.github.rushuat.ocell.model.Json;
 import io.github.rushuat.ocell.model.Pojo;
@@ -19,7 +20,7 @@ public class DocumentClassTest {
     return
         new Object[]{
             model,
-            new DocumentClass<>(model)
+            new DocumentClass<>(model, Map.of(String.class, new EmptyConverter()))
         };
   }
 
@@ -66,7 +67,7 @@ public class DocumentClassTest {
     List<DocumentField> documentFields = documentClass.getFields();
     //THEN
     assertNotNull(documentFields);
-    assertEquals(documentFields.size(), 17);
+    assertEquals(documentFields.size(), 19);
   }
 
   @Test(dataProvider = "models")
@@ -77,8 +78,8 @@ public class DocumentClassTest {
     //THEN
     assertNotNull(names);
     assertNotNull(indexes);
-    assertEquals(names.keySet().size(), 17);
-    assertEquals(indexes.keySet().size(), 17);
+    assertEquals(names.keySet().size(), 19);
+    assertEquals(indexes.keySet().size(), 19);
   }
 
   @Test(dataProvider = "models")

@@ -24,19 +24,21 @@ import lombok.SneakyThrows;
 public class DocumentClass<T> {
 
   private final Class<T> clazz;
-  private final Map<Class<? extends ValueConverter>, ValueConverter> converterCache;
+  private final Map<Class<?>, ValueConverter> typeConverters;
+  private final Map<Class<? extends ValueConverter>, ValueConverter> fieldConverters;
 
-  public DocumentClass(Class<T> clazz) {
+  public DocumentClass(Class<T> clazz, Map<Class<?>, ValueConverter> typeConverters) {
     this.clazz = clazz;
-    this.converterCache = new ConcurrentHashMap<>();
+    this.typeConverters = typeConverters;
+    this.fieldConverters = new ConcurrentHashMap<>();
   }
 
-  public DocumentClass(T element) {
-    this((Class<T>) element.getClass());
+  public DocumentClass(T element, Map<Class<?>, ValueConverter> typeConverters) {
+    this((Class<T>) element.getClass(), typeConverters);
   }
 
-  public DocumentClass(T[] array) {
-    this((Class<T>) array.getClass().getComponentType());
+  public DocumentClass(T[] array, Map<Class<?>, ValueConverter> typeConverters) {
+    this((Class<T>) array.getClass().getComponentType(), typeConverters);
   }
 
   public Map<Integer, String> getNameByIndexMap() {
@@ -63,7 +65,7 @@ public class DocumentClass<T> {
     while (subclass != Object.class) {
       Arrays
           .stream(subclass.getDeclaredFields())
-          .map(field -> new DocumentField(field, converterCache))
+          .map(field -> new DocumentField(field, typeConverters, fieldConverters))
           .filter(Predicate.not(DocumentField::isExcluded))
           .forEach(fields::add);
       subclass = subclass.getSuperclass();

@@ -10,6 +10,7 @@ import java.util.stream.IntStream;
 import org.apache.commons.collections4.BidiMap;
 import org.apache.commons.collections4.bidimap.DualLinkedHashBidiMap;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
 
 public class DocumentHeader {
@@ -25,11 +26,13 @@ public class DocumentHeader {
           .forEach(index -> {
             DocumentField documentField = fields.get(index);
             String name = documentField.getName();
+
             Alignment alignment = documentField.getHeader();
             Format format = new Format(null, false);
+            CellStyle style = workbook.getCellStyle(format, alignment);
 
             Cell cell = header.createCell(index);
-            cell.setCellStyle(workbook.getCellStyle(format, alignment));
+            cell.setCellStyle(style);
             cell.setCellValue(name);
           });
     }

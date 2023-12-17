@@ -8,19 +8,25 @@ import org.apache.poi.ss.usermodel.DateUtil;
 public class DocumentCell {
 
   private final Cell cell;
+  private final boolean formula;
 
-  public DocumentCell(Cell cell) {
+  public DocumentCell(Cell cell, boolean formula) {
     this.cell = cell;
+    this.formula = formula;
   }
 
   public void setStyle(CellStyle style) {
     cell.setCellStyle(style);
   }
 
-  public <E> void setValue(E obj) {
+  public <V> void setValue(V obj) {
     if (obj != null) {
       if (obj instanceof String) {
-        cell.setCellValue((String) obj);
+        if (formula) {
+          cell.setCellFormula((String) obj);
+        } else {
+          cell.setCellValue((String) obj);
+        }
       } else if (obj instanceof Boolean) {
         cell.setCellValue((Boolean) obj);
       } else if (obj instanceof Number) {
@@ -46,6 +52,11 @@ public class DocumentCell {
               DateUtil.isCellDateFormatted(cell)
                   ? cell.getDateCellValue()
                   : cell.getNumericCellValue();
+          break;
+        case FORMULA:
+          if (formula) {
+            value = cell.getCellFormula();
+          }
           break;
         default:
           value = null;
