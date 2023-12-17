@@ -76,12 +76,12 @@ All types of annotations could be mixed with one POJO.
 
 Priority order of annotations from lower to higher: *JPA* < *JAXB* < *Jackson* < *oCell*.
 
-#### Mode
-The library supports two types of `MappingMode`:
+#### Mapping
+The library supports two types of `MappingType`:
 * `STRICT` - all POJO fields must be mapped to spreadsheet columns and vice versa
 * `FLEXIBLE` - some POJO fields might not be mapped to spreadsheet columns and vice versa
 
-The default mode is `FLEXIBLE` 
+The default mapping type is `FLEXIBLE` 
 
 #### Document
 The library supports two types of spreadsheet documents:
@@ -163,12 +163,12 @@ Documents could be created using the `Documents` class:
 ```java
 try (Document document = Documents.BIFF().create()) { ... }
 try (Document document = Documents.BIFF(password).create()) { ... }
-try (Document document = Documents.BIFF().mode(MappingMode.STRICT).create()) { ... }
+try (Document document = Documents.BIFF().mapping(MappingType.STRICT).create()) { ... }
 try (Document document = Documents.BIFF(password).converter(String.class, new StringConverter()).create()) { ... }
 
 try (Document document = Documents.OOXML().create()) { ... }
 try (Document document = Documents.OOXML(password).create()) { ... }
-try (Document document = Documents.OOXML().mode(MappingMode.STRICT).create()) { ... }
+try (Document document = Documents.OOXML().mapping(MappingType.STRICT).create()) { ... }
 try (Document document = Documents.OOXML(password).converter(String.class, new StringConverter()).create()) { ... }    
 ```
 
