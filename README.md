@@ -111,9 +111,9 @@ public class PercentConverter implements ValueConverter<String, Integer> {
 }
 ```
 
-POJO example with annotations:
+POJO mapping example:
 ```java
-@ClassName("MODEL")
+@ClassName("POJO")
 public class Model extends Base {
 
   @FieldOrder(0)
@@ -179,7 +179,7 @@ InputStream stream = ...
 String path = ...
 File file = ...
 
-List<Model> models;
+List<Model> list;
 
 try (Document document = Documents.BIFF().create()) {
   document.fromBytes(bytes);
@@ -187,9 +187,9 @@ try (Document document = Documents.BIFF().create()) {
   document.fromFile(path);
   document.fromFile(file);
 
-  models = document.getSheet(Model.class);
-  models = document.getSheet(0, Model.class);
-  models = document.getSheet("Sheet1", Model.class);
+  list = document.getSheet(Model.class);
+  list = document.getSheet(0, Model.class);
+  list = document.getSheet("Sheet1", Model.class);
 }
 ```
 
@@ -200,11 +200,11 @@ OutputStream stream = ...
 String path = ...
 File file = ...
 
-List<Model> models = ...
+List<Model> list = ...
 
 try (Document document = Documents.OOXML().create()) {
-  document.addSheet(models);
-  document.addSheet("Sheet1", models);
+  document.addSheet(list);
+  document.addSheet("Sheet1", list);
 
   bytes = document.toBytes();
   document.toStream(stream);
