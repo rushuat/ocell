@@ -68,7 +68,7 @@ public class DocumentField {
         Optional.ofNullable(getConverter())
             .orElseGet(() -> typeConverters.get(type));
     if (converter != null) {
-      data = converter.convertInput(data);
+      data = converter.toModel(data);
     }
     if (data == null) {
       data = getDefault();
@@ -86,7 +86,7 @@ public class DocumentField {
         Optional.ofNullable(getConverter())
             .orElseGet(() -> typeConverters.get(getType()));
     if (converter != null) {
-      value = converter.convertOutput(value);
+      value = converter.toDocument(value);
     }
     if (value instanceof Enum) {
       value = ((Enum<?>) value).name();
