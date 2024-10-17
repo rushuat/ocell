@@ -1,7 +1,9 @@
 package io.github.rushuat.ocell.document;
 
+import io.github.rushuat.ocell.field.Format;
 import io.github.rushuat.ocell.field.MappingType;
 import io.github.rushuat.ocell.field.ValueConverter;
+import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
@@ -21,18 +23,36 @@ public final class Documents {
     private final DocumentType type;
     private final String password;
     private final AtomicReference<MappingType> mapping;
+    private final Map<Class<?>, Format> formats;
     private final Map<Class<?>, ValueConverter> converters;
 
     private DocumentBuilder(DocumentType type, String password) {
       this.type = type;
       this.password = password;
       this.mapping = new AtomicReference<>(MappingType.FLEXIBLE);
+      this.formats = new ConcurrentHashMap<>();
       this.converters = new ConcurrentHashMap<>();
     }
 
     public DocumentBuilder mapping(MappingType mapping) {
       if (mapping != null) {
         this.mapping.set(mapping);
+      }
+      return this;
+    }
+
+    public DocumentBuilder format(Class<?> clazz, String pattern) {
+      if (clazz != null && pattern != null && !pattern.isBlank()) {
+        boolean isDate = clazz.equals(Date.class);
+        Format format = new Format(pattern, isDate);
+        this.formats.put(clazz, format);
+      }
+      return this;
+    }
+
+    public DocumentBuilder formats(Map<Class<?>, String> patterns) {
+      if (patterns != null) {
+        patterns.forEach(this::format);
       }
       return this;
     }
@@ -46,7 +66,7 @@ public final class Documents {
 
     public DocumentBuilder converters(Map<Class<?>, ValueConverter> converters) {
       if (converters != null) {
-        this.converters.putAll(converters);
+        converters.forEach(this::converter);
       }
       return this;
     }
@@ -54,9 +74,9 @@ public final class Documents {
     public Document create() {
       switch (type) {
         case BIFF:
-          return new DocumentBIFF(password, mapping.get(), converters);
+          return new DocumentBIFF(password, mapping.get(), formats, converters);
         case OOXML:
-          return new DocumentOOXML(password, mapping.get(), converters);
+          return new DocumentOOXML(password, mapping.get(), formats, converters);
         default:
           throw new IllegalArgumentException(type.name());
       }

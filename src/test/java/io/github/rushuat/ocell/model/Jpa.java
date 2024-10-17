@@ -44,8 +44,7 @@ public class Jpa extends Base {
 
   @FieldOrder(2)
   @FieldAlignment(horizontal = "left", vertical = "top")
-  @FieldFormat("yyyy-MM-dd'T'HH:mm:ss")
-  @DateValue("1991-08-24T01:02:03")
+  @DateValue(value = "1991-08-24T01:02:03", format = "yyyy-MM-dd'T'HH:mm:ss")
   @Column(name = "Date Of Birth")
   private Date dateOfBirth;
 

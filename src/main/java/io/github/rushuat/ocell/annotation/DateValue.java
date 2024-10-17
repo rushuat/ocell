@@ -10,4 +10,6 @@ import java.lang.annotation.Target;
 public @interface DateValue {
 
   String value();
+
+  String format() default "yyyy-MM-dd'T'HH:mm:ss'Z'";
 }

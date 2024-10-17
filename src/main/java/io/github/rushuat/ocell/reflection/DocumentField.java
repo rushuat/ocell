@@ -54,10 +54,8 @@ public class DocumentField {
   @SneakyThrows
   public void setValue(Object obj, Object value) {
     Object data = value;
-    Class<?> type =
-        Optional.ofNullable(getSubtype())
-            .filter(sub -> !sub.equals(getType()))
-            .orElseGet(() -> (Class) getType());
+    Class<?> type = getExternalType();
+
     data =
         Optional.ofNullable(getEnum(data, type))
             .orElse(data);
@@ -144,12 +142,10 @@ public class DocumentField {
       String name = field.getAnnotation(EnumValue.class).value();
       value = getEnum(name, getType());
     } else if (field.isAnnotationPresent(DateValue.class)) {
-      String date = field.getAnnotation(DateValue.class).value();
-      Format format = getFormat();
-      DateFormat formatter =
-          format.getPattern() == null
-              ? new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
-              : new SimpleDateFormat(format.getPattern());
+      DateValue dateValue = field.getAnnotation(DateValue.class);
+      String date = dateValue.value();
+      String format = dateValue.format();
+      DateFormat formatter = new SimpleDateFormat(format);
       value = formatter.parse(date);
     }
     return value;
@@ -169,7 +165,7 @@ public class DocumentField {
         pattern = fieldFormat.value();
       }
     }
-    Class<?> type = getType();
+    Class<?> type = getExternalType();
     boolean isDate = type.equals(Date.class);
     return new Format(pattern, isDate);
   }
@@ -271,7 +267,7 @@ public class DocumentField {
     return field.getType();
   }
 
-  public Class<?> getSubtype() {
+  public Class<?> getConvertedType() {
     Class<?> type = null;
     ValueConverter converter = getConverter();
     if (converter != null) {
@@ -280,6 +276,12 @@ public class DocumentField {
       type = (Class<?>) generic.getActualTypeArguments()[1];
     }
     return type;
+  }
+
+  public Class<?> getExternalType() {
+    return
+        Optional.ofNullable(getConvertedType())
+            .orElseGet(() -> (Class) getType());
   }
 
   public ValueConverter getConverter() {

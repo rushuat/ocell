@@ -27,12 +27,14 @@ public class DocumentWorkbook implements Closeable {
 
   private final byte[] password;
   private final MappingType mapping;
+  private final Map<Class<?>, Format> formats;
   private final Map<Class<?>, ValueConverter> converters;
 
   public DocumentWorkbook(
       Workbook workbook,
       String password,
       MappingType mapping,
+      Map<Class<?>, Format> formats,
       Map<Class<?>, ValueConverter> converters) {
     this.workbook = workbook;
     this.styles = new ConcurrentHashMap<>();
@@ -45,6 +47,10 @@ public class DocumentWorkbook implements Closeable {
     this.mapping =
         Optional.ofNullable(mapping)
             .orElse(MappingType.FLEXIBLE);
+    this.formats =
+        Optional.ofNullable(formats)
+            .map(ConcurrentHashMap::new)
+            .orElseGet(ConcurrentHashMap::new);
     this.converters =
         Optional.ofNullable(converters)
             .map(ConcurrentHashMap::new)
@@ -74,7 +80,14 @@ public class DocumentWorkbook implements Closeable {
 
   public CellStyle getCellStyle(DocumentField documentField) {
     Format format = documentField.getFormat();
+    String pattern = format.getPattern();
+    if (pattern == null) {
+      Class<?> type = documentField.getExternalType();
+      format = formats.getOrDefault(type, format);
+    }
+
     Alignment alignment = documentField.getAlignment();
+
     return getCellStyle(format, alignment);
   }
 

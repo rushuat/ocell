@@ -67,7 +67,7 @@ public class DocumentClassTest {
     List<DocumentField> documentFields = documentClass.getFields();
     //THEN
     assertNotNull(documentFields);
-    assertEquals(documentFields.size(), 19);
+    assertEquals(documentFields.size(), 21);
   }
 
   @Test(dataProvider = "models")
@@ -78,8 +78,8 @@ public class DocumentClassTest {
     //THEN
     assertNotNull(names);
     assertNotNull(indexes);
-    assertEquals(names.keySet().size(), 19);
-    assertEquals(indexes.keySet().size(), 19);
+    assertEquals(names.keySet().size(), 21);
+    assertEquals(indexes.keySet().size(), 21);
   }
 
   @Test(dataProvider = "models")

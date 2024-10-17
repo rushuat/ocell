@@ -53,14 +53,38 @@ public class DocumentTest {
   public Object[][] passwords() {
     return
         new Object[][]{
-            {Documents.BIFF().converter(String.class, new EmptyConverter()).create()},
-            {Documents.BIFF(null).converter(String.class, new EmptyConverter()).create()},
-            {Documents.BIFF("").converter(String.class, new EmptyConverter()).create()},
-            {Documents.BIFF("******").converter(String.class, new EmptyConverter()).create()},
-            {Documents.OOXML().converter(String.class, new EmptyConverter()).create()},
-            {Documents.OOXML(null).converter(String.class, new EmptyConverter()).create()},
-            {Documents.OOXML("").converter(String.class, new EmptyConverter()).create()},
-            {Documents.OOXML("******").converter(String.class, new EmptyConverter()).create()},
+            {Documents.BIFF()
+                .format(Short.class, "# ##0")
+                .converter(String.class, new EmptyConverter())
+                .create()},
+            {Documents.BIFF(null)
+                .format(Short.class, "# ##0")
+                .converter(String.class, new EmptyConverter())
+                .create()},
+            {Documents.BIFF("")
+                .format(Short.class, "# ##0")
+                .converter(String.class, new EmptyConverter())
+                .create()},
+            {Documents.BIFF("******")
+                .format(Short.class, "# ##0")
+                .converter(String.class, new EmptyConverter())
+                .create()},
+            {Documents.OOXML()
+                .format(Short.class, "# ##0")
+                .converter(String.class, new EmptyConverter())
+                .create()},
+            {Documents.OOXML(null)
+                .format(Short.class, "# ##0")
+                .converter(String.class, new EmptyConverter())
+                .create()},
+            {Documents.OOXML("")
+                .format(Short.class, "# ##0")
+                .converter(String.class, new EmptyConverter())
+                .create()},
+            {Documents.OOXML("******")
+                .format(Short.class, "# ##0")
+                .converter(String.class, new EmptyConverter())
+                .create()},
         };
   }
 
@@ -118,6 +142,8 @@ public class DocumentTest {
     pojo.setCitizen("USA");
     pojo.setFormula("CONCATENATE(2+5,\"!\")");
     pojo.setEmpty(null);
+    pojo.setCreated("20140220");
+    pojo.setAmount((short) 1000);
     assertEquals(pojoList.get(0), pojo);
 
     Jpa jpa =
@@ -140,6 +166,8 @@ public class DocumentTest {
     jpa.setCitizen("USA");
     jpa.setFormula("CONCATENATE(2+5,\"!\")");
     jpa.setEmpty(null);
+    jpa.setCreated("20140220");
+    jpa.setAmount((short) 1000);
     assertEquals(jpaList.get(0), jpa);
 
     Xml xml =
@@ -162,6 +190,8 @@ public class DocumentTest {
     xml.setCitizen("USA");
     xml.setFormula("CONCATENATE(2+5,\"!\")");
     xml.setEmpty(null);
+    xml.setCreated("20140220");
+    xml.setAmount((short) 1000);
     assertEquals(xmlList.get(0), xml);
 
     Json json =
@@ -184,6 +214,8 @@ public class DocumentTest {
     json.setCitizen("USA");
     json.setFormula("CONCATENATE(2+5,\"!\")");
     json.setEmpty(null);
+    json.setCreated("20140220");
+    json.setAmount((short) 1000);
     assertEquals(jsonList.get(0), json);
   }
 }

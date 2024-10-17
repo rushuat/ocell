@@ -41,8 +41,7 @@ public class Json extends Base {
   private String name;
 
   @FieldAlignment(horizontal = "left", vertical = "top")
-  @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-  @DateValue("1991-08-24T01:02:03")
+  @DateValue(value = "1991-08-24T01:02:03", format = "yyyy-MM-dd'T'HH:mm:ss")
   @JsonProperty(value = "Date Of Birth", index = 2)
   private Date dateOfBirth;
 

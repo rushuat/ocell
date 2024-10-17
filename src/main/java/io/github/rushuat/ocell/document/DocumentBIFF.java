@@ -1,5 +1,6 @@
 package io.github.rushuat.ocell.document;
 
+import io.github.rushuat.ocell.field.Format;
 import io.github.rushuat.ocell.field.MappingType;
 import io.github.rushuat.ocell.field.ValueConverter;
 import java.io.IOException;
@@ -15,8 +16,9 @@ public class DocumentBIFF extends Document {
   public DocumentBIFF(
       String password,
       MappingType mapping,
+      Map<Class<?>, Format> formats,
       Map<Class<?>, ValueConverter> converters) {
-    super(new HSSFWorkbook(), password, mapping, converters);
+    super(new HSSFWorkbook(), password, mapping, formats, converters);
   }
 
   @Override
