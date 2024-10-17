@@ -16,7 +16,7 @@ Your project should have a dependency to the library:
 <dependency>
   <groupId>io.github.rushuat</groupId>
   <artifactId>ocell</artifactId>
-  <version>0.1.9</version>
+  <version>0.1.10</version>
 </dependency>
 ```
 
@@ -24,17 +24,17 @@ Your project should have a dependency to the library:
 The library supports POJOs and few types of annotations to customize them:
 1. [oCell](https://github.com/rushuat/ocell/tree/main/src/main/java/io/github/rushuat/ocell/annotation)
 2. [Jackson](https://github.com/FasterXML/jackson-annotations/wiki/Jackson-Annotations)
-3. [JAXB](https://javadoc.io/doc/javax.xml.bind/jaxb-api/2.3.1/javax/xml/bind/annotation/package-summary.html)
-4. [JPA](https://javadoc.io/static/javax.persistence/javax.persistence-api/2.2/javax/persistence/package-summary.html)
+3. [JAXB](https://javadoc.io/doc/jakarta.xml.bind/jakarta.xml.bind-api/4.0.2/jakarta.xml.bind/jakarta/xml/bind/annotation/package-summary.html)
+4. [JPA](https://javadoc.io/doc/jakarta.persistence/jakarta.persistence-api/3.1.0/jakarta.persistence/jakarta/persistence/package-summary.html)
 
 #### oCell
 * `@ClassName` - sheet name
 * `@FieldName` - column name
 * `@FieldOrder` - column order
 * `@FieldFormat` - column format
-* `@FieldAlignment` - column alignment by horizontal or vertical properties\
+* `@FieldAlignment` - column alignment by *horizontal* or *vertical* properties\
 (`HorizontalAlignment` or `VerticalAlignment` enumeration values)
-* `@HeaderAlignment` - column header alignment by horizontal or vertical properties\
+* `@HeaderAlignment` - column header alignment by *horizontal* or *vertical* properties\
 (`HorizontalAlignment` or `VerticalAlignment` enumeration values)
 * `@FieldFormula` - formula column
 * `@FieldExclude` - excluded column
@@ -67,9 +67,9 @@ Default values could be applied to POJO fields using annotations:
 * `@CharValue` - not applicable to primitive `char`
 * `@BooleanValue` - not applicable to primitive `boolean`
 * `@NumberValue` - not applicable to primitive types
-* `@EnumValue` - string value of enum constant name
+* `@EnumValue` - string value of enumeration constant name
 * `@DateValue` - default format is `DateTimeFormatter.ISO_INSTANT`\
-or could be overridden by `@FieldFormat` or `@JsonFormat` annotations
+and could be overridden by *format* property
 
 #### Priority
 All types of annotations could be mixed with one POJO.
@@ -100,12 +100,12 @@ Value converter example:
 public class PercentConverter implements ValueConverter<String, Integer> {
 
   @Override
-  public String convertInput(Integer value) {
+  public String toModel(Integer value) {
     return value == null ? "" : value + "%";
   }
 
   @Override
-  public Integer convertOutput(String value) {
+  public Integer toDocument(String value) {
     return value == null || value.isEmpty() ? null : Integer.valueOf(value.replaceAll("%", ""));
   }
 }
@@ -140,8 +140,7 @@ public class Model extends Base {
   private Boolean enable;
 
   @FieldAlignment(horizontal = "left", vertical = "top")
-  @FieldFormat("yyyy-MM-dd'T'HH:mm:ss")
-  @DateValue("1991-08-24T01:02:03")
+  @DateValue(value = "1991-08-24T01:02:03", format = "yyyy-MM-dd'T'HH:mm:ss")
   private Date start;
 
   @DateValue("2020-01-01T11:12:13Z")
@@ -164,12 +163,14 @@ Documents could be created using the `Documents` class:
 try (Document document = Documents.BIFF().create()) { ... }
 try (Document document = Documents.BIFF(password).create()) { ... }
 try (Document document = Documents.BIFF().mapping(MappingType.STRICT).create()) { ... }
-try (Document document = Documents.BIFF(password).converter(String.class, new StringConverter()).create()) { ... }
+try (Document document = Documents.BIFF().format(Integer.class, "# ##0").create()) { ... }
+try (Document document = Documents.BIFF().converter(String.class, new StringConverter()).create()) { ... }
 
 try (Document document = Documents.OOXML().create()) { ... }
 try (Document document = Documents.OOXML(password).create()) { ... }
 try (Document document = Documents.OOXML().mapping(MappingType.STRICT).create()) { ... }
-try (Document document = Documents.OOXML(password).converter(String.class, new StringConverter()).create()) { ... }    
+try (Document document = Documents.OOXML().format(Integer.class, "# ##0").create()) { ... }
+try (Document document = Documents.OOXML().converter(String.class, new StringConverter()).create()) { ... }    
 ```
 
 Documents could be loaded from different sources:
