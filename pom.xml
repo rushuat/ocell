@@ -6,17 +6,17 @@
 
   <groupId>io.github.rushuat</groupId>
   <artifactId>ocell</artifactId>
-  <version>0.1.9</version>
+  <version>0.1.10</version>
   <packaging>jar</packaging>
 
   <name>${project.groupId}:${project.artifactId}</name>
-  <description>A library for Excel to POJO and POJO to Excel mapping</description>
+  <description>The library for Excel to POJO and POJO to Excel mapping</description>
   <url>https://github.com/rushuat/ocell</url>
 
   <licenses>
     <license>
       <name>The Apache Software License, Version 2.0</name>
-      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
     </license>
   </licenses>
 
@@ -37,23 +37,23 @@
 
   <properties>
     <java.version>11</java.version>
-    <lombok.version>1.18.30</lombok.version>
+    <lombok.version>1.18.36</lombok.version>
 
-    <poi.version>5.2.5</poi.version>
-    <jackson.version>2.16.0</jackson.version>
-    <jaxb.version>2.3.1</jaxb.version>
-    <jpa.version>2.2</jpa.version>
+    <poi.version>5.3.0</poi.version>
+    <jackson.version>2.18.1</jackson.version>
+    <jaxb.version>4.0.2</jaxb.version>
+    <jpa.version>3.1.0</jpa.version>
 
-    <testng.version>7.8.0</testng.version>
-    <spotbugs.version>4.8.1</spotbugs.version>
+    <testng.version>7.10.2</testng.version>
+    <spotbugs.version>4.8.6</spotbugs.version>
 
-    <spotbugs.plugin>4.8.2.0</spotbugs.plugin>
+    <spotbugs.plugin>4.8.6.6</spotbugs.plugin>
 
-    <compiler.plugin>3.11.0</compiler.plugin>
-    <surefire.plugin>3.2.3</surefire.plugin>
-    <source.plugin>3.3.0</source.plugin>
-    <javadoc.plugin>3.6.3</javadoc.plugin>
-    <gpg.plugin>3.1.0</gpg.plugin>
+    <compiler.plugin>3.13.0</compiler.plugin>
+    <surefire.plugin>3.5.2</surefire.plugin>
+    <source.plugin>3.3.1</source.plugin>
+    <javadoc.plugin>3.11.1</javadoc.plugin>
+    <gpg.plugin>3.2.7</gpg.plugin>
 
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
@@ -76,13 +76,13 @@
       <version>${jackson.version}</version>
     </dependency>
     <dependency>
-      <groupId>javax.xml.bind</groupId>
-      <artifactId>jaxb-api</artifactId>
+      <groupId>jakarta.xml.bind</groupId>
+      <artifactId>jakarta.xml.bind-api</artifactId>
       <version>${jaxb.version}</version>
     </dependency>
     <dependency>
-      <groupId>javax.persistence</groupId>
-      <artifactId>javax.persistence-api</artifactId>
+      <groupId>jakarta.persistence</groupId>
+      <artifactId>jakarta.persistence-api</artifactId>
       <version>${jpa.version}</version>
     </dependency>
 

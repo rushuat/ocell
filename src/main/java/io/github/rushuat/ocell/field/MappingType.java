@@ -1,6 +1,6 @@
 package io.github.rushuat.ocell.field;
 
-public enum MappingMode {
+public enum MappingType {
   STRICT,
   FLEXIBLE
 }

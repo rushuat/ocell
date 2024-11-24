@@ -1,6 +1,7 @@
 package io.github.rushuat.ocell.document;
 
-import io.github.rushuat.ocell.field.MappingMode;
+import io.github.rushuat.ocell.field.Format;
+import io.github.rushuat.ocell.field.MappingType;
 import io.github.rushuat.ocell.field.ValueConverter;
 import io.github.rushuat.ocell.model.DocumentSheet;
 import io.github.rushuat.ocell.model.DocumentWorkbook;
@@ -24,10 +25,11 @@ public abstract class Document extends DocumentIO {
   protected Document(
       Workbook workbook,
       String password,
-      MappingMode mode,
+      MappingType mapping,
+      Map<Class<?>, Format> formats,
       Map<Class<?>, ValueConverter> converters) {
     IOUtils.setByteArrayMaxOverride(Integer.MAX_VALUE);
-    this.workbook = new DocumentWorkbook(workbook, password, mode, converters);
+    this.workbook = new DocumentWorkbook(workbook, password, mapping, formats, converters);
   }
 
   public <T> void addSheet(T[] items) {

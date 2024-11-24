@@ -12,13 +12,15 @@ import io.github.rushuat.ocell.annotation.NumberValue;
 import io.github.rushuat.ocell.annotation.StringValue;
 import io.github.rushuat.ocell.field.AgeConverter;
 import io.github.rushuat.ocell.field.PercentConverter;
+import jakarta.xml.bind.annotation.XmlAccessOrder;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorOrder;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlAttribute;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlTransient;
 import java.util.Date;
-import javax.xml.bind.annotation.XmlAccessOrder;
-import javax.xml.bind.annotation.XmlAccessorOrder;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -31,6 +33,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @XmlRootElement(name = "User")
+@XmlAccessorType(XmlAccessType.FIELD)
 @XmlAccessorOrder(XmlAccessOrder.UNDEFINED)
 public class Xml extends Base {
 
@@ -46,8 +49,7 @@ public class Xml extends Base {
 
   @FieldOrder(2)
   @FieldAlignment(horizontal = "left", vertical = "top")
-  @FieldFormat("yyyy-MM-dd'T'HH:mm:ss")
-  @DateValue("1991-08-24T01:02:03")
+  @DateValue(value = "1991-08-24T01:02:03", format = "yyyy-MM-dd'T'HH:mm:ss")
   @XmlAttribute(name = "Date Of Birth")
   private Date dateOfBirth;
 

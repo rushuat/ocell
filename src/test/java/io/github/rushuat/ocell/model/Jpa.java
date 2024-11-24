@@ -12,11 +12,12 @@ import io.github.rushuat.ocell.annotation.NumberValue;
 import io.github.rushuat.ocell.annotation.StringValue;
 import io.github.rushuat.ocell.field.AgeConverter;
 import io.github.rushuat.ocell.field.PercentConverter;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import java.util.Date;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -34,6 +35,7 @@ public class Jpa extends Base {
 
   @FieldOrder(0)
   @NumberValue(0)
+  @Id
   @Column(name = "Id")
   private Long id;
 
@@ -44,8 +46,7 @@ public class Jpa extends Base {
 
   @FieldOrder(2)
   @FieldAlignment(horizontal = "left", vertical = "top")
-  @FieldFormat("yyyy-MM-dd'T'HH:mm:ss")
-  @DateValue("1991-08-24T01:02:03")
+  @DateValue(value = "1991-08-24T01:02:03", format = "yyyy-MM-dd'T'HH:mm:ss")
   @Column(name = "Date Of Birth")
   private Date dateOfBirth;
 

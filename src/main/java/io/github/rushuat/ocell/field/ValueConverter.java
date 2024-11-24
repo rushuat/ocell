@@ -1,8 +1,8 @@
 package io.github.rushuat.ocell.field;
 
-public interface ValueConverter<I, O> {
+public interface ValueConverter<M, D> {
 
-  I convertInput(O value);
+  M toModel(D value) throws Exception;
 
-  O convertOutput(I value);
+  D toDocument(M value) throws Exception;
 }

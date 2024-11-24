@@ -20,6 +20,14 @@ import io.github.rushuat.ocell.annotation.StringValue;
 import io.github.rushuat.ocell.field.Alignment;
 import io.github.rushuat.ocell.field.Format;
 import io.github.rushuat.ocell.field.ValueConverter;
+import jakarta.persistence.Column;
+import jakarta.persistence.Transient;
+import jakarta.xml.bind.annotation.XmlAttribute;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlTransient;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodHandles.Lookup;
+import java.lang.invoke.VarHandle;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
@@ -28,16 +36,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 import java.util.Optional;
-import javax.persistence.Column;
-import javax.persistence.Transient;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlTransient;
 import lombok.SneakyThrows;
 
 public class DocumentField {
 
   private final Field field;
+  private final VarHandle handle;
   private final Map<Class<?>, ValueConverter> typeConverters;
   private final Map<Class<? extends ValueConverter>, ValueConverter> fieldConverters;
 
@@ -46,7 +50,7 @@ public class DocumentField {
       Map<Class<?>, ValueConverter> typeConverters,
       Map<Class<? extends ValueConverter>, ValueConverter> fieldConverters) {
     this.field = field;
-    this.field.setAccessible(true);
+    this.handle = newHandle(field);
     this.typeConverters = typeConverters;
     this.fieldConverters = fieldConverters;
   }
@@ -54,10 +58,8 @@ public class DocumentField {
   @SneakyThrows
   public void setValue(Object obj, Object value) {
     Object data = value;
-    Class<?> type =
-        Optional.ofNullable(getSubtype())
-            .filter(sub -> !sub.equals(getType()))
-            .orElseGet(() -> (Class) getType());
+    Class<?> type = getExternalType();
+
     data =
         Optional.ofNullable(getEnum(data, type))
             .orElse(data);
@@ -68,17 +70,17 @@ public class DocumentField {
         Optional.ofNullable(getConverter())
             .orElseGet(() -> typeConverters.get(type));
     if (converter != null) {
-      data = converter.convertInput(data);
+      data = converter.toModel(data);
     }
     if (data == null) {
       data = getDefault();
     }
-    field.set(obj, data);
+    handle.set(obj, data);
   }
 
   @SneakyThrows
   public Object getValue(Object obj) {
-    Object value = field.get(obj);
+    Object value = handle.get(obj);
     if (value == null) {
       value = getDefault();
     }
@@ -86,7 +88,7 @@ public class DocumentField {
         Optional.ofNullable(getConverter())
             .orElseGet(() -> typeConverters.get(getType()));
     if (converter != null) {
-      value = converter.convertOutput(value);
+      value = converter.toDocument(value);
     }
     if (value instanceof Enum) {
       value = ((Enum<?>) value).name();
@@ -113,12 +115,12 @@ public class DocumentField {
     if (value instanceof Number) {
       if (type.equals(double.class) || type.equals(Double.class)) {
         data = ((Number) value).doubleValue();
+      } else if (type.equals(float.class) || type.equals(Float.class)) {
+        data = ((Number) value).floatValue();
       } else if (type.equals(int.class) || type.equals(Integer.class)) {
         data = ((Number) value).intValue();
       } else if (type.equals(long.class) || type.equals(Long.class)) {
         data = ((Number) value).longValue();
-      } else if (type.equals(float.class) || type.equals(Float.class)) {
-        data = ((Number) value).floatValue();
       } else if (type.equals(byte.class) || type.equals(Byte.class)) {
         data = ((Number) value).byteValue();
       } else if (type.equals(short.class) || type.equals(Short.class)) {
@@ -144,12 +146,10 @@ public class DocumentField {
       String name = field.getAnnotation(EnumValue.class).value();
       value = getEnum(name, getType());
     } else if (field.isAnnotationPresent(DateValue.class)) {
-      String date = field.getAnnotation(DateValue.class).value();
-      Format format = getFormat();
-      DateFormat formatter =
-          format.getPattern() == null
-              ? new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
-              : new SimpleDateFormat(format.getPattern());
+      DateValue dateValue = field.getAnnotation(DateValue.class);
+      String date = dateValue.value();
+      String format = dateValue.format();
+      DateFormat formatter = new SimpleDateFormat(format);
       value = formatter.parse(date);
     }
     return value;
@@ -169,7 +169,7 @@ public class DocumentField {
         pattern = fieldFormat.value();
       }
     }
-    Class<?> type = getType();
+    Class<?> type = getExternalType();
     boolean isDate = type.equals(Date.class);
     return new Format(pattern, isDate);
   }
@@ -271,7 +271,7 @@ public class DocumentField {
     return field.getType();
   }
 
-  public Class<?> getSubtype() {
+  public Class<?> getConvertedType() {
     Class<?> type = null;
     ValueConverter converter = getConverter();
     if (converter != null) {
@@ -280,6 +280,12 @@ public class DocumentField {
       type = (Class<?>) generic.getActualTypeArguments()[1];
     }
     return type;
+  }
+
+  public Class<?> getExternalType() {
+    return
+        Optional.ofNullable(getConvertedType())
+            .orElseGet(() -> (Class) getType());
   }
 
   public ValueConverter getConverter() {
@@ -295,5 +301,18 @@ public class DocumentField {
   @SneakyThrows
   private ValueConverter newConverter(Class<? extends ValueConverter> clazz) {
     return clazz.getDeclaredConstructor().newInstance();
+  }
+
+  @SneakyThrows
+  private VarHandle newHandle(Field field) {
+    String name = field.getName();
+    Class<?> type = field.getType();
+    Class<?> clazz = field.getDeclaringClass();
+    Lookup lookup =
+        MethodHandles.privateLookupIn(clazz, MethodHandles.lookup());
+    return
+        Modifier.isStatic(field.getModifiers())
+            ? lookup.findStaticVarHandle(clazz, name, type)
+            : lookup.findVarHandle(clazz, name, type);
   }
 }

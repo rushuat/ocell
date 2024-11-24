@@ -1,6 +1,6 @@
 package io.github.rushuat.ocell.model;
 
-import io.github.rushuat.ocell.field.MappingMode;
+import io.github.rushuat.ocell.field.MappingType;
 import io.github.rushuat.ocell.reflection.DocumentClass;
 import io.github.rushuat.ocell.reflection.DocumentField;
 import java.util.Collection;
@@ -63,7 +63,7 @@ public class DocumentSheet<T> {
   }
 
   private void validateHeader() {
-    if (workbook.getMode() == MappingMode.STRICT) {
+    if (workbook.getMapping() == MappingType.STRICT) {
       Set<String> requiredFields =
           fields
               .stream()

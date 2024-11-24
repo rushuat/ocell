@@ -1,6 +1,7 @@
 package io.github.rushuat.ocell.document;
 
-import io.github.rushuat.ocell.field.MappingMode;
+import io.github.rushuat.ocell.field.Format;
+import io.github.rushuat.ocell.field.MappingType;
 import io.github.rushuat.ocell.field.ValueConverter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,9 +20,10 @@ public class DocumentOOXML extends Document {
 
   public DocumentOOXML(
       String password,
-      MappingMode mode,
+      MappingType mapping,
+      Map<Class<?>, Format> formats,
       Map<Class<?>, ValueConverter> converters) {
-    super(new XSSFWorkbook(), password, mode, converters);
+    super(new XSSFWorkbook(), password, mapping, formats, converters);
   }
 
   @Override

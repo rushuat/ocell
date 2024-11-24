@@ -2,11 +2,14 @@ package io.github.rushuat.ocell.model;
 
 import io.github.rushuat.ocell.annotation.BooleanValue;
 import io.github.rushuat.ocell.annotation.CharValue;
+import io.github.rushuat.ocell.annotation.FieldConverter;
+import io.github.rushuat.ocell.annotation.FieldFormat;
 import io.github.rushuat.ocell.annotation.FieldFormula;
 import io.github.rushuat.ocell.annotation.FieldName;
 import io.github.rushuat.ocell.annotation.FieldOrder;
 import io.github.rushuat.ocell.annotation.NumberValue;
 import io.github.rushuat.ocell.annotation.StringValue;
+import io.github.rushuat.ocell.field.DateConverter;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -51,4 +54,12 @@ public class Base {
   private String formula;
 
   private String empty = "";
+
+  @FieldFormat("DD/MM/YYYY")
+  @FieldConverter(DateConverter.class)
+  @StringValue("20140220")
+  private String created;
+
+  @NumberValue(1000)
+  private Short amount;
 }

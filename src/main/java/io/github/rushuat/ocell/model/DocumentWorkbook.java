@@ -2,7 +2,7 @@ package io.github.rushuat.ocell.model;
 
 import io.github.rushuat.ocell.field.Alignment;
 import io.github.rushuat.ocell.field.Format;
-import io.github.rushuat.ocell.field.MappingMode;
+import io.github.rushuat.ocell.field.MappingType;
 import io.github.rushuat.ocell.field.ValueConverter;
 import io.github.rushuat.ocell.reflection.DocumentField;
 import java.io.Closeable;
@@ -26,13 +26,15 @@ public class DocumentWorkbook implements Closeable {
   private Map<String, CellStyle> styles;
 
   private final byte[] password;
-  private final MappingMode mode;
+  private final MappingType mapping;
+  private final Map<Class<?>, Format> formats;
   private final Map<Class<?>, ValueConverter> converters;
 
   public DocumentWorkbook(
       Workbook workbook,
       String password,
-      MappingMode mode,
+      MappingType mapping,
+      Map<Class<?>, Format> formats,
       Map<Class<?>, ValueConverter> converters) {
     this.workbook = workbook;
     this.styles = new ConcurrentHashMap<>();
@@ -42,9 +44,13 @@ public class DocumentWorkbook implements Closeable {
             .filter(Predicate.not(String::isEmpty))
             .map(String::getBytes)
             .orElse(null);
-    this.mode =
-        Optional.ofNullable(mode)
-            .orElse(MappingMode.FLEXIBLE);
+    this.mapping =
+        Optional.ofNullable(mapping)
+            .orElse(MappingType.FLEXIBLE);
+    this.formats =
+        Optional.ofNullable(formats)
+            .map(ConcurrentHashMap::new)
+            .orElseGet(ConcurrentHashMap::new);
     this.converters =
         Optional.ofNullable(converters)
             .map(ConcurrentHashMap::new)
@@ -64,8 +70,8 @@ public class DocumentWorkbook implements Closeable {
     return password;
   }
 
-  public MappingMode getMode() {
-    return mode;
+  public MappingType getMapping() {
+    return mapping;
   }
 
   public Map<Class<?>, ValueConverter> getConverters() {
@@ -74,7 +80,14 @@ public class DocumentWorkbook implements Closeable {
 
   public CellStyle getCellStyle(DocumentField documentField) {
     Format format = documentField.getFormat();
+    String pattern = format.getPattern();
+    if (pattern == null) {
+      Class<?> type = documentField.getExternalType();
+      format = formats.getOrDefault(type, format);
+    }
+
     Alignment alignment = documentField.getAlignment();
+
     return getCellStyle(format, alignment);
   }
 
