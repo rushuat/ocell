@@ -14,6 +14,7 @@ import io.github.rushuat.ocell.field.AgeConverter;
 import io.github.rushuat.ocell.field.PercentConverter;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import java.util.Date;
@@ -34,6 +35,7 @@ public class Jpa extends Base {
 
   @FieldOrder(0)
   @NumberValue(0)
+  @Id
   @Column(name = "Id")
   private Long id;
 

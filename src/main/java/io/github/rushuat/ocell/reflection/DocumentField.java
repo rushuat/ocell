@@ -25,6 +25,9 @@ import jakarta.persistence.Transient;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlTransient;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodHandles.Lookup;
+import java.lang.invoke.VarHandle;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
@@ -38,6 +41,7 @@ import lombok.SneakyThrows;
 public class DocumentField {
 
   private final Field field;
+  private final VarHandle handle;
   private final Map<Class<?>, ValueConverter> typeConverters;
   private final Map<Class<? extends ValueConverter>, ValueConverter> fieldConverters;
 
@@ -46,7 +50,7 @@ public class DocumentField {
       Map<Class<?>, ValueConverter> typeConverters,
       Map<Class<? extends ValueConverter>, ValueConverter> fieldConverters) {
     this.field = field;
-    this.field.setAccessible(true);
+    this.handle = newHandle(field);
     this.typeConverters = typeConverters;
     this.fieldConverters = fieldConverters;
   }
@@ -71,12 +75,12 @@ public class DocumentField {
     if (data == null) {
       data = getDefault();
     }
-    field.set(obj, data);
+    handle.set(obj, data);
   }
 
   @SneakyThrows
   public Object getValue(Object obj) {
-    Object value = field.get(obj);
+    Object value = handle.get(obj);
     if (value == null) {
       value = getDefault();
     }
@@ -111,12 +115,12 @@ public class DocumentField {
     if (value instanceof Number) {
       if (type.equals(double.class) || type.equals(Double.class)) {
         data = ((Number) value).doubleValue();
+      } else if (type.equals(float.class) || type.equals(Float.class)) {
+        data = ((Number) value).floatValue();
       } else if (type.equals(int.class) || type.equals(Integer.class)) {
         data = ((Number) value).intValue();
       } else if (type.equals(long.class) || type.equals(Long.class)) {
         data = ((Number) value).longValue();
-      } else if (type.equals(float.class) || type.equals(Float.class)) {
-        data = ((Number) value).floatValue();
       } else if (type.equals(byte.class) || type.equals(Byte.class)) {
         data = ((Number) value).byteValue();
       } else if (type.equals(short.class) || type.equals(Short.class)) {
@@ -297,5 +301,18 @@ public class DocumentField {
   @SneakyThrows
   private ValueConverter newConverter(Class<? extends ValueConverter> clazz) {
     return clazz.getDeclaredConstructor().newInstance();
+  }
+
+  @SneakyThrows
+  private VarHandle newHandle(Field field) {
+    String name = field.getName();
+    Class<?> type = field.getType();
+    Class<?> clazz = field.getDeclaringClass();
+    Lookup lookup =
+        MethodHandles.privateLookupIn(clazz, MethodHandles.lookup());
+    return
+        Modifier.isStatic(field.getModifiers())
+            ? lookup.findStaticVarHandle(clazz, name, type)
+            : lookup.findVarHandle(clazz, name, type);
   }
 }

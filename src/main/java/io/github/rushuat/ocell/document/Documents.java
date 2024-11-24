@@ -6,7 +6,7 @@ import io.github.rushuat.ocell.field.ValueConverter;
 import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicReference;
+import org.apache.commons.lang3.mutable.MutableObject;
 
 public final class Documents {
 
@@ -22,21 +22,21 @@ public final class Documents {
 
     private final DocumentType type;
     private final String password;
-    private final AtomicReference<MappingType> mapping;
+    private final MutableObject<MappingType> mapping;
     private final Map<Class<?>, Format> formats;
     private final Map<Class<?>, ValueConverter> converters;
 
     private DocumentBuilder(DocumentType type, String password) {
       this.type = type;
       this.password = password;
-      this.mapping = new AtomicReference<>(MappingType.FLEXIBLE);
+      this.mapping = new MutableObject<>(MappingType.FLEXIBLE);
       this.formats = new ConcurrentHashMap<>();
       this.converters = new ConcurrentHashMap<>();
     }
 
     public DocumentBuilder mapping(MappingType mapping) {
       if (mapping != null) {
-        this.mapping.set(mapping);
+        this.mapping.setValue(mapping);
       }
       return this;
     }
@@ -74,9 +74,9 @@ public final class Documents {
     public Document create() {
       switch (type) {
         case BIFF:
-          return new DocumentBIFF(password, mapping.get(), formats, converters);
+          return new DocumentBIFF(password, mapping.getValue(), formats, converters);
         case OOXML:
-          return new DocumentOOXML(password, mapping.get(), formats, converters);
+          return new DocumentOOXML(password, mapping.getValue(), formats, converters);
         default:
           throw new IllegalArgumentException(type.name());
       }
