@@ -6,7 +6,7 @@
 
   <groupId>io.github.rushuat</groupId>
   <artifactId>ocell</artifactId>
-  <version>0.1.10</version>
+  <version>0.1.11</version>
   <packaging>jar</packaging>
 
   <name>${project.groupId}:${project.artifactId}</name>
@@ -37,23 +37,23 @@
 
   <properties>
     <java.version>11</java.version>
-    <lombok.version>1.18.36</lombok.version>
+    <lombok.version>1.18.42</lombok.version>
 
-    <poi.version>5.3.0</poi.version>
-    <jackson.version>2.18.1</jackson.version>
-    <jaxb.version>4.0.2</jaxb.version>
+    <poi.version>5.5.1</poi.version>
+    <jackson.version>2.20</jackson.version>
+    <jaxb.version>4.0.4</jaxb.version>
     <jpa.version>3.1.0</jpa.version>
 
-    <testng.version>7.10.2</testng.version>
-    <spotbugs.version>4.8.6</spotbugs.version>
+    <testng.version>7.11.0</testng.version>
+    <spotbugs.version>4.9.8</spotbugs.version>
 
-    <spotbugs.plugin>4.8.6.6</spotbugs.plugin>
+    <spotbugs.plugin>4.9.8.2</spotbugs.plugin>
 
-    <compiler.plugin>3.13.0</compiler.plugin>
-    <surefire.plugin>3.5.2</surefire.plugin>
-    <source.plugin>3.3.1</source.plugin>
-    <javadoc.plugin>3.11.1</javadoc.plugin>
-    <gpg.plugin>3.2.7</gpg.plugin>
+    <compiler.plugin>3.14.1</compiler.plugin>
+    <surefire.plugin>3.5.4</surefire.plugin>
+    <source.plugin>3.4.0</source.plugin>
+    <javadoc.plugin>3.12.0</javadoc.plugin>
+    <gpg.plugin>3.2.8</gpg.plugin>
 
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
